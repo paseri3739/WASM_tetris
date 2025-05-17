@@ -11,4 +11,4 @@ else
   cmake ..
 fi
 
-cmake --build . -j$(nproc)
+make -j$(sysctl -n hw.ncpu)

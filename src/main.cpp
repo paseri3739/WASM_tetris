@@ -2,58 +2,52 @@
 #include <iostream>
 #include <emscripten.h>
 
-struct GameState
-{
-    int x = 100;
-    int y = 100;
-    int w = 100;
-    int h = 100;
-};
-
+SDL_Surface *screenSurface = nullptr;
 SDL_Window *window = nullptr;
-SDL_Renderer *renderer = nullptr;
-GameState state;
-
-void render(const GameState &state)
-{
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // 白背景
-    SDL_RenderClear(renderer);
-
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // 赤四角
-    SDL_Rect rect = {state.x, state.y, state.w, state.h};
-    SDL_RenderFillRect(renderer, &rect);
-
-    SDL_RenderPresent(renderer);
-}
 
 void main_loop()
 {
-    render(state);
+    SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 255, 255, 255)); // 白背景
+
+    SDL_Rect rect = {100, 100, 100, 100};
+    SDL_FillRect(screenSurface, &rect, SDL_MapRGB(screenSurface->format, 255, 0, 0)); // 赤四角
+
+    SDL_UpdateWindowSurface(window);
 }
 
 int main()
 {
+
+    int n = SDL_GetNumRenderDrivers();
+    std::cout << "Available render drivers: " << n << std::endl;
+    for (int i = 0; i < n; ++i)
+    {
+        SDL_RendererInfo info;
+        SDL_GetRenderDriverInfo(i, &info);
+        std::cout << "  - " << info.name << std::endl;
+    }
+
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
         std::cerr << "SDL_Init Error: " << SDL_GetError() << "\n";
         return 1;
     }
 
-    window = SDL_CreateWindow("WASM SDL2 Window",
-                              SDL_WINDOWPOS_CENTERED,
-                              SDL_WINDOWPOS_CENTERED,
+    window = SDL_CreateWindow("Fallback Window",
+                              SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                               640, 480,
                               SDL_WINDOW_SHOWN);
+
     if (!window)
     {
-        std::cerr << "CreateWindow Error: " << SDL_GetError() << "\n";
+        std::cerr << "SDL_CreateWindow Error: " << SDL_GetError() << "\n";
         return 1;
     }
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if (!renderer)
+    screenSurface = SDL_GetWindowSurface(window);
+    if (!screenSurface)
     {
-        std::cerr << "CreateRenderer Error: " << SDL_GetError() << "\n";
+        std::cerr << "SDL_GetWindowSurface Error: " << SDL_GetError() << "\n";
         return 1;
     }
 
