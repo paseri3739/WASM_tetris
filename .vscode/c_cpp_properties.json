@@ -2,24 +2,12 @@
     "configurations": [
         {
             "name": "Linux",
-            "includePath": [
-                "/Users/masato/Documents/WASM_tetris/**",
-                "/Users/masato/Documents/WASM_tetris/build/_deps/catch2-src/include",
-                "/Users/masato/Documents/WASM_tetris/build/_deps/tl_expected-src/include",
-                "/Users/masato/Documents/WASM_tetris/build/_deps/immer-src/tools/include",
-                "/Users/masato/Documents/WASM_tetris/build/_deps/immer-src/extra/python/lib/pybind11/include"
-            ],
+            "includePath": ["${workspaceFolder}/**", "${workspaceFolder}/build/_deps/**/include"],
             "defines": [],
-            "compilerPath": "em++",
+            "compilerPath": "~/emsdk/upstream/emscripten/em++",
             "cStandard": "c17",
             "cppStandard": "c++17",
-            "intelliSenseMode": "linux-clang-x64",
-            "compilerPathInCppPropertiesJson": "/Users/masato/emsdk/upstream/emscripten/em++",
-            "mergeConfigurations": false,
-            "recursiveIncludes": {},
-            "browse": {
-                "limitSymbolsToIncludedHeaders": true
-            }
+            "intelliSenseMode": "linux-clang-x64"
         },
         {
             "name": "macOS",
@@ -31,11 +19,10 @@
                 "/Users/masato/Documents/WASM_tetris/build/_deps/immer-src/extra/python/lib/pybind11/include"
             ],
             "defines": [],
-            "compilerPath": "/Users/masato/emsdk/upstream/emscripten/em++",
+            "compilerPath": "~/emsdk/upstream/emscripten/em++",
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "macos-clang-arm64",
-            "compilerPathInCppPropertiesJson": "em++",
             "mergeConfigurations": false,
             "recursiveIncludes": {},
             "browse": {

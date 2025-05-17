@@ -1,0 +1,27 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 19
+    },
+    "configurePresets": [
+        {
+            "name": "default",
+            "hidden": true,
+            "generator": "Unix Makefiles"
+        },
+        {
+            "name": "wasm",
+            "inherits": "default",
+            "description": "WASM build using emsdk without hardcoded username",
+            "environment": {
+                "EMSDK": "$env{HOME}/emsdk",
+                "PATH": "$env{HOME}/emsdk/upstream/emscripten:$env{PATH}"
+            },
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "$env{HOME}/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
+            },
+            "binaryDir": "${sourceDir}/build/wasm"
+        }
+    ]
+}
