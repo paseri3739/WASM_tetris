@@ -1,12 +1,55 @@
-cmake_minimum_required(VERSION 3.0)
-project(WasmHello)
+cmake_minimum_required(VERSION 3.16)
+project(wasm_app LANGUAGES CXX)
 
-add_executable(hello main.cpp)
+include(FetchContent)
 
-# 出力ファイルに HTML を使う（emscripten が .html, .js, .wasm を出力）
-set_target_properties(hello PROPERTIES SUFFIX ".html")
+# Immer の不要オプションを無効化（小文字に注意）
+set(immer_BUILD_TESTS    OFF CACHE BOOL "" FORCE)
+set(immer_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(immer_BUILD_DOCS     OFF CACHE BOOL "" FORCE)
+set(immer_BUILD_EXTRAS   OFF CACHE BOOL "" FORCE)
 
-# emscripten向けのリンクオプション
-target_link_options(hello PRIVATE
-  "-sEXIT_RUNTIME=1"
+
+
+# Fetch immer (イミュータブルデータ構造)
+FetchContent_Declare(
+  immer
+  GIT_REPOSITORY https://github.com/arximboldi/immer.git
+  GIT_TAG master
 )
+FetchContent_MakeAvailable(immer)
+
+# Fetch tl::expected (Result型)
+FetchContent_Declare(
+  tl_expected
+  GIT_REPOSITORY https://github.com/TartanLlama/expected.git
+  GIT_TAG master
+)
+FetchContent_MakeAvailable(tl_expected)
+
+# 実行ファイルターゲット
+add_executable(wasm_app
+  src/main.cpp
+)
+
+# インクルードディレクトリ指定
+target_include_directories(wasm_app PRIVATE
+  ${tl_expected_SOURCE_DIR}/include
+)
+
+# ライブラリリンク
+target_link_libraries(wasm_app PRIVATE immer)
+
+# C++17 指定
+set_property(TARGET wasm_app PROPERTY CXX_STANDARD 17)
+
+# WASM 向け出力用の設定
+if(EMSCRIPTEN)
+  set_target_properties(wasm_app PROPERTIES SUFFIX ".html")
+  target_link_options(wasm_app PRIVATE
+    "-sUSE_SDL=2"
+    "-sASYNCIFY"
+    "-sNO_EXIT_RUNTIME=1"
+    "-sEXPORTED_FUNCTIONS=['_main']"
+  )
+endif()
