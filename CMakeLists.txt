@@ -9,8 +9,6 @@ set(immer_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(immer_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(immer_BUILD_EXTRAS OFF CACHE BOOL "" FORCE)
 
-
-
 # Fetch immer (イミュータブルデータ構造)
 FetchContent_Declare(
   immer
@@ -48,3 +46,7 @@ if(EMSCRIPTEN)
   include(cmake/wasm.cmake)
   setup_wasm_target(wasm_app)
 endif()
+
+set(CMAKE_BUILD_TYPE Debug) # -O0 相当
+set(CMAKE_CXX_FLAGS_DEBUG "-g -gsource-map \
+  --source-map-base http://localhost:8080/") # 行番号 & SourceMap
