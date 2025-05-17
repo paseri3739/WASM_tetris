@@ -1,36 +1,62 @@
+#include <SDL2/SDL.h>
 #include <iostream>
-#include <immer/vector.hpp>
-#include <tl/expected.hpp>
+#include <emscripten.h>
 
-// 関数：index指定でvectorから安全に取得
-tl::expected<int, std::string> get_element(const immer::vector<int> &vec, std::size_t index)
+struct GameState
 {
-    if (index >= vec.size())
-    {
-        return tl::unexpected("Index out of bounds");
-    }
-    return vec[index];
+    int x = 100;
+    int y = 100;
+    int w = 100;
+    int h = 100;
+};
+
+SDL_Window *window = nullptr;
+SDL_Renderer *renderer = nullptr;
+GameState state;
+
+void render(const GameState &state)
+{
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // 白背景
+    SDL_RenderClear(renderer);
+
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // 赤四角
+    SDL_Rect rect = {state.x, state.y, state.w, state.h};
+    SDL_RenderFillRect(renderer, &rect);
+
+    SDL_RenderPresent(renderer);
+}
+
+void main_loop()
+{
+    render(state);
 }
 
 int main()
 {
-    // イミュータブルvectorの作成
-    immer::vector<int> numbers = {10, 20, 30};
-    auto new_numbers = numbers.push_back(40); // numbersは不変
-
-    std::cout << "Original size: " << numbers.size() << "\n";
-    std::cout << "New size: " << new_numbers.size() << "\n";
-
-    // 値取得テスト
-    auto result = get_element(new_numbers, 2);
-    if (result)
+    if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
-        std::cout << "Element at index 2: " << *result << "\n";
-    }
-    else
-    {
-        std::cout << "Error: " << result.error() << "\n";
+        std::cerr << "SDL_Init Error: " << SDL_GetError() << "\n";
+        return 1;
     }
 
+    window = SDL_CreateWindow("WASM SDL2 Window",
+                              SDL_WINDOWPOS_CENTERED,
+                              SDL_WINDOWPOS_CENTERED,
+                              640, 480,
+                              SDL_WINDOW_SHOWN);
+    if (!window)
+    {
+        std::cerr << "CreateWindow Error: " << SDL_GetError() << "\n";
+        return 1;
+    }
+
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if (!renderer)
+    {
+        std::cerr << "CreateRenderer Error: " << SDL_GetError() << "\n";
+        return 1;
+    }
+
+    emscripten_set_main_loop(main_loop, 0, 1);
     return 0;
 }

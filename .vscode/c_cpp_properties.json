@@ -4,9 +4,10 @@
             "name": "Linux",
             "includePath": ["${workspaceFolder}/**", "${workspaceFolder}/build/_deps/**/include"],
             "defines": [],
-            "compilerPath": "/usr/bin/gcc",
+            "compilerPath": "em++",
             "cStandard": "c17",
-            "intelliSenseMode": "linux-gcc-x64"
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-clang-x64"
         }
     ],
     "version": 4
