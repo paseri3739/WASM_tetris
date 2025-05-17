@@ -43,24 +43,8 @@ target_link_libraries(wasm_app PRIVATE immer)
 # C++17 指定
 set_property(TARGET wasm_app PROPERTY CXX_STANDARD 17)
 
-# WASM 向け出力用の設定
+# ===== WASM 固有設定を外部ファイルに委譲 =====
 if(EMSCRIPTEN)
-  set_target_properties(wasm_app PROPERTIES SUFFIX ".html")
-
-  # SDL2のincludeをターゲットに明示的に追加
-  target_include_directories(wasm_app PRIVATE
-    ${CMAKE_SYSROOT}/include/SDL2
-  )
-
-  target_link_options(wasm_app PRIVATE
-    "-sUSE_SDL=2"
-    "-sUSE_SDL_IMAGE=0"
-    "-sUSE_SDL_TTF=0"
-    "-sUSE_SDL_MIXER=0"
-    "-sALLOW_MEMORY_GROWTH=1"
-    "-sFULL_ES3=1"
-    "-sASYNCIFY"
-    "-sNO_EXIT_RUNTIME=1"
-    "-sEXPORTED_FUNCTIONS=['_main']"
-  )
+  include(cmake/wasm.cmake)
+  setup_wasm_target(wasm_app)
 endif()
