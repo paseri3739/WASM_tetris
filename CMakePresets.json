@@ -1,27 +1,32 @@
 {
-    "version": 3,
-    "cmakeMinimumRequired": {
-        "major": 3,
-        "minor": 19
-    },
+    "version": 8,
+
     "configurePresets": [
         {
-            "name": "default",
-            "hidden": true,
-            "generator": "Unix Makefiles"
-        },
-        {
             "name": "wasm",
-            "inherits": "default",
-            "description": "WASM build using emsdk without hardcoded username",
-            "environment": {
-                "EMSDK": "$env{HOME}/emsdk",
-                "PATH": "$env{HOME}/emsdk/upstream/emscripten:$env{PATH}"
-            },
+            "displayName": "WebAssembly (Emscripten) – Debug",
+            "description": "Equivalent to ./bootstrap.sh wasm",
+            "generator": "Unix Makefiles",
+            "binaryDir": "${sourceDir}/build",
             "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_TOOLCHAIN_FILE": "$env{HOME}/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
             },
-            "binaryDir": "${sourceDir}/build/wasm"
+            "environment": {
+                "EM_CONFIG": "$env{HOME}/.emscripten",
+                "EMSCRIPTEN": "$env{HOME}/emsdk/upstream/emscripten",
+                "EMSDK": "$env{HOME}/emsdk",
+                "PATH": "$env{HOME}/emsdk/upstream/emscripten:$env{HOME}/emsdk/upstream/bin:$penv{PATH}"
+            }
+        }
+    ],
+
+    "buildPresets": [
+        {
+            "name": "wasm",
+            "displayName": "Build WebAssembly (Debug)",
+            "configurePreset": "wasm",
+            "jobs": 0
         }
     ]
 }
