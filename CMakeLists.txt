@@ -33,6 +33,7 @@ add_executable(wasm_app
 # インクルードディレクトリ指定
 target_include_directories(wasm_app PRIVATE
   ${tl_expected_SOURCE_DIR}/include
+  ${PROJECT_SOURCE_DIR}/include
 )
 
 # ライブラリリンク

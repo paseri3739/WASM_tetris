@@ -4,30 +4,7 @@
 #include <tl/expected.hpp>
 #include <fstream>
 
-template <typename T>
-class IO
-{
-public:
-    explicit IO(std::function<T()> action) : action_(std::move(action)) {}
-
-    T run() const { return action_(); }
-
-    template <typename F>
-    auto map(F f) const -> IO<decltype(f(std::declval<T>()))>
-    {
-        return IO<decltype(f(std::declval<T>()))>([=]
-                                                  { return f(action_()); });
-    }
-
-    template <typename F>
-    auto flatMap(F f) const -> decltype(f(std::declval<T>()))
-    {
-        return f(action_());
-    }
-
-private:
-    std::function<T()> action_;
-};
+#include <monad/IO.hpp>
 
 IO<tl::expected<void, std::string>> logMousePosition(const std::string &filepath)
 {
