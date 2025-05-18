@@ -2,7 +2,10 @@
     "configurations": [
         {
             "name": "Linux",
-            "includePath": ["${workspaceFolder}/**", "${workspaceFolder}/build/_deps/**/include"],
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/build/_deps/**/include"
+            ],
             "defines": [],
             "compilerPath": "~/emsdk/upstream/emscripten/em++",
             "cStandard": "c17",
