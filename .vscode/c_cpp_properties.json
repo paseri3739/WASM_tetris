@@ -16,7 +16,7 @@
             "compilerPath": "${env:HOME}/emsdk/upstream/emscripten/em++",
             "cStandard": "c17",
             "cppStandard": "c++17",
-            "intelliSenseMode": "macos-clang-x64" // x64じゃないとダメ。ARMの場合でもバグでインクルードできなくなる。
+            "intelliSenseMode": "clang-x64" // x64じゃないとダメ。ARMの場合でもバグでインクルードできなくなる。
         }
     ],
     "version": 4
