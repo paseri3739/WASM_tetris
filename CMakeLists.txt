@@ -24,7 +24,7 @@ FetchContent_MakeAvailable(googletest)
 FetchContent_Declare(
   immer
   GIT_REPOSITORY https://github.com/arximboldi/immer.git
-  GIT_TAG master
+  GIT_TAG v0.8.1
 )
 FetchContent_MakeAvailable(immer)
 
@@ -32,7 +32,7 @@ FetchContent_MakeAvailable(immer)
 FetchContent_Declare(
   tl_expected
   GIT_REPOSITORY https://github.com/TartanLlama/expected.git
-  GIT_TAG master
+  GIT_TAG v1.1.0
 )
 FetchContent_MakeAvailable(tl_expected)
 
@@ -41,14 +41,14 @@ add_executable(wasm_app
   src/main.cpp
 )
 
+
 # インクルードディレクトリ指定
 target_include_directories(wasm_app PRIVATE
-  ${tl_expected_SOURCE_DIR}/include
   ${PROJECT_SOURCE_DIR}/include
 )
 
 # ライブラリリンク
-target_link_libraries(wasm_app PRIVATE immer)
+target_link_libraries(wasm_app PRIVATE immer tl::expected)
 
 # C++17 指定
 set_property(TARGET wasm_app PROPERTY CXX_STANDARD 17)
