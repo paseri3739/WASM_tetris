@@ -82,14 +82,7 @@ endif()
 # googletest の設定(ダミーの例) 最後に書く
 enable_testing()
 
-add_executable(
-  hello_test
-  ./test/hello_test.cpp
-)
-target_link_libraries(
-  hello_test
-  GTest::gtest_main
-)
-
-include(GoogleTest)
-gtest_discover_tests(hello_test)
+# EMSCRIPTEN 環境では単体テストをスキップする場合
+if(NOT EMSCRIPTEN AND BUILD_TESTING)
+  add_subdirectory(test) # ★ テスト用 CMakeLists.txt を呼び出す
+endif()
