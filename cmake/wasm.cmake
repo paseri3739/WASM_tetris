@@ -1,6 +1,6 @@
 # ===== cmake/wasm.cmake =====
 function(setup_wasm_target target_name)
-    if (NOT EMSCRIPTEN)
+    if(NOT EMSCRIPTEN)
         message(FATAL_ERROR "setup_wasm_target() は EMSCRIPTEN ビルド専用です")
     endif()
 
