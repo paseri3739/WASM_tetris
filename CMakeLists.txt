@@ -76,8 +76,7 @@ if(EMSCRIPTEN)
   include(cmake/wasm.cmake)
   setup_wasm_target(wasm_app)
   set(CMAKE_BUILD_TYPE Debug) # -O0 相当
-  set(CMAKE_CXX_FLAGS_DEBUG "-g -gsource-map \
-  --source-map-base http://localhost:8080/") # 行番号 & SourceMap
+  string(APPEND CMAKE_CXX_FLAGS_DEBUG " -gsource-map --source-map-base http://localhost:8080/")
 endif()
 
 # googletest の設定(ダミーの例) 最後に書く
