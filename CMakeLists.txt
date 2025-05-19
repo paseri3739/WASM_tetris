@@ -41,17 +41,16 @@ add_executable(wasm_app
   src/main.cpp
 )
 
+# C++17 指定
+set_property(TARGET wasm_app PROPERTY CXX_STANDARD 17)
 
 # インクルードディレクトリ指定
 target_include_directories(wasm_app PRIVATE
   ${PROJECT_SOURCE_DIR}/include
 )
 
-# ライブラリリンク
+# ライブラリリンク(リンク対象に含めると勝手にインクルードされる)
 target_link_libraries(wasm_app PRIVATE immer tl::expected)
-
-# C++17 指定
-set_property(TARGET wasm_app PROPERTY CXX_STANDARD 17)
 
 # ===== WASM 固有設定を外部ファイルに委譲 =====
 if(EMSCRIPTEN)
@@ -64,7 +63,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g -gsource-map \
   --source-map-base http://localhost:8080/") # 行番号 & SourceMap
 
 
-# googletest の設定(ダミーの例)
+# googletest の設定(ダミーの例) 最後に書く
 enable_testing()
 
 add_executable(
