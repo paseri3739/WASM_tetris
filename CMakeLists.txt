@@ -64,7 +64,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g -gsource-map \
   --source-map-base http://localhost:8080/") # 行番号 & SourceMap
 
 
-# googletest の設定
+# googletest の設定(ダミーの例)
 enable_testing()
 
 add_executable(
