@@ -1,2 +1,2 @@
-#include "core/hello.hpp"
+#include <core/hello.hpp>
 int hello() { return 42; }
