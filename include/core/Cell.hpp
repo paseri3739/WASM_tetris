@@ -18,8 +18,8 @@ enum class CellStatus { Empty, Moving, Filled };
 struct Cell {
     const CellStatus type;
     const Position position;
-    const int cellWidth;
-    const int cellHeight;
+    const double cellWidth;
+    const double cellHeight;
     const std::string color;
 };
 
@@ -72,8 +72,8 @@ class CellFactory {
     int cell_height() const noexcept { return h_; }
 
    private:
-    int w_;
-    int h_;
+    double w_;
+    double h_;
 };
 
 #endif /* B46CA402_5D14_4D1D_9923_49018BA7FA61 */
