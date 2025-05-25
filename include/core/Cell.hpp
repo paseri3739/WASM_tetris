@@ -9,7 +9,7 @@
 /**
  * セル状態
  */
-enum class CellStatus { Empty, Moving, Filled };
+enum class CellStatus { EMPTY, MOVING, FILLED };
 
 /**
  * セル値オブジェクト
@@ -28,22 +28,22 @@ struct Cell {
  */
 constexpr bool is_legal_transition(CellStatus from, CellStatus to) noexcept {
     switch (from) {
-        case CellStatus::Empty:
-            return to == CellStatus::Moving;
-        case CellStatus::Moving:
-            return to == CellStatus::Empty || to == CellStatus::Filled;
-        case CellStatus::Filled:
-            return to == CellStatus::Empty;
+        case CellStatus::EMPTY:
+            return to == CellStatus::MOVING;
+        case CellStatus::MOVING:
+            return to == CellStatus::EMPTY || to == CellStatus::FILLED;
+        case CellStatus::FILLED:
+            return to == CellStatus::EMPTY;
         default:
             return false;
     }
 }
 
 // constexprとstatic_assertを組み合わせることで状態遷移の妥当性チェックをコンパイル時に行う
-static_assert(is_legal_transition(CellStatus::Empty, CellStatus::Moving));
-static_assert(is_legal_transition(CellStatus::Moving, CellStatus::Empty));
-static_assert(is_legal_transition(CellStatus::Moving, CellStatus::Filled));
-static_assert(is_legal_transition(CellStatus::Filled, CellStatus::Empty));
+static_assert(is_legal_transition(CellStatus::EMPTY, CellStatus::MOVING));
+static_assert(is_legal_transition(CellStatus::MOVING, CellStatus::EMPTY));
+static_assert(is_legal_transition(CellStatus::MOVING, CellStatus::FILLED));
+static_assert(is_legal_transition(CellStatus::FILLED, CellStatus::EMPTY));
 
 /**
  * セル状態更新（純粋関数）
@@ -57,7 +57,7 @@ inline tl::expected<Cell, std::string> update_cell_state(const Cell& cell, CellS
     }
 
     // Empty → 常に白
-    if (new_state == CellStatus::Empty) new_color = "white";
+    if (new_state == CellStatus::EMPTY) new_color = "white";
 
     return Cell{new_state, cell.position, cell.cellWidth, cell.cellHeight, std::move(new_color)};
 }
@@ -70,7 +70,7 @@ class CellFactory {
     explicit CellFactory(const GameConfig& cfg) : w_{cfg.cell.size}, h_{cfg.cell.size} {}
 
     [[nodiscard]] Cell create(const Position& pos, CellStatus type, std::string color) const {
-        if (type == CellStatus::Empty) color = "white";
+        if (type == CellStatus::EMPTY) color = "white";
         return Cell{type, pos, w_, h_, std::move(color)};
     }
 
