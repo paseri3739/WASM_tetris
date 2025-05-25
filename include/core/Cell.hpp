@@ -39,7 +39,7 @@ constexpr bool is_legal_transition(CellStatus from, CellStatus to) noexcept {
     }
 }
 
-// constexprとstatic_assertを組み合わせることで状態遷移の妥当性チェックをコンパイル時に行う
+// constexprとstatic_assertを組み合わせることで状態遷移の妥当性チェックをコンパイル時に行う。単体テストを不要にできる。
 static_assert(is_legal_transition(CellStatus::EMPTY, CellStatus::MOVING));
 static_assert(is_legal_transition(CellStatus::MOVING, CellStatus::EMPTY));
 static_assert(is_legal_transition(CellStatus::MOVING, CellStatus::FILLED));
