@@ -1,10 +1,10 @@
 #ifndef B46CA402_5D14_4D1D_9923_49018BA7FA61
 #define B46CA402_5D14_4D1D_9923_49018BA7FA61
 
-#include <Position.hpp>
 #include <string>
 #include <tl/expected.hpp>
 #include "GameConfig.hpp"
+#include "Position.hpp"
 
 /**
  * セル状態
@@ -72,7 +72,7 @@ class CellFactory {
      * @return 成功時は更新後のセル、失敗時はエラーメッセージ
      */
     tl::expected<Cell, std::string> update_cell_state(const Cell& cell, CellStatus new_state,
-                                                      std::string new_color) {}
+                                                      std::string new_color);
 
    private:
     double size_;
