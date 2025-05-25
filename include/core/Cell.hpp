@@ -20,6 +20,12 @@ struct Cell {
     const Position position;
     const double size;
     const std::string color;
+
+    // コンストラクタは private にして、CellFactory 経由でのみインスタンス化可能にする
+   private:
+    Cell(CellStatus t, Position pos, double sz, std::string col)
+        : type(t), position(pos), size(sz), color(std::move(col)) {}
+    friend class CellFactory;  // CellFactoryからのみインスタンス化可能
 };
 
 /**
@@ -45,23 +51,6 @@ static_assert(is_legal_transition(CellStatus::MOVING, CellStatus::FILLED));
 static_assert(is_legal_transition(CellStatus::FILLED, CellStatus::EMPTY));
 
 /**
- * セル状態更新（純粋関数）
- *  - 成功時: 新しい Cell
- *  - 失敗時: エラーメッセージ
- */
-inline tl::expected<Cell, std::string> update_cell_state(const Cell& cell, CellStatus new_state,
-                                                         std::string new_color) {
-    if (!is_legal_transition(cell.type, new_state)) {
-        return tl::unexpected{"illegal state transition"};
-    }
-
-    // Empty → 常に白
-    if (new_state == CellStatus::EMPTY) new_color = "white";
-
-    return Cell{new_state, cell.position, cell.size, std::move(new_color)};
-}
-
-/**
  * CellFactory ― 値オブジェクト生成器
  */
 class CellFactory {
@@ -74,6 +63,25 @@ class CellFactory {
     }
 
     int cell_size() const noexcept { return size_; }
+
+    /**
+     * セルの状態を更新する
+     * @param cell 更新対象のセル
+     * @param new_state 新しい状態
+     * @param new_color 新しい色（EMPTYの場合は常に白）
+     * @return 成功時は更新後のセル、失敗時はエラーメッセージ
+     */
+    tl::expected<Cell, std::string> update_cell_state(const Cell& cell, CellStatus new_state,
+                                                      std::string new_color) {
+        if (!is_legal_transition(cell.type, new_state)) {
+            return tl::unexpected{"illegal state transition"};
+        }
+
+        // Empty → 常に白
+        if (new_state == CellStatus::EMPTY) new_color = "white";
+
+        return Cell{new_state, cell.position, cell.size, std::move(new_color)};
+    }
 
    private:
     double size_;

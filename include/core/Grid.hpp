@@ -13,6 +13,13 @@ struct TetrisGrid {
     int rows;
     int columns;
     std::vector<std::vector<Cell>> cells;
+
+   private:
+    // コンストラクタは外部から呼ばれないようにprivateにする
+    TetrisGrid(const std::string& n, const Position& pos, double w, double h, int r, int c,
+               std::vector<std::vector<Cell>> cs)
+        : name(n), position(pos), width(w), height(h), rows(r), columns(c), cells(std::move(cs)) {}
+    friend class TetrisGridFactory;  // TetrisGridFactoryからのみインスタンス化可能
 };
 
 class TetrisGridFactory {
