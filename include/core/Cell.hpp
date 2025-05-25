@@ -18,8 +18,7 @@ enum class CellStatus { EMPTY, MOVING, FILLED };
 struct Cell {
     const CellStatus type;
     const Position position;
-    const double cellWidth;
-    const double cellHeight;
+    const double size;
     const std::string color;
 };
 
@@ -59,7 +58,7 @@ inline tl::expected<Cell, std::string> update_cell_state(const Cell& cell, CellS
     // Empty → 常に白
     if (new_state == CellStatus::EMPTY) new_color = "white";
 
-    return Cell{new_state, cell.position, cell.cellWidth, cell.cellHeight, std::move(new_color)};
+    return Cell{new_state, cell.position, cell.size, std::move(new_color)};
 }
 
 /**
@@ -67,19 +66,17 @@ inline tl::expected<Cell, std::string> update_cell_state(const Cell& cell, CellS
  */
 class CellFactory {
    public:
-    explicit CellFactory(const GameConfig& cfg) : w_{cfg.cell.size}, h_{cfg.cell.size} {}
+    explicit CellFactory(const GameConfig& cfg) : size_{cfg.cell.size} {}
 
     [[nodiscard]] Cell create(const Position& pos, CellStatus type, std::string color) const {
         if (type == CellStatus::EMPTY) color = "white";
-        return Cell{type, pos, w_, h_, std::move(color)};
+        return Cell{type, pos, size_, std::move(color)};
     }
 
-    int cell_width() const noexcept { return w_; }
-    int cell_height() const noexcept { return h_; }
+    int cell_size() const noexcept { return size_; }
 
    private:
-    double w_;
-    double h_;
+    double size_;
 };
 
 #endif /* B46CA402_5D14_4D1D_9923_49018BA7FA61 */
