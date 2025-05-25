@@ -12,7 +12,8 @@ class IO {
     T run() const { return action_(); }
 
     template <typename F>
-    // auto f() -> 型(後置) decltypeの中でdeclvalを使うことで、fの引数の型を取得(typeofのようなもの)
+    // auto f() -> 型(後置) (trailing return type)
+    // decltypeの中でdeclvalを使うことで、fの引数の型を取得(typeofのようなもの)
     // declval<T>()は、T型の値を生成せずにT型の値を表現するためのもの
     // (型がメソッドを持っているならこの後にdeclval<T>().メソッド名()と書くことでメソッドの戻り値の型を取得できる)
     auto map(F f) const -> IO<decltype(f(std::declval<T>()))> {
