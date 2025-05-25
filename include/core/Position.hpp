@@ -6,9 +6,9 @@ struct Position {
     double y;
 };
 
-struct GridPosition {
-    int x;
-    int y;
+struct GridColumnRow {
+    int column;
+    int row;
 };
 
 #endif /* DB5D9C5A_4147_4189_B61C_72287BB1B903 */
