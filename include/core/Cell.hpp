@@ -62,7 +62,7 @@ class CellFactory {
         return Cell{type, pos, size_, std::move(color)};
     }
 
-    int cell_size() const noexcept { return size_; }
+    int size() const noexcept { return size_; }
 
     /**
      * セルの状態を更新する
