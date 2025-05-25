@@ -1,10 +1,10 @@
 #ifndef B46CA402_5D14_4D1D_9923_49018BA7FA61
 #define B46CA402_5D14_4D1D_9923_49018BA7FA61
 
+#include <core/GameConfig.hpp>
+#include <core/Position.hpp>
 #include <string>
 #include <tl/expected.hpp>
-#include "GameConfig.hpp"
-#include "Position.hpp"
 
 /**
  * セル状態
