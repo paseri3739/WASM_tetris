@@ -29,12 +29,15 @@ class Scene {
 
 class SceneManager {
    public:
+    explicit SceneManager(std::unique_ptr<Scene> initial_scene)
+        : current_scene_{std::move(initial_scene)} {
+        current_scene_->initialize();
+    }
+
     void update(double delta_time);
     void render();
 
-    // 遷移先をセット（内部で Scene に this を注入）
     void change_scene(std::unique_ptr<Scene> next);
-
     Scene& get_current() const;
 
    private:
