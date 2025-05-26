@@ -10,14 +10,14 @@ struct GameConfig {
         double size;
     } cell;  // square
     struct {
-        int columns;
         int rows;
+        int columns;
     } grid;
 };
 
 namespace game_config {
 // ゲームの設定を格納する構造体
-constexpr GameConfig defaultGameConfig = {.window = {800, 600}, .cell = {50}, .grid = {10, 10}};
+constexpr GameConfig defaultGameConfig = {.window = {300, 600}, .cell = {30}, .grid = {20, 10}};
 
 }  // namespace game_config
 
