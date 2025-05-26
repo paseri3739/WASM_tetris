@@ -26,24 +26,21 @@ class Scene {
 /**
  * SceneManager ― Stateパターンに基づきシーンを管理・遷移するクラス
  */
+
 class SceneManager {
    public:
-    SceneManager() = default;
-
-    // 現在のシーンを更新
     void update(double delta_time);
-
-    // 現在のシーンを描画
     void render();
 
-    // 次のシーンへ遷移（次フレームで適用）
+    // 遷移先をセット（内部で Scene に this を注入）
     void change_scene(std::unique_ptr<Scene> next);
+
+    Scene& get_current() const;
 
    private:
     std::unique_ptr<Scene> current_scene_;
     std::unique_ptr<Scene> next_scene_;
 
-    // シーン遷移を即時に適用する内部処理
     void apply_scene_change();
 };
 
