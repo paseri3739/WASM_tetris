@@ -16,7 +16,7 @@ class Game {
     // ゲームの更新処理
     void update();
 
-    void run_loop();
+    void runLoop();
 
    private:
     GameConfig config_;
