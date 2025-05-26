@@ -1,6 +1,7 @@
 #ifndef B2833B7C_0978_42EE_A754_673FBA7514B8
 #define B2833B7C_0978_42EE_A754_673FBA7514B8
 
+#include <core/Input.hpp>
 #include <memory>
 
 /**
@@ -14,10 +15,10 @@ class Scene {
     virtual void initialize() = 0;
 
     // シーンの更新処理
-    virtual void update(double delta_time) = 0;
+    virtual void update(const double delta_time) = 0;
 
     // シーンの入力処理
-    virtual void process_input() = 0;
+    virtual void process_input(const Input& input) = 0;
 
     // シーンの描画処理
     virtual void render() = 0;
@@ -37,10 +38,10 @@ class SceneManager {
         current_scene_->initialize();
     }
 
-    void update(double delta_time);
+    void update(const double delta_time);
     void render();
 
-    void change_scene(std::unique_ptr<Scene> next);
+    void change_scene(const std::unique_ptr<Scene> next);
     Scene& get_current() const;
 
    private:
