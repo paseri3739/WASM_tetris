@@ -16,6 +16,9 @@ class Scene {
     // シーンの更新処理
     virtual void update(double delta_time) = 0;
 
+    // シーンの入力処理
+    virtual void process_input() = 0;
+
     // シーンの描画処理
     virtual void render() = 0;
 

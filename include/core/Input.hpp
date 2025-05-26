@@ -1,0 +1,7 @@
+#ifndef AF4443E9_E719_459C_BC56_81BE22CBDE47
+#define AF4443E9_E719_459C_BC56_81BE22CBDE47
+
+// TODO: 抽象入力を実装。WebではSDLとバインディングする。
+struct Input {};
+
+#endif /* AF4443E9_E719_459C_BC56_81BE22CBDE47 */
