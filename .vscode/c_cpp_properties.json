@@ -17,6 +17,15 @@
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "clang-x64" // x64じゃないとダメ。ARMの場合でもバグでインクルードできなくなる。
+        },
+        {
+            "name": "MacNative",
+            "includePath": ["${workspaceFolder}/**", "${workspaceFolder}/build/_deps/**/include"],
+            "defines": [],
+            "compilerPath": "clang++",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64" // x64じゃないとダメ。ARMの場合でもバグでインクルードできなくなる。
         }
     ],
     "version": 4

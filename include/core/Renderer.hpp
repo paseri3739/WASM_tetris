@@ -2,7 +2,6 @@
 #define B8AC84C6_6A5A_4990_8095_F03C1115A0EC
 
 #include <SDL2/SDL.h>
-
 class RendererInterface {
    public:
     virtual ~RendererInterface() = default;

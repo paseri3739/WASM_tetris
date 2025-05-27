@@ -8,7 +8,6 @@ set(immer_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(immer_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(immer_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(immer_BUILD_EXTRAS OFF CACHE BOOL "" FORCE)
-
 set(EXPECTED_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 
 FetchContent_Declare(
@@ -29,13 +28,36 @@ FetchContent_Declare(
   GIT_TAG v1.1.0)
 FetchContent_MakeAvailable(tl_expected)
 
+# ---- SDL2 取得方法を選択 --------------------------------------------------
+option(USE_BUNDLED_SDL2 "Build SDL2 from source via FetchContent" ON)
+
+if(NOT EMSCRIPTEN) # ─── ネイティブ側 ────────────────────────
+  if(USE_BUNDLED_SDL2)
+    # SDL2 を FetchContent で取得
+    FetchContent_Declare(
+      sdl2
+      GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
+      GIT_TAG release-2.32.4 # SDL2 最新安定タグ
+    )
+    FetchContent_MakeAvailable(sdl2)
+
+    # SDL2 のビルドで生成される CMake ターゲット名
+    set(SDL2_TARGET SDL2-static) # or SDL2           (構成に応じて)
+  else()
+    # システムインストール版 SDL2 を探す
+    find_package(SDL2 2.0 REQUIRED)
+    set(SDL2_TARGET SDL2::SDL2)
+  endif()
+endif()
+
+
 # ─────────────────────────────────────────────────────────────
 # 1) まず「純粋ロジック層」 src/core をライブラリ化（両ビルド共通）
 # ─────────────────────────────────────────────────────────────
 file(GLOB_RECURSE CORE_SOURCES CONFIGURE_DEPENDS src/core/*.cpp)
 add_library(core STATIC ${CORE_SOURCES})
 target_include_directories(core PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_link_libraries(core PUBLIC immer tl::expected)
+target_link_libraries(core PUBLIC immer tl::expected SDL2::SDL2)
 set_property(TARGET core PROPERTY CXX_STANDARD 17)
 
 # ─────────────────────────────────────────────────────────────
