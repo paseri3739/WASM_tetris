@@ -12,7 +12,7 @@ void SDLInputPoller::poll(Input& input) {
 
         if (event.type != SDL_KEYDOWN && event.type != SDL_KEYUP) continue;
 
-        auto maybe_key = to_input_key(event.key.keysym.sym);
+        auto maybe_key = KeyMapping::to_input_key(event.key.keysym.sym);
         if (!maybe_key.has_value()) continue;
 
         InputKey key = maybe_key.value();

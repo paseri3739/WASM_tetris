@@ -10,10 +10,12 @@ inline const std::pair<SDL_Keycode, InputKey> SDL_TO_INPUT_KEY_MAP[] = {
     {SDLK_SPACE, InputKey::DROP}, {SDLK_p, InputKey::PAUSE},       {SDLK_ESCAPE, InputKey::QUIT},
 };
 
+namespace KeyMapping {
 inline std::optional<InputKey> to_input_key(SDL_Keycode code) {
     for (const auto& [sdl, input] : SDL_TO_INPUT_KEY_MAP) {
         if (sdl == code) return input;
     }
     return std::nullopt;
 }
+}  // namespace KeyMapping
 #endif /* A36BFEA9_7C8D_4A2E_A878_B5C129D4F6D0 */
