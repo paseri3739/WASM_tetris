@@ -1,5 +1,5 @@
-#include <core/KeyMapping.hpp>
-#include <core/SDLInputPoller.hpp>
+#include <IO/KeyMapping.hpp>
+#include <IO/SDLInputPoller.hpp>
 void SDLInputPoller::poll(Input& input) {
     input.clear_frame_state();
 

@@ -1,5 +1,5 @@
 
-#include <core/Renderer.hpp>
+#include <IO/Renderer.hpp>
 class DrawRectCommand : public IRenderCommand {
    public:
     DrawRectCommand(int x, int y, int w, int h, SDL_Color color)

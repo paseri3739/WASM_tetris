@@ -1,5 +1,5 @@
 #include <SDL2/SDL.h>
-#include <core/Renderer.hpp>
+#include <IO/Renderer.hpp>
 class SDLRenderer : public RendererInterface {
    public:
     explicit SDLRenderer(SDL_Renderer* renderer) : sdl_renderer_{renderer} {}
