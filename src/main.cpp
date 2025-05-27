@@ -30,11 +30,6 @@ void main_loop() {
     SDL_FillRect(screenSurface, &rect, SDL_MapRGB(screenSurface->format, 255, 0, 0));  // 赤四角
 
     SDL_UpdateWindowSurface(window);
-
-    auto result = logMousePosition("mouse_log.txt").run();
-    if (!result) {
-        std::cerr << "ログエラー: " << result.error() << std::endl;
-    }
 }
 
 int main() {

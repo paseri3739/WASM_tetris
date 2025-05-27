@@ -57,7 +57,10 @@ endif()
 file(GLOB_RECURSE CORE_SOURCES CONFIGURE_DEPENDS src/core/*.cpp)
 add_library(core STATIC ${CORE_SOURCES})
 target_include_directories(core PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_link_libraries(core PUBLIC immer tl::expected SDL2::SDL2)
+if(NOT EMSCRIPTEN)
+  target_link_libraries(core PUBLIC immer tl::expected SDL2::SDL2)
+endif()
+target_link_libraries(core PUBLIC immer tl::expected)
 set_property(TARGET core PROPERTY CXX_STANDARD 17)
 
 # ─────────────────────────────────────────────────────────────
