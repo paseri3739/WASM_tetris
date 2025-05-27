@@ -10,6 +10,8 @@ class IRenderer {
     // 他にも draw_texture, draw_text など必要に応じて追加
     virtual void clear() = 0;
     virtual void draw_line(Position start, Position end, std::string color) = 0;
+    virtual void dra_point(Position pos, std::string color) = 0;
+    virtual void draw_circle(Position center, double radius, std::string color) = 0;
 };
 
 #endif /* B8AC84C6_6A5A_4990_8095_F03C1115A0EC */
