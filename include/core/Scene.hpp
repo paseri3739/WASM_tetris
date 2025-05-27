@@ -1,8 +1,8 @@
 #ifndef B2833B7C_0978_42EE_A754_673FBA7514B8
 #define B2833B7C_0978_42EE_A754_673FBA7514B8
 
+#include <core/IRenderer.hpp>
 #include <core/Input.hpp>
-#include <core/Renderer.hpp>
 #include <memory>
 
 /**
