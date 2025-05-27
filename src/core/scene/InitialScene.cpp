@@ -1,4 +1,3 @@
-#include <core/IRenderer.hpp>
 #include <core/scene/Scene.hpp>
 
 class InitialScene : public Scene {
