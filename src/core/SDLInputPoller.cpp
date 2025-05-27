@@ -1,5 +1,5 @@
+#include <core/KeyMapping.hpp>
 #include <core/SDLInputPoller.hpp>
-
 void SDLInputPoller::poll(Input& input) {
     input.clear_frame_state();
 
@@ -10,25 +10,18 @@ void SDLInputPoller::poll(Input& input) {
             continue;
         }
 
-        if (event.type != SDL_KEYDOWN && event.type != SDL_KEYUP) {
-            continue;
-        }
+        if (event.type != SDL_KEYDOWN && event.type != SDL_KEYUP) continue;
 
-        SDL_Keycode code = event.key.keysym.sym;
-        auto it = key_map_.find(code);
-        if (it == key_map_.end()) {
-            continue;
-        }
+        auto maybe_key = to_input_key(event.key.keysym.sym);
+        if (!maybe_key.has_value()) continue;
 
-        InputKey key = it->second;
+        InputKey key = maybe_key.value();
         InputState& state = input.key_states[key];
 
         if (event.type == SDL_KEYDOWN) {
-            if (!state.is_held) {
-                state.is_pressed = true;
-            }
+            if (!state.is_held) state.is_pressed = true;
             state.is_held = true;
-        } else {  // SDL_KEYUP
+        } else {
             state.is_held = false;
             state.is_released = true;
         }
