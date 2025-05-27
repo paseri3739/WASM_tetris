@@ -42,7 +42,8 @@ class SDLRenderer final : public IRenderer {
     void clear(Color color = {0, 0, 0, 255}) override;
 
     // プリミティブ描画 ------------------------------------------------------
-    void draw_rect(const Rect& rect, Color color, bool filled = true) override;
+    void fill_rect(const Rect& rect, Color color) override;    // 塗りつぶし
+    void stroke_rect(const Rect& rect, Color color) override;  // 枠線のみ
 
     void draw_line(Position start, Position end, Color color) override;
 

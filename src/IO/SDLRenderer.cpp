@@ -52,14 +52,16 @@ void SDLRenderer::clear(Color color) {
 }
 
 // ──────────── プリミティブ描画 ────────────
-void SDLRenderer::draw_rect(const Rect& rect, Color color, bool filled) {
+void SDLRenderer::fill_rect(const Rect& rect, Color color) {
     set_draw_color(color);
     SDL_Rect srect = to_sdl_rect(rect);
-    if (filled) {
-        SDL_RenderFillRect(renderer_, &srect);
-    } else {
-        SDL_RenderDrawRect(renderer_, &srect);
-    }
+    SDL_RenderFillRect(renderer_, &srect);
+}
+
+void SDLRenderer::stroke_rect(const Rect& rect, Color color) {
+    set_draw_color(color);
+    SDL_Rect srect = to_sdl_rect(rect);
+    SDL_RenderDrawRect(renderer_, &srect);
 }
 
 void SDLRenderer::draw_line(Position start, Position end, Color color) {

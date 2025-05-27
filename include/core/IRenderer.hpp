@@ -16,7 +16,8 @@ class IRenderer {
     virtual void clear(Color color = {0, 0, 0, 255}) = 0;
 
     // プリミティブ描画
-    virtual void draw_rect(const Rect& rect, Color color, bool filled = true) = 0;
+    virtual void fill_rect(const Rect&, Color) = 0;
+    virtual void stroke_rect(const Rect&, Color) = 0;
     virtual void draw_line(Position start, Position end, Color color) = 0;
 
     // 他にも draw_texture, draw_text など必要に応じて追加
