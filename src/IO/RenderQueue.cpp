@@ -5,7 +5,7 @@ class RenderQueue {
    public:
     void push(std::unique_ptr<IRenderCommand> cmd) { commands_.emplace_back(std::move(cmd)); }
 
-    void execute_all(RendererInterface& renderer) {
+    void execute_all(IRenderer& renderer) {
         for (const auto& cmd : commands_) {
             cmd->execute(renderer);
         }

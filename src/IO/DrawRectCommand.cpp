@@ -5,9 +5,7 @@ class DrawRectCommand : public IRenderCommand {
     DrawRectCommand(int x, int y, int w, int h, SDL_Color color)
         : x_{x}, y_{y}, w_{w}, h_{h}, color_{color} {}
 
-    void execute(RendererInterface& renderer) const override {
-        renderer.draw_rect(x_, y_, w_, h_, color_);
-    }
+    void execute(IRenderer& renderer) const override { renderer.draw_rect(x_, y_, w_, h_, color_); }
 
    private:
     int x_, y_, w_, h_;

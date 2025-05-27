@@ -2,6 +2,7 @@
 #define B2833B7C_0978_42EE_A754_673FBA7514B8
 
 #include <core/Input.hpp>
+#include <core/Renderer.hpp>
 #include <memory>
 
 /**
@@ -21,7 +22,7 @@ class Scene {
     virtual void process_input(const Input& input) = 0;
 
     // シーンの描画処理
-    virtual void render() = 0;
+    virtual void render(IRenderer& renderer) = 0;
 
     // シーンの終了処理
     virtual void cleanup() = 0;

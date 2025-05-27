@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
 #include <IO/Renderer.hpp>
-class SDLRenderer : public RendererInterface {
+class SDLRenderer : public IRenderer {
    public:
     explicit SDLRenderer(SDL_Renderer* renderer) : sdl_renderer_{renderer} {}
 
