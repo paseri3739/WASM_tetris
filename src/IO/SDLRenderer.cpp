@@ -8,16 +8,23 @@ inline SDL_Rect to_sdl_rect(const Rect& r) {
 }
 }  // namespace
 
-// ──────────── コンストラクタ / デストラクタ ────────────
-SDLRenderer::SDLRenderer(SDL_Window* window, int flags) : window_{window} {
-    if (!window_) throw std::invalid_argument("SDLRenderer: window must not be null");
-
-    renderer_ = SDL_CreateRenderer(window_, -1, flags);
-    if (!renderer_) {
-        throw std::runtime_error(std::string{"SDL_CreateRenderer failed: "} + SDL_GetError());
+// ──────────── create (ファクトリ) ────────────
+tl::expected<std::unique_ptr<SDLRenderer>, std::string> SDLRenderer::create(SDL_Window* window,
+                                                                            int flags) {
+    if (!window) {
+        return tl::unexpected<std::string>{"SDLRenderer: window must not be null"};
     }
+
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, flags);
+    if (!renderer) {
+        return tl::unexpected<std::string>(std::string{"SDL_CreateRenderer failed: "} +
+                                           SDL_GetError());
+    }
+
+    return std::unique_ptr<SDLRenderer>{new SDLRenderer{window, renderer}};
 }
 
+// ──────────── デストラクタ ────────────
 SDLRenderer::~SDLRenderer() {
     for (auto& [id, tex] : textures_) {
         SDL_DestroyTexture(tex);
@@ -64,7 +71,7 @@ void SDLRenderer::draw_line(Position start, Position end, Color color) {
 void SDLRenderer::draw_texture(TextureId id, const Rect& src_region, const Rect& dst_region,
                                double angle) {
     auto it = textures_.find(id);
-    if (it == textures_.end()) return;  // 未登録 ID は無視（必要なら throw）
+    if (it == textures_.end()) return;  // 未登録 ID は無視（必要ならエラーを返す API を追加）
 
     SDL_Texture* tex = it->second;
     SDL_Rect src = to_sdl_rect(src_region);
@@ -74,8 +81,10 @@ void SDLRenderer::draw_texture(TextureId id, const Rect& src_region, const Rect&
 }
 
 // ──────────── テクスチャ管理 ────────────
-TextureId SDLRenderer::register_texture(SDL_Texture* tex) {
-    if (!tex) throw std::invalid_argument("register_texture: texture is null");
+tl::expected<TextureId, std::string> SDLRenderer::register_texture(SDL_Texture* tex) {
+    if (!tex) {
+        return tl::unexpected<std::string>{"register_texture: texture is null"};
+    }
     const TextureId id = next_id_++;
     textures_.emplace(id, tex);
     return id;

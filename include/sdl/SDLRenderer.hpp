@@ -3,19 +3,34 @@
 
 #include <SDL2/SDL.h>
 #include <core/IRenderer.hpp>
-#include <stdexcept>
+#include <memory>
+#include <string>
+#include <tl/expected.hpp>
 #include <unordered_map>
 
 /**
  * SDLRenderer ― SDL2 バックエンド実装
  *   - RAII で SDL_Renderer を保持
- *   - テクスチャは register_texture() で管理
- *   - begin_frame()/end_frame() により Present を明示
+ *   - 生成は static create() から行い、結果を tl::expected で返す
+ *   - テクスチャは register_texture() で管理（これも expected で結果返却）
  */
 class SDLRenderer final : public IRenderer {
    public:
-    explicit SDLRenderer(SDL_Window* window,
-                         int flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    /**
+     * ファクトリ関数
+     * @param window SDL_Window*（借用）
+     * @param flags  SDL_Renderer フラグ
+     * @return 成功時: std::unique_ptr<SDLRenderer>
+     *         失敗時: エラーメッセージ
+     */
+    static tl::expected<std::unique_ptr<SDLRenderer>, std::string> create(
+        SDL_Window* window, int flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+    // コピー禁止・ムーブのみ許可
+    SDLRenderer(const SDLRenderer&) = delete;
+    SDLRenderer& operator=(const SDLRenderer&) = delete;
+    SDLRenderer(SDLRenderer&&) = default;
+    SDLRenderer& operator=(SDLRenderer&&) = default;
 
     ~SDLRenderer() override;
 
@@ -35,9 +50,9 @@ class SDLRenderer final : public IRenderer {
                       double angle = 0.0) override;
 
     // 追加ユーティリティ ----------------------------------------------------
-    /** SDL_Texture* を登録し TextureId を取得（SDLRenderer が破棄を担当） */
+    /** SDL_Texture* を登録し TextureId を取得 */
     [[nodiscard]]
-    TextureId register_texture(SDL_Texture* tex);
+    tl::expected<TextureId, std::string> register_texture(SDL_Texture* tex);
 
     /** BlendMode を直接設定 */
     void set_blend_mode(SDL_BlendMode mode) { SDL_SetRenderDrawBlendMode(renderer_, mode); }
@@ -46,6 +61,10 @@ class SDLRenderer final : public IRenderer {
     SDL_Renderer* raw() noexcept { return renderer_; }
 
    private:
+    // create() からのみ呼ばれるプライベートコンストラクタ
+    SDLRenderer(SDL_Window* window, SDL_Renderer* renderer) noexcept
+        : window_{window}, renderer_{renderer} {}
+
     SDL_Window* window_{nullptr};      // 借用：破棄はアプリ側
     SDL_Renderer* renderer_{nullptr};  // 保有：デストラクタで破棄
 
