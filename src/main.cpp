@@ -60,6 +60,7 @@ int main() {
         return 1;
     }
 
+    // TODO: emscriptenに依存しないメインループで書く
     emscripten_set_main_loop(main_loop, 0, 1);
     return 0;
 }
