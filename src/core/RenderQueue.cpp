@@ -13,5 +13,6 @@ class RenderQueue {
     }
 
    private:
+    // このクラスがライフタイム管理するので、unique_ptrを使用
     std::vector<std::unique_ptr<IRenderCommand>> commands_;
 };
