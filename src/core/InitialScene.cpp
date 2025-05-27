@@ -1,4 +1,4 @@
-#include <core/Scene.hpp>
+#include <core/scene/Scene.hpp>
 
 class InitialScene : public Scene {
    public:
