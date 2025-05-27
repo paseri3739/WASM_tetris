@@ -1,3 +1,4 @@
+#include <SDL2/SDL.h>
 #include <core/Renderer.hpp>
 class SDLRenderer : public RendererInterface {
    public:
