@@ -2,7 +2,7 @@
 #define CECD6737_285E_48BD_BE62_13103B0254DC
 
 #include <core/GameConfig.hpp>
-#include <core/scene/Scene.hpp>
+#include <core/scene/IScene.hpp>
 #include <core/scene/SceneManager.hpp>
 #include <memory>
 

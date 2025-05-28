@@ -2,7 +2,7 @@
 
 #ifndef C79CAE94_BCD1_41D5_AD77_2A43EE576AB7
 #define C79CAE94_BCD1_41D5_AD77_2A43EE576AB7
-#include <core/scene/Scene.hpp>
+#include <core/scene/IScene.hpp>
 #include <memory>
 
 /**

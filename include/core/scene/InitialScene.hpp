@@ -2,7 +2,7 @@
 #define D84B2884_6930_4338_8CE4_151D458C1D5E
 
 #include <core/GameConfig.hpp>
-#include <core/scene/Scene.hpp>
+#include <core/scene/IScene.hpp>
 
 class InitialScene final : public IScene {
    public:
