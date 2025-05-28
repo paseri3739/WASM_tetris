@@ -4,6 +4,10 @@
 #include <iomanip>
 #include <sstream>
 #include <unordered_map>
+
+/**
+ * 文字列からColorオブジェクトを生成
+ */
 Color Color::from_string(std::string color_str) {
     // 先頭・末尾の空白を除去
     auto trim = [](std::string& s) {
@@ -79,3 +83,10 @@ Color Color::from_string(std::string color_str) {
     // 解析失敗時は既定値（白）
     return color;
 }
+
+// Example usage
+// Color c1 = Color::from_string("red");                 // 名称
+// Color c2 = Color::from_string("#00ff00");             // #rrggbb
+// Color c3 = Color::from_string("#0f08");               // #rgba  → #00ff0088
+// Color c4 = Color::from_string("rgb(0,0,255)");        // rgb(...)
+// Color c5 = Color::from_string("rgba(255,255,0,128)"); // rgba(...)
