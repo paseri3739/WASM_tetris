@@ -9,8 +9,15 @@
 /// テトリス 7 種のテトロミノ
 enum class TetriminoType : std::uint8_t { I, O, T, S, Z, J, L };
 
-namespace tetrimino {
+enum class TetriminoStateType : std::uint8_t { ACTIVE, PENDING, LOCKED };
 
+// 最低限のプロパティだけ保持してほかはconstexprで計算するようにする。
+struct Tetrimino {
+    TetriminoType type;
+    TetriminoStateType state;
+};
+
+namespace tetrimino {
 /// 形状 → 色 のテーブル（添字と enum 値を一致させる）
 constexpr std::array<Color, 7> kColors{{
     /* I */ {0, 255, 255, 255},  // cyan
