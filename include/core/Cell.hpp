@@ -4,6 +4,7 @@
 #include <core/GameConfig.hpp>
 #include <core/IRenderer.hpp>
 #include <core/Position.hpp>
+#include <core/graphics_types.hpp>
 #include <string>
 #include <tl/expected.hpp>
 
@@ -20,14 +21,14 @@ struct Cell {
     const CellStatus type;
     const Position position;
     const double size;
-    const std::string color;
+    const Color color;
 
     void render(IRenderer& renderer) const;
 
     // コンストラクタは private にして、CellFactory 経由でのみインスタンス化可能にする
    private:
-    Cell(CellStatus t, Position pos, double sz, std::string col)
-        : type(t), position(pos), size(sz), color(std::move(col)) {}
+    Cell(CellStatus t, Position pos, double sz, Color col)
+        : type(t), position(pos), size(sz), color(col) {}
     friend class CellFactory;  // CellFactoryからのみインスタンス化可能
 };
 
@@ -60,7 +61,7 @@ class CellFactory {
    public:
     explicit CellFactory(const GameConfig& cfg) : size_{cfg.cell.size} {}
 
-    [[nodiscard]] Cell create(const Position& pos, CellStatus type, std::string color) const;
+    [[nodiscard]] Cell create(const Position& pos, CellStatus type, Color color) const;
 
     int size() const noexcept { return size_; }
 
@@ -72,7 +73,7 @@ class CellFactory {
      * @return 成功時は更新後のセル、失敗時はエラーメッセージ
      */
     tl::expected<Cell, std::string> update_cell_state(const Cell& cell, CellStatus new_state,
-                                                      std::string new_color);
+                                                      Color new_color);
 
    private:
     double size_;
