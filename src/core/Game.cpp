@@ -2,6 +2,9 @@
 #include <cmath>  // for std::max
 #include <core/Game.hpp>
 #include <thread>
+#ifndef __EMSCRIPTEN__
+#include <SDL2/SDL.h>
+#endif
 
 void Game::update(double delta_time) { this->scene_manager_->update(delta_time); }
 void Game::processInput() {
