@@ -33,6 +33,7 @@ int main() {
 #else
     Uint32 winFlags = SDL_WINDOW_SHOWN;
 #endif
+    // TODO: サイズを再考する
     window = SDL_CreateWindow("Fallback Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                               640, 480, winFlags);
     if (!window) {
