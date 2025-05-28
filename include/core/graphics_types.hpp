@@ -3,6 +3,7 @@
 
 #include <core/Position.hpp>
 #include <cstdint>
+#include <string>
 
 /** RGBA カラー（0-255 範囲） */
 struct Color {
