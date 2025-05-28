@@ -22,28 +22,34 @@ void Game::processInput() {
     // SDLInputPollerを利用して入力を取得する処理を追加
     this->scene_manager_->process_input(input);  // シーンに入力が伝播する
 }
+
+// ─────────────────────── 1フレーム処理 ───────────────────────
+void Game::tick(double deltaTime) {
+    this->processInput();     // 入力収集
+    this->update(deltaTime);  // ロジック更新
+    this->scene_manager_->render(*renderer_);
+}
+
+// ─────────────────────── デスクトップ専用ループ ───────────────
+#ifndef __EMSCRIPTEN__
 void Game::runLoop() {
     using clock = std::chrono::steady_clock;
 
-    const double target_frame_duration = 1.0 / static_cast<double>(config_.frame_rate.frame_rate);
-
-    auto last_time = clock::now();
+    const double target = 1.0 / static_cast<double>(config_.frame_rate.frame_rate);
+    auto last = clock::now();
 
     while (true) {
         auto now = clock::now();
-        double delta_time = std::chrono::duration<double>(now - last_time).count();
-        last_time = now;
+        double dt = std::chrono::duration<double>(now - last).count();
+        last = now;
 
-        this->processInput();  // TODO: 内部でSDLInputPollerを利用して入力を取得し、シーンに渡す
-        this->update(delta_time);
-        this->scene_manager_->render(*this->renderer_);
+        tick(dt);
 
-        // 経過時間より短ければスリープしてFPSを一定に保つ
-        double frame_time = std::chrono::duration<double>(clock::now() - now).count();
-        double sleep_time = target_frame_duration - frame_time;
-
-        if (sleep_time > 0.0) {
-            std::this_thread::sleep_for(std::chrono::duration<double>(sleep_time));
-        }
+        // 経過時間を測って不足分だけスリープ
+        double spent = std::chrono::duration<double>(clock::now() - now).count();
+        double remaining = target - spent;
+        if (remaining > 0.0)
+            SDL_Delay(static_cast<Uint32>(remaining * 1000.0));  // 高分解能ではないが十分
     }
 }
+#endif

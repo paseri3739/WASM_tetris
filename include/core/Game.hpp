@@ -19,6 +19,7 @@ class Game {
     // ゲームの初期化処理
     bool initialize();
     void runLoop();
+    void tick(double deltaTime);  // 1フレーム処理（全環境共通）
 
    private:
     GameConfig config_;

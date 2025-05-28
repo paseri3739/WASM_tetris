@@ -23,6 +23,7 @@ function(setup_wasm_target target_name)
     set_target_properties(${target_name} PROPERTIES SUFFIX ".html")
     target_link_options(${target_name} PRIVATE
         "-sUSE_SDL=2"
+        "-sUSE_WEBGL2=1"
         "-sUSE_SDL_IMAGE=2"
         "-sUSE_SDL_MIXER=2"
         "-sALLOW_MEMORY_GROWTH=1"
