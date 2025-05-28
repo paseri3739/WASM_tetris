@@ -5,7 +5,7 @@
 
 void Game::update(double delta_time) { this->scene_manager_.update(delta_time); }
 void Game::processInput() {
-    // TODO: 抽象入力を受け取り、現在のシーンに渡す
+    // TODO: 抽象入力を取得し、SceneManager経由で現在のシーンに渡す
 }
 void Game::runLoop() {
     using clock = std::chrono::steady_clock;
@@ -19,7 +19,7 @@ void Game::runLoop() {
         double delta_time = std::chrono::duration<double>(now - last_time).count();
         last_time = now;
 
-        this->processInput();
+        this->processInput();  // TODO: 内部でSDLInputPollerを利用して入力を取得し、シーンに渡す
         this->update(delta_time);
         this->scene_manager_.render(this->renderer_);
 
