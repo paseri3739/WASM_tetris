@@ -1,4 +1,4 @@
-#include "SDLRenderer.hpp"
+#include <sdl/SDLRenderer.hpp>
 
 // ──────────── ローカル変換ユーティリティ ────────────
 namespace {

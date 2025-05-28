@@ -3,7 +3,7 @@
 #include <core/Game.hpp>
 #include <thread>
 
-void Game::update(double delta_time) { this->scene_manager_.update(delta_time); }
+void Game::update(double delta_time) { this->scene_manager_->update(delta_time); }
 void Game::processInput() {
     // TODO: 抽象入力を取得し、SceneManager経由で現在のシーンに渡す
     Input input = {std::unordered_map<InputKey, InputState>{
@@ -20,7 +20,7 @@ void Game::processInput() {
         {InputKey::QUIT, {false, false, false}},
     }};
     // SDLInputPollerを利用して入力を取得する処理を追加
-    this->scene_manager_.process_input(input);
+    this->scene_manager_->process_input(input);  // シーンに入力が伝播する
 }
 void Game::runLoop() {
     using clock = std::chrono::steady_clock;
@@ -36,7 +36,7 @@ void Game::runLoop() {
 
         this->processInput();  // TODO: 内部でSDLInputPollerを利用して入力を取得し、シーンに渡す
         this->update(delta_time);
-        this->scene_manager_.render(this->renderer_);
+        this->scene_manager_->render(*this->renderer_);
 
         // 経過時間より短ければスリープしてFPSを一定に保つ
         double frame_time = std::chrono::duration<double>(clock::now() - now).count();

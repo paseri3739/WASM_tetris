@@ -1,27 +1,22 @@
-#include <core/scene/Scene.hpp>
+#include <core/scene/InitialScene.hpp>
 
-class InitialScene : public IScene {
-   public:
-    InitialScene() = default;
+void InitialScene::initialize() {}
 
-    void initialize() override {}
+void InitialScene::update(const double delta_time) {
+    // 初期シーンの更新処理
+}
 
-    void update(const double delta_time) override {
-        // 初期シーンの更新処理
-    }
+void InitialScene::process_input(const Input& input) {
+    // 初期シーンの入力処理
+}
 
-    void process_input(const Input& input) override {
-        // 初期シーンの入力処理
-    }
+void InitialScene::render(IRenderer& renderer) {
+    // 初期シーンの描画処理
+    constexpr Rect rect = {{0, 0}, {800, 600}};        // 全画面サイズ
+    constexpr Color background_color{0, 0, 255, 255};  // 青色
+    renderer.fill_rect(rect, background_color);        // 例: 青い背景
+}
 
-    void render(IRenderer& renderer) override {
-        // 初期シーンの描画処理
-        constexpr Rect rect = {{0, 0}, {800, 600}};        // 全画面サイズ
-        constexpr Color background_color{0, 0, 255, 255};  // 青色
-        renderer.fill_rect(rect, background_color);        // 例: 青い背景
-    }
-
-    void cleanup() override {
-        // 初期シーンの終了処理
-    }
-};
+void InitialScene::cleanup() {
+    // 初期シーンの終了処理
+}

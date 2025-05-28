@@ -67,18 +67,23 @@ set_property(TARGET core PROPERTY CXX_STANDARD 17)
 # 2) WASM ビルド時のみ UI/SDL を含む実行ファイルを生成
 # ─────────────────────────────────────────────────────────────
 if(EMSCRIPTEN)
-  add_executable(wasm_app
-    src/main.cpp # SDL2 を直接触る層
-  )
-  target_include_directories(wasm_app PRIVATE ${PROJECT_SOURCE_DIR}/include)
-  target_link_libraries(wasm_app PRIVATE core)
+  # src 配下の *.cpp を問答無用で収集
+  file(GLOB_RECURSE ALL_SOURCES CONFIGURE_DEPENDS
+    ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
-  # WASM オプション委譲
+  add_executable(wasm_app ${ALL_SOURCES})
+  target_include_directories(wasm_app PRIVATE ${PROJECT_SOURCE_DIR}/include)
+
+  # Emscripten 専用オプション
   include(cmake/wasm.cmake)
-  setup_wasm_target(wasm_app) # 既存関数
+  setup_wasm_target(wasm_app)
+
   set(CMAKE_BUILD_TYPE Debug)
   string(APPEND CMAKE_CXX_FLAGS_DEBUG
     " -gsource-map --source-map-base http://localhost:8080/")
+
+  # ヘッダ専用ライブラリはリンクだけ渡す（シンボルは出ない）
+  target_link_libraries(wasm_app PRIVATE immer tl::expected)
 endif()
 
 # ─────────────────────────────────────────────────────────────

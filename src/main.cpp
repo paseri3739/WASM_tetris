@@ -1,36 +1,15 @@
 #include <SDL2/SDL.h>
 #include <emscripten.h>
-#include <fstream>
+#include <core/Game.hpp>
+#include <core/GameConfig.hpp>
+#include <core/scene/InitialScene.hpp>
+#include <core/scene/SceneManager.hpp>
 #include <iostream>
-#include <monad/IO.hpp>
-#include <tl/expected.hpp>
-
-IO<tl::expected<void, std::string>> logMousePosition(const std::string &filepath) {
-    return IO<tl::expected<void, std::string>>([filepath]() {
-        int x, y;
-        SDL_GetMouseState(&x, &y);
-
-        std::ofstream file(filepath, std::ios::app);
-        if (!file.is_open())
-            return tl::expected<void, std::string>(
-                tl::unexpected<std::string>("ファイルオープン失敗: " + filepath));
-
-        file << "Mouse: (" << x << ", " << y << ")\n";
-        return tl::expected<void, std::string>{};
-    });
-}
+#include <memory>
+#include <sdl/SDLRenderer.hpp>
 
 SDL_Surface *screenSurface = nullptr;
 SDL_Window *window = nullptr;
-
-void main_loop() {
-    SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 255, 255, 255));  // 白背景
-
-    SDL_Rect rect = {100, 100, 100, 100};
-    SDL_FillRect(screenSurface, &rect, SDL_MapRGB(screenSurface->format, 255, 0, 0));  // 赤四角
-
-    SDL_UpdateWindowSurface(window);
-}
 
 int main() {
     int n = SDL_GetNumRenderDrivers();
@@ -60,7 +39,20 @@ int main() {
         return 1;
     }
 
-    // TODO: emscriptenに依存しないメインループで書く
-    emscripten_set_main_loop(main_loop, 0, 1);
+    // // TODO: emscriptenに依存しないメインループで書く
+    // emscripten_set_main_loop(main_loop, 0, 1);
+    auto initial_scene = std::make_unique<InitialScene>();
+    auto scene_manager = std::make_unique<SceneManager>(std::move(initial_scene));
+    auto renderer_result = SDLRenderer::create(window);
+    if (!renderer_result) {
+        std::cerr << "Failed to create SDLRenderer: " << renderer_result.error() << '\n';
+        return 1;
+    }
+    // std::unique_ptr<SDLRenderer> を取り出す
+    std::unique_ptr<SDLRenderer> renderer = std::move(renderer_result.value());
+    Game game = Game(game_config::defaultGameConfig, std::move(scene_manager), std::move(renderer));
+
+    game.runLoop();
+
     return 0;
 }
