@@ -12,7 +12,7 @@ class IScene {
    public:
     virtual ~IScene() = default;
 
-    // シーンの初期化
+    // シーンの初期化が必要ならここで行う
     virtual void initialize() = 0;
 
     // シーンの更新処理
