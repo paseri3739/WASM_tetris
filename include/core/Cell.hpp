@@ -2,6 +2,7 @@
 #define B46CA402_5D14_4D1D_9923_49018BA7FA61
 
 #include <core/GameConfig.hpp>
+#include <core/IRenderer.hpp>
 #include <core/Position.hpp>
 #include <string>
 #include <tl/expected.hpp>
@@ -20,6 +21,8 @@ struct Cell {
     const Position position;
     const double size;
     const std::string color;
+
+    void render(IRenderer& renderer) const;
 
     // コンストラクタは private にして、CellFactory 経由でのみインスタンス化可能にする
    private:

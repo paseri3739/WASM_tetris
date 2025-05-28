@@ -10,6 +10,7 @@ struct Color {
     std::uint8_t g{0};
     std::uint8_t b{0};
     std::uint8_t a{255};
+    static Color from_string(std::string color_str);
 };
 
 /** 幅・高さを表す 2D サイズ */

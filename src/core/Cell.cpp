@@ -1,4 +1,5 @@
 #include <core/Cell.hpp>
+#include <core/graphics_types.hpp>
 
 Cell CellFactory::create(const Position& pos, CellStatus type, std::string color) const {
     if (type == CellStatus::EMPTY) color = "white";
@@ -16,4 +17,14 @@ tl::expected<Cell, std::string> CellFactory::update_cell_state(const Cell& cell,
     if (new_state == CellStatus::EMPTY) new_color = "white";
 
     return Cell{new_state, cell.position, cell.size, std::move(new_color)};
+}
+
+void Cell::render(IRenderer& renderer) const {
+    // 描画処理の実装
+    Rect rect{position.x, position.y, size, size};
+    if (type == CellStatus::FILLED) {
+        renderer.fill_rect(rect, Color::from_string(color));
+    } else {
+        renderer.stroke_rect(rect, Color::from_string(color));
+    }
 }
