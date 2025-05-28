@@ -1,5 +1,10 @@
 #include <core/Cell.hpp>
 
+Cell CellFactory::create(const Position& pos, CellStatus type, std::string color) const {
+    if (type == CellStatus::EMPTY) color = "white";
+    return Cell{type, pos, size_, std::move(color)};
+}
+
 tl::expected<Cell, std::string> CellFactory::update_cell_state(const Cell& cell,
                                                                CellStatus new_state,
                                                                std::string new_color) {

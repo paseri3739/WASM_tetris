@@ -57,10 +57,7 @@ class CellFactory {
    public:
     explicit CellFactory(const GameConfig& cfg) : size_{cfg.cell.size} {}
 
-    [[nodiscard]] Cell create(const Position& pos, CellStatus type, std::string color) const {
-        if (type == CellStatus::EMPTY) color = "white";
-        return Cell{type, pos, size_, std::move(color)};
-    }
+    [[nodiscard]] Cell create(const Position& pos, CellStatus type, std::string color) const;
 
     int size() const noexcept { return size_; }
 
