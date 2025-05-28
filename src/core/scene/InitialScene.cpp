@@ -1,6 +1,6 @@
 #include <core/scene/Scene.hpp>
 
-class InitialScene : public Scene {
+class InitialScene : public IScene {
    public:
     InitialScene() = default;
 

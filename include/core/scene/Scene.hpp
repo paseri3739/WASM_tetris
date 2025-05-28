@@ -8,9 +8,9 @@
 /**
  * Scene ― シーンのインターフェース
  */
-class Scene {
+class IScene {
    public:
-    virtual ~Scene() = default;
+    virtual ~IScene() = default;
 
     // シーンの初期化
     virtual void initialize() = 0;
@@ -34,7 +34,7 @@ class Scene {
 
 class SceneManager {
    public:
-    explicit SceneManager(std::unique_ptr<Scene> initial_scene)
+    explicit SceneManager(std::unique_ptr<IScene> initial_scene)
         : current_scene_{std::move(initial_scene)} {
         current_scene_->initialize();
     }
@@ -42,12 +42,12 @@ class SceneManager {
     void update(const double delta_time);
     void render();
 
-    void change_scene(const std::unique_ptr<Scene> next);
-    Scene& get_current() const;
+    void change_scene(const std::unique_ptr<IScene> next);
+    IScene& get_current() const;
 
    private:
-    std::unique_ptr<Scene> current_scene_;
-    std::unique_ptr<Scene> next_scene_;
+    std::unique_ptr<IScene> current_scene_;
+    std::unique_ptr<IScene> next_scene_;
 
     void apply_scene_change();
 };
