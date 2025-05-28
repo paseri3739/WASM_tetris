@@ -16,7 +16,9 @@ class InitialScene : public Scene {
 
     void render(IRenderer& renderer) override {
         // 初期シーンの描画処理
-        renderer.fill_rect({{0, 0}, {800, 600}}, {0, 0, 255, 255});  // 例: 青い背景
+        constexpr Rect rect = {{0, 0}, {800, 600}};        // 全画面サイズ
+        constexpr Color background_color{0, 0, 255, 255};  // 青色
+        renderer.fill_rect(rect, background_color);        // 例: 青い背景
     }
 
     void cleanup() override {
