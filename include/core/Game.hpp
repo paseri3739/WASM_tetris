@@ -3,11 +3,12 @@
 
 #include <core/GameConfig.hpp>
 #include <core/scene/Scene.hpp>
+#include <core/scene/SceneManager.hpp>
 
 class Game {
    public:
-    explicit Game(const GameConfig& config, SceneManager& scene_manager)
-        : config_(config), scene_manager_(scene_manager) {}
+    explicit Game(const GameConfig& config, SceneManager& scene_manager, IRenderer& renderer)
+        : config_(config), scene_manager_(scene_manager), renderer_(renderer) {}
 
     // ゲームの設定を取得
     const GameConfig& getConfig() const { return config_; }
@@ -18,6 +19,7 @@ class Game {
    private:
     GameConfig config_;
     SceneManager& scene_manager_;
+    IRenderer& renderer_;  // レンダラーの参照
     double last_update_time_ = 0.0;
     // ゲームの更新処理
     void update(double delta_time);

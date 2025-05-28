@@ -21,7 +21,7 @@ void Game::runLoop() {
 
         this->processInput();
         this->update(delta_time);
-        this->scene_manager_.render();
+        this->scene_manager_.render(this->renderer_);
 
         // 経過時間より短ければスリープしてFPSを一定に保つ
         double frame_time = std::chrono::duration<double>(clock::now() - now).count();
