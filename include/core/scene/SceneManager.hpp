@@ -1,5 +1,6 @@
 #include <core/scene/Scene.hpp>
 #include <memory>
+
 /**
  * SceneManager ― Stateパターンに基づきシーンを管理・遷移するクラス
  */
@@ -12,9 +13,10 @@ class SceneManager {
     }
 
     void update(const double delta_time);
-    void render();
+    void render(IRenderer& renderer);
+    void process_input(const Input& input);
 
-    void change_scene(const std::unique_ptr<IScene> next);
+    void change_scene(std::unique_ptr<IScene> next);  // ← const を外す
     IScene& get_current() const;
 
    private:
