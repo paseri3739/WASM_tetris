@@ -21,10 +21,10 @@ tl::expected<Cell, std::string> CellFactory::update_cell_state(const Cell& cell,
 
 void Cell::render(IRenderer& renderer) const {
     // 描画処理の実装
-    Rect rect{position.x, position.y, size, size};
-    if (type == CellStatus::FILLED) {
-        renderer.fill_rect(rect, Color::from_string(color));
+    Rect rect{this->position.x, this->position.y, this->size, this->size};
+    if (this->type == CellStatus::FILLED) {
+        renderer.fill_rect(rect, Color::from_string(this->color));
     } else {
-        renderer.stroke_rect(rect, Color::from_string(color));
+        renderer.stroke_rect(rect, Color::from_string(this->color));
     }
 }
