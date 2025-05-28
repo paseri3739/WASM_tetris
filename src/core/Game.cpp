@@ -27,7 +27,12 @@ void Game::processInput() {
 void Game::tick(double deltaTime) {
     this->processInput();     // 入力収集
     this->update(deltaTime);  // ロジック更新
+
+    // レンダリング処理
+    renderer_->begin_frame();          // ← 任意（状態リセット用）
+    renderer_->clear({0, 0, 0, 255});  // 背景を真っ黒でクリア (任意)
     this->scene_manager_->render(*renderer_);
+    renderer_->end_frame();  // ← SDL_RenderPresent() が呼ばれる
 }
 
 // ─────────────────────── デスクトップ専用ループ ───────────────
