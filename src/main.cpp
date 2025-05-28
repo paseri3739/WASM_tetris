@@ -50,7 +50,8 @@ int main() {
     auto renderer = std::move(renderer_result.value());
 
     // ── SceneManager ──
-    auto scene_manager = std::make_unique<SceneManager>(std::make_unique<InitialScene>());
+    auto scene_manager = std::make_unique<SceneManager>(
+        std::make_unique<InitialScene>(game_config::defaultGameConfig));
 
     // ── Game を生成し g_game に保持 ──
     g_game = std::make_unique<Game>(game_config::defaultGameConfig, std::move(scene_manager),

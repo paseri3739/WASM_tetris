@@ -1,11 +1,12 @@
 #ifndef D84B2884_6930_4338_8CE4_151D458C1D5E
 #define D84B2884_6930_4338_8CE4_151D458C1D5E
 
+#include <core/GameConfig.hpp>
 #include <core/scene/Scene.hpp>
 
 class InitialScene final : public IScene {
    public:
-    InitialScene() = default;
+    InitialScene(const GameConfig& game_config) : game_config_(game_config) {};
 
     void initialize() override;
 
@@ -16,6 +17,9 @@ class InitialScene final : public IScene {
     void render(IRenderer& renderer) override;
 
     void cleanup() override;
+
+   private:
+    GameConfig game_config_;  // ゲーム設定
 };
 
 #endif /* D84B2884_6930_4338_8CE4_151D458C1D5E */
