@@ -18,23 +18,30 @@
  */
 class TetrisGrid {
    public:
-    std::string id;
-    Position position;                     ///< グリッドの左上位置
-    Size size;                             ///< 全体サイズ
-    GridColumnRow grid_size;               ///< 行数・列数
-    std::vector<std::vector<Cell>> cells;  ///< 各セルの状態
+    // 読み取り専用でpublicにしておく
+    const std::string id;
+    const Position position;                     ///< グリッドの左上位置
+    const Size size;                             ///< 全体サイズ
+    const GridColumnRow grid_size;               ///< 行数・列数
+    const std::vector<std::vector<Cell>> cells;  ///< 各セルの状態
+    const CellFactory cell_factory;              ///< セル生成用ファクトリ
 
     /**
-     * ファクトリ関数
-     * @param id   グリッドの識別子
-     * @param pos  左上座標
-     * @param sz   グリッド全体の描画サイズ
-     * @param rows 行数
-     * @param cols 列数
-     * @return 成功: TetrisGrid / 失敗: エラーメッセージ
+     * コンストラクタ
+     * @param id グリッドの識別子
+     * @param position グリッドの左上位置
+     * @param size グリッドのサイズ
+     * @param grid_size 行数・列数
+     * @param cell_factory セル生成用ファクトリ
      */
-    static tl::expected<TetrisGrid, std::string> create(const std::string& id, Position pos,
-                                                        Size sz, int rows, int cols);
+    TetrisGrid(std::string id, Position position, Size size, GridColumnRow grid_size,
+               CellFactory cell_factory)
+        : id(std::move(id)),
+          position(position),
+          size(size),
+          grid_size(grid_size),
+          cell_factory(std::move(cell_factory)),
+          cells(initialize_cells(this->position, this->grid_size, this->cell_factory)) {}
 
     inline void render(IRenderer& renderer) {
         // セルを描画する
@@ -49,31 +56,35 @@ class TetrisGrid {
         }
     }
 
+    Position get_position_of_cell(const TetrisGrid& grid, const GridColumnRow& grid_position,
+                                  double cell_size);
+
+    GridColumnRow get_grid_position_of_cell(const TetrisGrid& grid, const Position& cell_position,
+                                            double cell_size);
+
+    bool is_within_bounds(const TetrisGrid& grid, int column, int row);
+
+    bool is_within_bounds(const TetrisGrid& grid, const Position& position);
+
    private:
-    // プライベートコンストラクタで外部からの直接生成を禁止
-    TetrisGrid(std::string id_, Position pos_, Size sz_, GridColumnRow grid_sz_,
-               std::vector<std::vector<Cell>> cells_)
-        : id{std::move(id_)},
-          position{pos_},
-          size{sz_},
-          grid_size{grid_sz_},
-          cells{std::move(cells_)} {}
-
-    // 旧 tetris_grid::create() は削除するため宣言しない
+    static std::vector<std::vector<Cell>> initialize_cells(const Position& origin,
+                                                           const GridColumnRow& grid_size,
+                                                           const CellFactory& factory) {
+        std::vector<std::vector<Cell>> result(grid_size.row);
+        for (int row = 0; row < grid_size.row; ++row) {
+            std::vector<Cell> row_cells;
+            for (int col = 0; col < grid_size.column; ++col) {
+                Position cell_pos{
+                    origin.x + col * factory.size.width,
+                    origin.y + row * factory.size.height,
+                };
+                row_cells.push_back(
+                    factory.create(cell_pos, CellStatus::EMPTY, Color::from_string("white")));
+            }
+            result[row] = std::move(row_cells);
+        }
+        return result;
+    }
 };
-
-namespace tetris_grid {
-
-Position get_position_of_cell(const TetrisGrid& grid, const GridColumnRow& grid_position,
-                              double cell_size);
-
-GridColumnRow get_grid_position_of_cell(const TetrisGrid& grid, const Position& cell_position,
-                                        double cell_size);
-
-bool is_within_bounds(const TetrisGrid& grid, int column, int row);
-
-bool is_within_bounds(const TetrisGrid& grid, const Position& position);
-
-}  // namespace tetris_grid
 
 #endif
