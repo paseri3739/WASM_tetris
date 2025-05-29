@@ -30,18 +30,8 @@ GridColumnRow tetris_grid_manipulation::get_grid_position_of_cell(const TetrisGr
     return GridColumnRow{column, row};
 }
 
-TetrisGrid tetris_grid_manipulation::map_tetrimino_to_grid(const TetrisGrid& grid,
-                                                           const Tetrimino& tetrimino,
-                                                           CellFactory& cell_factory) {
-    std::terminate();  // TODO: 呼ばれると即終了
-}
-
-TetrisGrid tetris_grid_manipulation::unmap_moving_cell(const TetrisGrid& grid,
-                                                       const CellFactory& cell_factory) {
-    std::terminate();  // TODO: 呼ばれると即終了
-}
-
-TetrisGrid tetris_grid_manipulation::clear_filled_rows(const TetrisGrid& grid,
-                                                       CellFactory& cell_factory) {
-    std::terminate();  // TODO: 呼ばれると即終了
+bool tetris_grid_manipulation::is_within_bounds(const TetrisGrid& grid, int column, int row) {
+    bool isColumnValid = column >= 0 && column < grid.grid_size.column;
+    bool isRowValid = row >= 0 && row < grid.grid_size.row;
+    return isColumnValid && isRowValid;
 }
