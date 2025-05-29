@@ -21,3 +21,8 @@ bool tetris_grid::is_within_bounds(const TetrisGrid& grid, int column, int row) 
     bool isRowValid = row >= 0 && row <= grid.grid_size.row;
     return isColumnValid && isRowValid;
 }
+
+bool tetris_grid::is_within_bounds(const TetrisGrid& grid, const Position& position) {
+    auto grid_position = get_grid_position_of_cell(grid, position, grid.size.width);
+    return is_within_bounds(grid, grid_position.column, grid_position.row);
+}

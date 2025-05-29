@@ -72,6 +72,8 @@ GridColumnRow get_grid_position_of_cell(const TetrisGrid& grid, const Position& 
 
 bool is_within_bounds(const TetrisGrid& grid, int column, int row);
 
+bool is_within_bounds(const TetrisGrid& grid, const Position& position);
+
 }  // namespace tetris_grid
 
 #endif
