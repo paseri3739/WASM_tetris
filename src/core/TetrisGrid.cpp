@@ -45,3 +45,28 @@ TetrisGrid tetris_grid_manipulation::clear_filled_rows(const TetrisGrid& grid,
                                                        CellFactory& cell_factory) {
     std::terminate();  // TODO: 呼ばれると即終了
 }
+
+tl::expected<TetrisGrid, std::string> tetris_grid_manipulation::make_all_empty(
+    const TetrisGrid& grid, CellFactory& cell_factory) {
+    std::vector<std::vector<Cell>> new_cells;
+
+    for (const auto& row : grid.cells) {
+        std::vector<Cell> new_row;
+        for (const auto& cell : row) {
+            auto new_cell =
+                cell_factory.create(cell.position, CellStatus::EMPTY, Color::from_string("white"));
+            new_row.push_back(new_cell);
+        }
+        new_cells.push_back(std::move(new_row));
+    }
+
+    // 新しいTetrisGridをcreateで構築（privateコンストラクタのため直接生成できない）
+    return TetrisGrid::create(grid.id, grid.position, grid.size,
+                              static_cast<int>(grid.grid_size.row),
+                              static_cast<int>(grid.grid_size.column))
+        .and_then([&](TetrisGrid new_grid) -> tl::expected<TetrisGrid, std::string> {
+            // セルだけ差し替える
+            new_grid.cells = std::move(new_cells);
+            return new_grid;
+        });
+}

@@ -68,8 +68,10 @@ TetrisGrid unmap_moving_cell(const TetrisGrid& grid, const CellFactory& cell_fac
 
 TetrisGrid clear_filled_rows(const TetrisGrid& grid, CellFactory& cell_factory);
 
+tl::expected<TetrisGrid, std::string> make_all_empty(
+    const TetrisGrid& grid,
+    CellFactory& cell_factory);  // namespace tetris_grid_manipulation
 }  // namespace tetris_grid_manipulation
-
 #endif /* F7B71047_1F3E_482C_9849_3CB6B22E22C3 */
 
 #endif /* EAEC85BA_F694_47C7_AB0E_2FD093BD0A16 */
