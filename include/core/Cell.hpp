@@ -23,7 +23,15 @@ struct Cell {
     const Size size;
     const Color color;
 
-    void render(IRenderer& renderer) const;
+    inline void render(IRenderer& renderer) const {
+        // 描画処理の実装
+        Rect rect{this->position.x, this->position.y, this->size.width, this->size.height};
+        if (this->type == CellStatus::FILLED) {
+            renderer.fill_rect(rect, this->color);
+        } else {
+            renderer.stroke_rect(rect, Color::from_string("black"));
+        }
+    };
 
     // コンストラクタは private にして、CellFactory 経由でのみインスタンス化可能にする
    private:

@@ -18,13 +18,3 @@ tl::expected<Cell, std::string> CellFactory::update_cell_state(const Cell& cell,
 
     return Cell{new_state, cell.position, cell.size, std::move(new_color)};
 }
-
-void Cell::render(IRenderer& renderer) const {
-    // 描画処理の実装
-    Rect rect{this->position.x, this->position.y, this->size.width, this->size.height};
-    if (this->type == CellStatus::FILLED) {
-        renderer.fill_rect(rect, this->color);
-    } else {
-        renderer.stroke_rect(rect, Color::from_string("black"));
-    }
-}
