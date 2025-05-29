@@ -1,12 +1,17 @@
 #include <IO/KeyMapping.hpp>
 #include <IO/SDLInputPoller.hpp>
-void SDLInputPoller::poll(Input& input) {
-    input.clear_frame_state();
+
+std::shared_ptr<const Input> SDLInputPoller::poll(std::shared_ptr<const Input> previous_input) {
+    auto input = std::make_shared<Input>(*previous_input);  // コピーして操作対象にする
+    for (auto& [_, state] : input->key_states) {
+        state.is_pressed = false;
+        state.is_released = false;
+    }
 
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
-            input.key_states[InputKey::QUIT].is_pressed = true;
+            input->key_states[InputKey::QUIT].is_pressed = true;
             continue;
         }
 
@@ -16,7 +21,7 @@ void SDLInputPoller::poll(Input& input) {
         if (!maybe_key.has_value()) continue;
 
         InputKey key = maybe_key.value();
-        InputState& state = input.key_states[key];
+        InputState& state = input->key_states[key];
 
         if (event.type == SDL_KEYDOWN) {
             if (!state.is_held) state.is_pressed = true;
@@ -26,4 +31,6 @@ void SDLInputPoller::poll(Input& input) {
             state.is_released = true;
         }
     }
+
+    return input;
 }

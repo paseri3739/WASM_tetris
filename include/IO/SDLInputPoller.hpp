@@ -6,7 +6,7 @@
 
 class SDLInputPoller : public InputPoller {
    public:
-    void poll(Input& input) override;
+    std::shared_ptr<const Input> poll(std::shared_ptr<const Input> previous_input) override;
 };
 
 #endif /* AAB054B7_A6D3_4E3E_A203_66DBAA015871 */

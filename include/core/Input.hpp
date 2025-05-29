@@ -12,14 +12,23 @@ struct InputState {
 };
 
 struct Input {
-    std::unordered_map<InputKey, InputState> key_states;  // キー状態のマップ
-    void clear_frame_state();
+    std::unordered_map<InputKey, InputState> key_states;
+
+    // フレーム状態をクリアした新インスタンスを返す
+    [[nodiscard]] std::shared_ptr<const Input> clear_frame_state() const {
+        auto next = std::make_shared<Input>(*this);
+        for (auto& [_, state] : next->key_states) {
+            state.is_pressed = false;
+            state.is_released = false;
+        }
+        return next;
+    }
 };
 
 class InputPoller {
    public:
     virtual ~InputPoller() = default;
-    virtual void poll(Input& input) = 0;  // 入力状態をポーリングして更新
+    virtual std::shared_ptr<const Input> poll(std::shared_ptr<const Input> previous_input) = 0;
 };
 
 #endif /* AF4443E9_E719_459C_BC56_81BE22CBDE47 */
