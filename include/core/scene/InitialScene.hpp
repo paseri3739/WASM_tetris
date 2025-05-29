@@ -20,6 +20,7 @@ class InitialScene final : public IScene {
 
    private:
     GameConfig game_config_;  // ゲーム設定
+    Position position_;
 };
 
 #endif /* D84B2884_6930_4338_8CE4_151D458C1D5E */
