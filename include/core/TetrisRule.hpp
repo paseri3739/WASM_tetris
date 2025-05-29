@@ -1,13 +1,18 @@
 #ifndef ADFD1949_02B3_4216_A6EB_C0B2714665E9
 #define ADFD1949_02B3_4216_A6EB_C0B2714665E9
 #include <core/Tetrimino.hpp>
+#include <core/TetrisGrid.hpp>
 #include <vector>
 
-class GameState {
+class IGameState {
    public:
-    GameState() = default;
-    ~GameState() = default;
-}
+    virtual ~IGameState() {}
+
+   private:
+    TetrisGrid grid_;
+    Tetrimino current_tetrimino_;
+    bool isGameOver_ = false;
+};
 
 class TetriminoTypeQueue {
    private:
