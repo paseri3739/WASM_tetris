@@ -37,3 +37,26 @@ bool TetrisGrid::is_filled_cell(const GridColumnRow& grid_position) const {
     }
     return this->cells[row][col].type == CellStatus::FILLED;
 }
+
+bool TetrisGrid::is_colliding(const GridColumnRow& before, const GridColumnRow& after) const {
+    // まず両方の位置がグリッド内に収まっているか確認
+    bool before_in_bounds = before.column >= 0 && before.column < grid_size.column &&
+                            before.row >= 0 && before.row < grid_size.row;
+    bool after_in_bounds = after.column >= 0 && after.column < grid_size.column && after.row >= 0 &&
+                           after.row < grid_size.row;
+
+    if (!(before_in_bounds && after_in_bounds)) {
+        return true;  // 領域外への移動は衝突とみなす
+    }
+
+    // セルの状態を取得
+    const CellStatus from_status = cells[before.row][before.column].type;
+    const CellStatus to_status = cells[after.row][after.column].type;
+
+    // EMPTY から EMPTY への移動だけが衝突しない
+    if (from_status == CellStatus::EMPTY && to_status == CellStatus::EMPTY) {
+        return false;  // 非衝突
+    }
+
+    return true;  // それ以外は衝突扱い
+}

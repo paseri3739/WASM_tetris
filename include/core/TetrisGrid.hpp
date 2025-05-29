@@ -66,6 +66,8 @@ class TetrisGrid {
 
     bool is_filled_cell(const GridColumnRow& grid_position) const;
 
+    bool is_colliding(const GridColumnRow& before, const GridColumnRow& after) const;
+
    private:
     static std::vector<std::vector<Cell>> initialize_cells(const Position& origin,
                                                            const GridColumnRow& grid_size,
