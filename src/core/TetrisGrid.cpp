@@ -1,6 +1,5 @@
 #include <core/TetrisGrid.hpp>
 
-// TODO:
 void TetrisGrid::render(IRenderer& renderer) {
     // セルを描画する
     int columns = this->grid_size.column;
