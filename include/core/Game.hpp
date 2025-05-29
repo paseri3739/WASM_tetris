@@ -18,7 +18,10 @@ class Game {
     const GameConfig& getConfig() const { return config_; }
     // ゲームの初期化処理
     bool initialize();
+#ifndef __EMSCRIPTEN__
+    // デスクトップ環境でのゲームループ
     void runLoop();
+#endif
     void tick(double deltaTime);  // 1フレーム処理（全環境共通）
 
    private:
