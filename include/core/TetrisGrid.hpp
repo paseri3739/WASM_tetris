@@ -11,28 +11,43 @@
 #include <string>
 #include <vector>
 
-struct TetrisGrid {
-    std::string id;
-    Position position;  // グリッドの左上位置
-    Size size;
-    GridColumnRow grid_size;               // 行数と列数
-    std::vector<std::vector<Cell>> cells;  // 各セルの状態を保持
-};
-
-namespace tetris_grid {
 /**
- * TetrisGrid の生成関数
- * @param id グリッドの識別子
- * @param pos グリッドの左上位置
- * @param sz グリッドのサイズ
- * @param rows 行数
- * @param cols 列数
- * @return TetrisGrid インスタンス
+ * TetrisGrid ― テトリスの盤面を表す値オブジェクト
+ *   - 生成は static create() からのみ許可
+ *   - 不変オブジェクトとみなし setter は用意しない
  */
-TetrisGrid create(const std::string& id, Position pos, Size sz, int rows, int cols) {
-    return TetrisGrid{id, pos, sz, rows, cols};
-}
-}  // namespace tetris_grid
+class TetrisGrid {
+   public:
+    std::string id;
+    Position position;                     ///< グリッドの左上位置
+    Size size;                             ///< 全体サイズ
+    GridColumnRow grid_size;               ///< 行数・列数
+    std::vector<std::vector<Cell>> cells;  ///< 各セルの状態
+
+    /**
+     * ファクトリ関数
+     * @param id   グリッドの識別子
+     * @param pos  左上座標
+     * @param sz   グリッド全体の描画サイズ
+     * @param rows 行数
+     * @param cols 列数
+     * @return 成功: TetrisGrid / 失敗: エラーメッセージ
+     */
+    static tl::expected<TetrisGrid, std::string> create(const std::string& id, Position pos,
+                                                        Size sz, int rows, int cols);
+
+   private:
+    // プライベートコンストラクタで外部からの直接生成を禁止
+    TetrisGrid(std::string id_, Position pos_, Size sz_, GridColumnRow grid_sz_,
+               std::vector<std::vector<Cell>> cells_)
+        : id{std::move(id_)},
+          position{pos_},
+          size{sz_},
+          grid_size{grid_sz_},
+          cells{std::move(cells_)} {}
+
+    // 旧 tetris_grid::create() は削除するため宣言しない
+};
 
 namespace tetris_grid_manipulation {
 
@@ -41,6 +56,13 @@ Position get_position_of_cell(const TetrisGrid& grid, const GridColumnRow& grid_
 
 GridColumnRow get_grid_position_of_cell(const TetrisGrid& grid, const Position& cell_position,
                                         double cell_size);
+
+TetrisGrid map_tetrimino_to_grid(const TetrisGrid& grid, const Tetrimino& tetrimino,
+                                 CellFactory& cell_factory);
+
+TetrisGrid unmap_moving_cell(const TetrisGrid& grid, const CellFactory& cell_factory);
+
+TetrisGrid clear_filled_rows(const TetrisGrid& grid, CellFactory& cell_factory);
 
 }  // namespace tetris_grid_manipulation
 

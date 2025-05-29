@@ -1,3 +1,4 @@
+#include "TetrisGrid.hpp"
 #include <core/TetrisGrid.hpp>
 namespace tetris_grid_manipulation {
 
@@ -16,4 +17,18 @@ GridColumnRow get_grid_position_of_cell(const TetrisGrid& grid, const Position& 
     return GridColumnRow{column, row};
 }
 
+TetrisGrid map_tetrimino_to_grid(const TetrisGrid& grid, const Tetrimino& tetrimino,
+                                 CellFactory& cell_factory) {
+    std::terminate();  // TODO: 呼ばれると即終了
+}
 }  // namespace tetris_grid_manipulation
+
+TetrisGrid tetris_grid_manipulation::unmap_moving_cell(const TetrisGrid& grid,
+                                                       const CellFactory& cell_factory) {
+    std::terminate();  // TODO: 呼ばれると即終了
+}
+
+TetrisGrid tetris_grid_manipulation::clear_filled_rows(const TetrisGrid& grid,
+                                                       CellFactory& cell_factory) {
+    std::terminate();  // TODO: 呼ばれると即終了
+}
