@@ -40,6 +40,9 @@ struct Cell {
     friend class CellFactory;  // CellFactoryからのみインスタンス化可能
 };
 
+// immerが使えるための前提条件
+static_assert(std::is_copy_assignable_v<Cell>);
+
 /**
  * 状態遷移が妥当か判定
  */
@@ -70,7 +73,11 @@ class CellFactory {
     const Size size;
     explicit CellFactory(const GameConfig& cfg) : size{cfg.cell.size} {}
 
-    [[nodiscard]] Cell create(const Position& pos, CellStatus type, Color color) const;
+    [[nodiscard]]
+    inline Cell create(const Position& pos, CellStatus type, Color color) const {
+        if (type == CellStatus::EMPTY) color = Color::from_string("white");
+        return Cell{type, pos, size, std::move(color)};
+    };
 
     /**
      * セルの状態を更新する
@@ -79,8 +86,19 @@ class CellFactory {
      * @param new_color 新しい色（EMPTYの場合は常に白）
      * @return 成功時は更新後のセル、失敗時はエラーメッセージ
      */
-    tl::expected<Cell, std::string> update_cell_state(const Cell& cell, CellStatus new_state,
-                                                      Color new_color) const;
+    inline tl::expected<Cell, std::string> update_cell_state(const Cell& cell, CellStatus new_state,
+                                                             Color new_color) const {
+        if (!is_legal_transition(cell.type, new_state)) {
+            return tl::unexpected{"illegal state transition"};
+        }
+
+        // Empty → 常に白
+        if (new_state == CellStatus::EMPTY) {
+            new_color = Color::from_string("white");
+        }
+
+        return Cell{new_state, cell.position, cell.size, std::move(new_color)};
+    };
 };
 
 #endif /* B46CA402_5D14_4D1D_9923_49018BA7FA61 */
