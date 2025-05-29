@@ -1,5 +1,10 @@
 #include <core/TetrisGrid.hpp>
 
+tl::expected<TetrisGrid, std::string> TetrisGrid::create(const std::string& id, Position pos,
+                                                         Size sz, int rows, int cols) {
+    std::terminate();  // TODO:
+}
+
 Position tetris_grid::get_position_of_cell(const TetrisGrid& grid,
                                            const GridColumnRow& grid_position, double cell_size) {
     // グリッドの左上位置に、セルの位置を加算してセルの位置を計算
