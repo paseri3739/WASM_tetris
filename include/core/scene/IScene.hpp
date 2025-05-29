@@ -1,6 +1,7 @@
 #ifndef B2833B7C_0978_42EE_A754_673FBA7514B8
 #define B2833B7C_0978_42EE_A754_673FBA7514B8
 
+#include <core/IGameState.hpp>
 #include <core/IRenderer.hpp>
 #include <core/Input.hpp>
 #include <memory>
@@ -26,6 +27,9 @@ class IScene {
 
     // シーンの終了処理
     virtual void cleanup() = 0;
+
+   private:
+    IGameState current_state_;  // 現在のゲーム状態
 };
 
 #endif /* B2833B7C_0978_42EE_A754_673FBA7514B8 */
