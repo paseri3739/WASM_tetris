@@ -5,12 +5,13 @@
 #ifndef __EMSCRIPTEN__
 #include <SDL2/SDL.h>
 #endif
+#include <iostream>
 
 void Game::update(double delta_time) { this->scene_manager_->update(delta_time); }
 void Game::processInput() {
     // SDLInputPoller で新しい Input を取得（不変）
     this->current_input_ = input_poller_->poll(this->current_input_);
-
+    std::cout << this->current_input_->to_string() << std::endl;  // デバッグ用に入力状態を出力
     // シーンに渡すときは const Input& に展開
     this->scene_manager_->process_input(*this->current_input_);
 }

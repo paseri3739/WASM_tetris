@@ -1,5 +1,6 @@
 #ifndef AF4443E9_E719_459C_BC56_81BE22CBDE47
 #define AF4443E9_E719_459C_BC56_81BE22CBDE47
+#include <string>
 #include <unordered_map>
 
 // TODO: 抽象入力を実装。WebではSDLとバインディングする。
@@ -22,6 +23,17 @@ struct Input {
             state.is_released = false;
         }
         return next;
+    }
+
+    std::string to_string() const {
+        std::string result;
+        for (const auto& [key, state] : key_states) {
+            result += "Key: " + std::to_string(static_cast<int>(key)) +
+                      ", Pressed: " + std::to_string(state.is_pressed) +
+                      ", Released: " + std::to_string(state.is_released) +
+                      ", Held: " + std::to_string(state.is_held) + "\n";
+        }
+        return result;
     }
 };
 
