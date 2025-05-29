@@ -5,19 +5,6 @@
 #include <core/TetrisGrid.hpp>
 #include <vector>
 
-class IGameState {
-   public:
-    virtual ~IGameState() {}
-
-   private:
-    TetrisGrid grid_;
-    Tetrimino current_tetrimino_;
-    bool isGameOver_ = false;
-};
-
-[[nodiscard]]
-IGameState step(const IGameState& state, const Input& input, double delta_time) noexcept;
-
 class TetriminoTypeQueue {
    private:
     std::vector<TetriminoType> queue_;
