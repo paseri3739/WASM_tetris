@@ -16,11 +16,14 @@ struct Color {
 
 /** 幅・高さを表す 2D サイズ */
 struct Size {
-    double w;
-    double h;
+    double width;
+    double height;
 };
 
-/** 位置とサイズを組み合わせた矩形 */
+/** 位置とサイズを組み合わせた矩形
+ *   - pos: 左上隅の位置
+ *   - size: 幅と高さ
+ */
 struct Rect {
     Position pos;
     Size size;

@@ -4,7 +4,7 @@
 namespace {
 inline SDL_Rect to_sdl_rect(const Rect& r) {
     return SDL_Rect{static_cast<int>(r.pos.x), static_cast<int>(r.pos.y),
-                    static_cast<int>(r.size.w), static_cast<int>(r.size.h)};
+                    static_cast<int>(r.size.width), static_cast<int>(r.size.height)};
 }
 }  // namespace
 
