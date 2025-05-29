@@ -31,7 +31,7 @@ GridColumnRow tetris_grid_manipulation::get_grid_position_of_cell(const TetrisGr
 }
 
 bool tetris_grid_manipulation::is_within_bounds(const TetrisGrid& grid, int column, int row) {
-    bool isColumnValid = column >= 0 && column < grid.grid_size.column;
-    bool isRowValid = row >= 0 && row < grid.grid_size.row;
+    bool isColumnValid = column >= 0 && column <= grid.grid_size.column;
+    bool isRowValid = row >= 0 && row <= grid.grid_size.row;
     return isColumnValid && isRowValid;
 }
