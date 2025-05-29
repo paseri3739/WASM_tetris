@@ -60,3 +60,30 @@ bool TetrisGrid::is_colliding(const GridColumnRow& before, const GridColumnRow& 
 
     return true;  // それ以外は衝突扱い
 }
+
+TetrisGrid TetrisGrid::update_cell(const GridColumnRow& pos, CellStatus status, Color color) const {
+    if (pos.row < 0 || pos.row >= grid_size.row || pos.column < 0 ||
+        pos.column >= grid_size.column) {
+        return *this;  // 範囲外 → 変更なし
+    }
+
+    const Cell& old_cell = cells[pos.row][pos.column];
+    if (!is_legal_transition(old_cell.type, status)) {
+        return *this;  // 不正遷移 → 変更なし
+    }
+
+    if (status == CellStatus::EMPTY) {
+        color = Color::from_string("white");
+    }
+
+    auto updated_cell_result = cell_factory.update_cell_state(old_cell, status, color);
+    if (!updated_cell_result.has_value()) {
+        return *this;  // 失敗 → 元のまま
+    }
+
+    // セル更新（immerによる構造共有）
+    auto new_row = cells[pos.row].set(pos.column, updated_cell_result.value());
+    auto new_cells = cells.set(pos.row, new_row);
+
+    return TetrisGrid{id, position, size, grid_size, cell_factory, new_cells};
+}

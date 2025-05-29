@@ -8,13 +8,15 @@ Cell CellFactory::create(const Position& pos, CellStatus type, Color color) cons
 
 tl::expected<Cell, std::string> CellFactory::update_cell_state(const Cell& cell,
                                                                CellStatus new_state,
-                                                               Color new_color) {
+                                                               Color new_color) const {
     if (!is_legal_transition(cell.type, new_state)) {
         return tl::unexpected{"illegal state transition"};
     }
 
     // Empty → 常に白
-    if (new_state == CellStatus::EMPTY) new_color = Color::from_string("white");
+    if (new_state == CellStatus::EMPTY) {
+        new_color = Color::from_string("white");
+    }
 
     return Cell{new_state, cell.position, cell.size, std::move(new_color)};
 }

@@ -7,9 +7,9 @@
 #include <core/Position.hpp>
 #include <core/Tetrimino.hpp>
 #include <core/graphics_types.hpp>
+#include <immer/vector.hpp>
 #include <string>
 #include <tl/expected.hpp>
-#include <vector>
 
 /**
  * TetrisGrid ― テトリスの盤面を表す値オブジェクト
@@ -20,11 +20,11 @@ class TetrisGrid {
    public:
     // 読み取り専用でpublicにしておく
     const std::string id;
-    const Position position;                     ///< グリッドの左上位置
-    const Size size;                             ///< 全体サイズ
-    const GridColumnRow grid_size;               ///< 行数・列数
-    const std::vector<std::vector<Cell>> cells;  ///< 各セルの状態
-    const CellFactory cell_factory;              ///< セル生成用ファクトリ
+    const Position position;                         ///< グリッドの左上位置
+    const Size size;                                 ///< 全体サイズ
+    const GridColumnRow grid_size;                   ///< 行数・列数
+    const immer::vector<immer::vector<Cell>> cells;  // ← 変更点
+    const CellFactory cell_factory;                  ///< セル生成用ファクトリ
 
     /**
      * コンストラクタ
@@ -35,13 +35,13 @@ class TetrisGrid {
      * @param cell_factory セル生成用ファクトリ
      */
     TetrisGrid(std::string id, Position position, Size size, GridColumnRow grid_size,
-               CellFactory cell_factory)
+               CellFactory factory, immer::vector<immer::vector<Cell>> cells)
         : id(std::move(id)),
           position(position),
           size(size),
           grid_size(grid_size),
-          cell_factory(std::move(cell_factory)),
-          cells(initialize_cells(this->position, this->grid_size, this->cell_factory)) {}
+          cells(std::move(cells)),
+          cell_factory(std::move(factory)) {}
 
     inline void render(IRenderer& renderer) {
         // セルを描画する
@@ -68,24 +68,28 @@ class TetrisGrid {
 
     bool is_colliding(const GridColumnRow& before, const GridColumnRow& after) const;
 
+    // 変更点：更新系メソッドは新しいインスタンスを返す
+    [[nodiscard]] TetrisGrid update_cell(const GridColumnRow& pos, CellStatus status,
+                                         Color color) const;
+
    private:
-    static std::vector<std::vector<Cell>> initialize_cells(const Position& origin,
-                                                           const GridColumnRow& grid_size,
-                                                           const CellFactory& factory) {
-        std::vector<std::vector<Cell>> result(grid_size.row);
+    inline immer::vector<immer::vector<Cell>> initialize_cells(const Position& origin,
+                                                               const GridColumnRow& grid_size,
+                                                               const CellFactory& factory) {
+        immer::vector<immer::vector<Cell>> rows;
         for (int row = 0; row < grid_size.row; ++row) {
-            std::vector<Cell> row_cells;
+            immer::vector<Cell> columns;
             for (int col = 0; col < grid_size.column; ++col) {
                 Position cell_pos{
                     origin.x + col * factory.size.width,
                     origin.y + row * factory.size.height,
                 };
-                row_cells.push_back(
+                columns = columns.push_back(
                     factory.create(cell_pos, CellStatus::EMPTY, Color::from_string("white")));
             }
-            result[row] = std::move(row_cells);
+            rows = rows.push_back(columns);
         }
-        return result;
+        return rows;
     }
 };
 

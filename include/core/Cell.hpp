@@ -18,10 +18,10 @@ enum class CellStatus { EMPTY, MOVING, FILLED };
  *  - メンバは public immutable（直接代入せず生成関数経由で作成）
  */
 struct Cell {
-    const CellStatus type;
-    const Position position;
-    const Size size;
-    const Color color;
+    CellStatus type;
+    Position position;
+    Size size;
+    Color color;
 
     inline void render(IRenderer& renderer) const {
         // 描画処理の実装
@@ -80,7 +80,7 @@ class CellFactory {
      * @return 成功時は更新後のセル、失敗時はエラーメッセージ
      */
     tl::expected<Cell, std::string> update_cell_state(const Cell& cell, CellStatus new_state,
-                                                      Color new_color);
+                                                      Color new_color) const;
 };
 
 #endif /* B46CA402_5D14_4D1D_9923_49018BA7FA61 */

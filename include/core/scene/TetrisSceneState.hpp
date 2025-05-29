@@ -7,9 +7,13 @@
 
 class TetrisSceneState final : public IGameState {
    public:
-    const TetrisGrid& grid;              // ゲームのグリッド状態
-    const Tetrimino& current_tetrimino;  // 現在のテトリミノ
-    bool is_game_over;                   // ゲームオーバー状態
+    TetrisGrid grid;              // 不変データ構造
+    Tetrimino current_tetrimino;  // 値保持
+    bool is_game_over;
+
+    TetrisSceneState(TetrisGrid g, Tetrimino t, bool over)
+        : grid(std::move(g)), current_tetrimino(std::move(t)), is_game_over(over) {}
+
     static IGameState step(const IGameState& state, const Input& input, double delta_time) noexcept;
 };
 
