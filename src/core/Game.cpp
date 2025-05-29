@@ -8,22 +8,11 @@
 
 void Game::update(double delta_time) { this->scene_manager_->update(delta_time); }
 void Game::processInput() {
-    // TODO: 抽象入力を取得し、SceneManager経由で現在のシーンに渡す
-    Input input = {std::unordered_map<InputKey, InputState>{
-        // モック入力データ
-        // TODO: 実際はSDLInputPollerを利用して入力を取得する
-        {InputKey::UP, {false, false, false}},
-        {InputKey::DOWN, {false, false, false}},
-        {InputKey::LEFT, {false, false, false}},
-        {InputKey::RIGHT, {false, false, false}},
-        {InputKey::ROTATE_LEFT, {false, false, false}},
-        {InputKey::ROTATE_RIGHT, {false, false, false}},
-        {InputKey::DROP, {false, false, false}},
-        {InputKey::PAUSE, {false, false, false}},
-        {InputKey::QUIT, {false, false, false}},
-    }};
-    // SDLInputPollerを利用して入力を取得する処理を追加
-    this->scene_manager_->process_input(input);  // シーンに入力が伝播する
+    // SDLInputPoller で新しい Input を取得（不変）
+    this->current_input_ = input_poller_->poll(this->current_input_);
+
+    // シーンに渡すときは const Input& に展開
+    this->scene_manager_->process_input(*this->current_input_);
 }
 
 // ─────────────────────── 1フレーム処理 ───────────────────────

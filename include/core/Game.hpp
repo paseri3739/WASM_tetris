@@ -1,6 +1,7 @@
 #ifndef CECD6737_285E_48BD_BE62_13103B0254DC
 #define CECD6737_285E_48BD_BE62_13103B0254DC
 
+#include <IO/SDLInputPoller.hpp>
 #include <core/GameConfig.hpp>
 #include <core/scene/IScene.hpp>
 #include <core/scene/SceneManager.hpp>
@@ -8,11 +9,13 @@
 
 class Game {
    public:
-    explicit Game(const GameConfig& config, std::unique_ptr<SceneManager> scene_manager,
-                  std::unique_ptr<IRenderer> renderer)
+    Game(const GameConfig& config, std::unique_ptr<SceneManager> scene_manager,
+         std::unique_ptr<IRenderer> renderer, std::unique_ptr<InputPoller> input_poller)
         : config_(config),
           scene_manager_(std::move(scene_manager)),
-          renderer_(std::move(renderer)) {}
+          renderer_(std::move(renderer)),
+          current_input_(std::make_shared<Input>()),
+          input_poller_(std::move(input_poller)) {}
 
     // ゲームの設定を取得
     const GameConfig& getConfig() const { return config_; }
@@ -28,6 +31,8 @@ class Game {
     GameConfig config_;
     std::unique_ptr<SceneManager> scene_manager_;
     std::unique_ptr<IRenderer> renderer_;  // レンダラーのユニークポインタ
+    std::shared_ptr<const Input> current_input_;
+    std::unique_ptr<InputPoller> input_poller_;
     double last_update_time_ = 0.0;
     // ゲームの更新処理
     void update(double delta_time);
