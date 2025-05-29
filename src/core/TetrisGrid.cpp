@@ -1,28 +1,39 @@
 #include <core/TetrisGrid.hpp>
 
-Position TetrisGrid::get_position_of_cell(const TetrisGrid& grid,
-                                          const GridColumnRow& grid_position, double cell_size) {
-    // グリッドの左上位置に、セルの位置を加算してセルの位置を計算
-    return Position{grid.position.x + grid_position.column * cell_size,
-                    grid.position.y + grid_position.row * cell_size};
+// セルの座標を算出
+Position TetrisGrid::get_position_of_cell(const GridColumnRow& grid_position, double cell_size) {
+    return Position{
+        this->position.x + grid_position.column * cell_size,
+        this->position.y + grid_position.row * cell_size,
+    };
 }
 
-GridColumnRow TetrisGrid::get_grid_position_of_cell(const TetrisGrid& grid,
-                                                    const Position& cell_position,
+// 座標からグリッド上の行・列を逆算（浮動小数をintに切り下げ）
+GridColumnRow TetrisGrid::get_grid_position_of_cell(const Position& cell_position,
                                                     double cell_size) {
-    // グリッドの左上位置からセルの位置を引いて、セルの列と行を計算
-    int column = static_cast<int>((cell_position.x - grid.position.x) / cell_size);
-    int row = static_cast<int>((cell_position.y - grid.position.y) / cell_size);
-    return GridColumnRow{column, row};
+    int col = static_cast<int>((cell_position.x - this->position.x) / cell_size);
+    int row = static_cast<int>((cell_position.y - this->position.y) / cell_size);
+    return GridColumnRow{col, row};
 }
 
-bool TetrisGrid::is_within_bounds(const TetrisGrid& grid, int column, int row) {
-    bool isColumnValid = column >= 0 && column <= grid.grid_size.column;
-    bool isRowValid = row >= 0 && row <= grid.grid_size.row;
-    return isColumnValid && isRowValid;
+// 範囲内チェック（整数インデックス）
+bool TetrisGrid::is_within_bounds(int column, int row) {
+    return column >= 0 && column < this->grid_size.column && row >= 0 && row < this->grid_size.row;
 }
 
-bool TetrisGrid::is_within_bounds(const TetrisGrid& grid, const Position& position) {
-    auto grid_position = get_grid_position_of_cell(grid, position, grid.size.width);
-    return is_within_bounds(grid, grid_position.column, grid_position.row);
+// 範囲内チェック（座標位置）
+bool TetrisGrid::is_within_bounds(const Position& position) {
+    return position.x >= this->position.x && position.y >= this->position.y &&
+           position.x < this->position.x + this->size.width &&
+           position.y < this->position.y + this->size.height;
+}
+
+// セルがFILLED状態か確認
+bool TetrisGrid::is_filled_cell(const GridColumnRow& grid_position) const {
+    int col = grid_position.column;
+    int row = grid_position.row;
+    if (!((col >= 0 && col < this->grid_size.column) && (row >= 0 && row < this->grid_size.row))) {
+        return false;
+    }
+    return this->cells[row][col].type == CellStatus::FILLED;
 }

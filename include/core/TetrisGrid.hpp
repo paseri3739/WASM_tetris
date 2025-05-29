@@ -56,15 +56,15 @@ class TetrisGrid {
         }
     }
 
-    Position get_position_of_cell(const TetrisGrid& grid, const GridColumnRow& grid_position,
-                                  double cell_size);
+    Position get_position_of_cell(const GridColumnRow& grid_position, double cell_size);
 
-    GridColumnRow get_grid_position_of_cell(const TetrisGrid& grid, const Position& cell_position,
-                                            double cell_size);
+    GridColumnRow get_grid_position_of_cell(const Position& cell_position, double cell_size);
 
-    bool is_within_bounds(const TetrisGrid& grid, int column, int row);
+    bool is_within_bounds(int column, int row);
 
-    bool is_within_bounds(const TetrisGrid& grid, const Position& position);
+    bool is_within_bounds(const Position& position);
+
+    bool is_filled_cell(const GridColumnRow& grid_position) const;
 
    private:
     static std::vector<std::vector<Cell>> initialize_cells(const Position& origin,
