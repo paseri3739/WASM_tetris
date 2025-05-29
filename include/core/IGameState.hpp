@@ -7,8 +7,7 @@ class IGameState {
    public:
     virtual ~IGameState() {}
     [[nodiscard]]
-    virtual IGameState step(const IGameState& state, const Input& input,
-                            double delta_time) noexcept;
+    static IGameState step(const IGameState& state, const Input& input, double delta_time) noexcept;
 };
 
 #endif /* B8C43484_0D94_42BD_87ED_2A239AE61EDB */

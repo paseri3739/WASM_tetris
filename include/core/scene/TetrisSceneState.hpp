@@ -10,8 +10,7 @@ class TetrisSceneState final : public IGameState {
     const TetrisGrid grid;              // ゲームのグリッド状態
     const Tetrimino current_tetrimino;  // 現在のテトリミノ
     bool is_game_over;                  // ゲームオーバー状態
-    IGameState step(const IGameState& state, const Input& input,
-                    double delta_time) noexcept override;
+    static IGameState step(const IGameState& state, const Input& input, double delta_time) noexcept;
 };
 
 #endif /* DB541074_2FC2_44B0_9DF3_58C8A424B4A1 */
