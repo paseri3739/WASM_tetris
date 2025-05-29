@@ -5,10 +5,12 @@
 
 #include <algorithm>
 #include <core/Cell.hpp>
+#include <core/IRenderer.hpp>
 #include <core/Position.hpp>
 #include <core/Tetrimino.hpp>
 #include <core/graphics_types.hpp>
 #include <string>
+#include <tl/expected.hpp>
 #include <vector>
 
 /**
@@ -35,6 +37,8 @@ class TetrisGrid {
      */
     static tl::expected<TetrisGrid, std::string> create(const std::string& id, Position pos,
                                                         Size sz, int rows, int cols);
+
+    void render(IRenderer& renderer);
 
    private:
     // プライベートコンストラクタで外部からの直接生成を禁止
