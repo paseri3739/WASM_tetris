@@ -1,0 +1,19 @@
+#include <core/TetrisGrid.hpp>
+namespace tetris_grid_manipulation {
+
+Position get_position_of_cell(const TetrisGrid& grid, const GridColumnRow& grid_position,
+                              double cell_size) {
+    // グリッドの左上位置に、セルの位置を加算してセルの位置を計算
+    return Position{grid.position.x + grid_position.column * cell_size,
+                    grid.position.y + grid_position.row * cell_size};
+}
+
+GridColumnRow get_grid_position_of_cell(const TetrisGrid& grid, const Position& cell_position,
+                                        double cell_size) {
+    // グリッドの左上位置からセルの位置を引いて、セルの列と行を計算
+    int column = static_cast<int>((cell_position.x - grid.position.x) / cell_size);
+    int row = static_cast<int>((cell_position.y - grid.position.y) / cell_size);
+    return GridColumnRow{column, row};
+}
+
+}  // namespace tetris_grid_manipulation
