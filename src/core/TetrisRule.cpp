@@ -1,6 +1,6 @@
 #include <core/TetrisRule.hpp>
 
-Tetrimino TetrisRule::drop_tetrimino(const Tetrimino& tetrimino, double delta_time) {
+Tetrimino TetrisRule::drop_tetrimino(const Tetrimino& tetrimino, double delta_time) noexcept {
     if (tetrimino.state == TetriminoStateType::PENDING) {
         return tetrimino;
     }

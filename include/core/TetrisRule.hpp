@@ -3,6 +3,12 @@
 #include <core/Tetrimino.hpp>
 #include <vector>
 
+class GameState {
+   public:
+    GameState() = default;
+    ~GameState() = default;
+}
+
 class TetriminoTypeQueue {
    private:
     std::vector<TetriminoType> queue_;
