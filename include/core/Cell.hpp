@@ -59,11 +59,10 @@ static_assert(is_legal_transition(CellStatus::FILLED, CellStatus::EMPTY));
  */
 class CellFactory {
    public:
-    explicit CellFactory(const GameConfig& cfg) : size_{cfg.cell.size} {}
+    const double size;
+    explicit CellFactory(const GameConfig& cfg) : size{cfg.cell.size} {}
 
     [[nodiscard]] Cell create(const Position& pos, CellStatus type, Color color) const;
-
-    int size() const noexcept { return size_; }
 
     /**
      * セルの状態を更新する
@@ -74,9 +73,6 @@ class CellFactory {
      */
     tl::expected<Cell, std::string> update_cell_state(const Cell& cell, CellStatus new_state,
                                                       Color new_color);
-
-   private:
-    double size_;
 };
 
 #endif /* B46CA402_5D14_4D1D_9923_49018BA7FA61 */

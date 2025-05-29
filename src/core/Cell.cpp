@@ -3,7 +3,7 @@
 
 Cell CellFactory::create(const Position& pos, CellStatus type, Color color) const {
     if (type == CellStatus::EMPTY) color = Color::from_string("white");
-    return Cell{type, pos, size_, std::move(color)};
+    return Cell{type, pos, size, std::move(color)};
 }
 
 tl::expected<Cell, std::string> CellFactory::update_cell_state(const Cell& cell,
