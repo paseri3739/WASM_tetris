@@ -68,9 +68,29 @@ TetrisGrid unmap_moving_cell(const TetrisGrid& grid, const CellFactory& cell_fac
 
 TetrisGrid clear_filled_rows(const TetrisGrid& grid, CellFactory& cell_factory);
 
-tl::expected<TetrisGrid, std::string> make_all_empty(
-    const TetrisGrid& grid,
-    CellFactory& cell_factory);  // namespace tetris_grid_manipulation
+bool is_within_bounds(const TetrisGrid& grid, int column, int row);
+
+bool is_within_bounds(const TetrisGrid& grid, const Tetrimino& tetrimino);
+
+typedef struct {
+    bool collided;
+    bool horizontal;
+} CollisionResult;
+
+CollisionResult check_collision(const TetrisGrid& grid, const Tetrimino& next,
+                                const Tetrimino& previous);
+
+bool is_collided_bottom(const TetrisGrid& grid, const Tetrimino& tetrimino);
+
+bool is_game_over(const TetrisGrid& grid, const Tetrimino& tetrimino);
+
+TetrisGrid fix_tetrimino(const TetrisGrid& grid, const Tetrimino& tetrimino);
+
+std::vector<GridColumnRow> get_tetrimino_map(const TetrisGrid& grid, const Tetrimino& tetrimino);
+
+std::vector<GridColumnRow> get_tetrimino_map_with_out_of_bounds(const TetrisGrid& grid,
+                                                                const Tetrimino& tetrimino);
+
 }  // namespace tetris_grid_manipulation
 #endif /* F7B71047_1F3E_482C_9849_3CB6B22E22C3 */
 
