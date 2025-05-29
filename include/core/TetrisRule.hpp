@@ -1,5 +1,6 @@
 #ifndef ADFD1949_02B3_4216_A6EB_C0B2714665E9
 #define ADFD1949_02B3_4216_A6EB_C0B2714665E9
+#include <core/Input.hpp>
 #include <core/Tetrimino.hpp>
 #include <core/TetrisGrid.hpp>
 #include <vector>
@@ -13,6 +14,9 @@ class IGameState {
     Tetrimino current_tetrimino_;
     bool isGameOver_ = false;
 };
+
+[[nodiscard]]
+IGameState step(const IGameState& state, const Input& input, double delta_time) noexcept;
 
 class TetriminoTypeQueue {
    private:
