@@ -21,7 +21,7 @@ tl::expected<Cell, std::string> CellFactory::update_cell_state(const Cell& cell,
 
 void Cell::render(IRenderer& renderer) const {
     // 描画処理の実装
-    Rect rect{this->position.x, this->position.y, this->size, this->size};
+    Rect rect{this->position.x, this->position.y, this->size.width, this->size.height};
     if (this->type == CellStatus::FILLED) {
         renderer.fill_rect(rect, this->color);
     } else {

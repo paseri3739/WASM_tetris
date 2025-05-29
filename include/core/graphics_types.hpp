@@ -14,7 +14,10 @@ struct Color {
     static Color from_string(std::string color_str);
 };
 
-/** 幅・高さを表す 2D サイズ */
+/** 幅・高さを表す 2D サイズ
+ *  - width: 幅
+ *  - height: 高さ
+ */
 struct Size {
     double width;
     double height;

@@ -20,14 +20,14 @@ enum class CellStatus { EMPTY, MOVING, FILLED };
 struct Cell {
     const CellStatus type;
     const Position position;
-    const double size;
+    const Size size;
     const Color color;
 
     void render(IRenderer& renderer) const;
 
     // コンストラクタは private にして、CellFactory 経由でのみインスタンス化可能にする
    private:
-    Cell(CellStatus t, Position pos, double sz, Color col)
+    Cell(CellStatus t, Position pos, Size sz, Color col)
         : type(t), position(pos), size(sz), color(col) {}
     friend class CellFactory;  // CellFactoryからのみインスタンス化可能
 };
@@ -59,7 +59,7 @@ static_assert(is_legal_transition(CellStatus::FILLED, CellStatus::EMPTY));
  */
 class CellFactory {
    public:
-    const double size;
+    const Size size;
     explicit CellFactory(const GameConfig& cfg) : size{cfg.cell.size} {}
 
     [[nodiscard]] Cell create(const Position& pos, CellStatus type, Color color) const;
