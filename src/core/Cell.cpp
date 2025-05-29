@@ -25,6 +25,6 @@ void Cell::render(IRenderer& renderer) const {
     if (this->type == CellStatus::FILLED) {
         renderer.fill_rect(rect, this->color);
     } else {
-        renderer.stroke_rect(rect, this->color);
+        renderer.stroke_rect(rect, Color::from_string("black"));
     }
 }
