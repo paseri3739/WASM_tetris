@@ -1,18 +1,5 @@
 #include <core/TetrisGrid.hpp>
 
-void TetrisGrid::render(IRenderer& renderer) {
-    // セルを描画する
-    int columns = this->grid_size.column;
-    int rows = this->grid_size.row;
-
-    for (int row = 0; row < rows; ++row) {
-        for (int column = 0; column < columns; ++column) {
-            const Cell& cell = this->cells[row][column];
-            cell.render(renderer);
-        }
-    }
-}
-
 Position tetris_grid_manipulation::get_position_of_cell(const TetrisGrid& grid,
                                                         const GridColumnRow& grid_position,
                                                         double cell_size) {

@@ -38,7 +38,18 @@ class TetrisGrid {
     static tl::expected<TetrisGrid, std::string> create(const std::string& id, Position pos,
                                                         Size sz, int rows, int cols);
 
-    void render(IRenderer& renderer);
+    inline void TetrisGrid::render(IRenderer& renderer) {
+        // セルを描画する
+        int columns = this->grid_size.column;
+        int rows = this->grid_size.row;
+
+        for (int row = 0; row < rows; ++row) {
+            for (int column = 0; column < columns; ++column) {
+                const Cell& cell = this->cells[row][column];
+                cell.render(renderer);
+            }
+        }
+    }
 
    private:
     // プライベートコンストラクタで外部からの直接生成を禁止
