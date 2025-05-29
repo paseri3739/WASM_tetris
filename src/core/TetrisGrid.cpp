@@ -1,4 +1,3 @@
-#include "TetrisGrid.hpp"
 #include <core/TetrisGrid.hpp>
 
 // TODO:
