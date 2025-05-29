@@ -15,8 +15,7 @@ struct TetrisGrid {
     std::string id;
     Position position;  // グリッドの左上位置
     Size size;
-    int rows;                              // 行数
-    int columns;                           // 列数
+    GridColumnRow grid_size;               // 行数と列数
     std::vector<std::vector<Cell>> cells;  // 各セルの状態を保持
 };
 
