@@ -11,6 +11,10 @@ void InitialScene::update(const double delta_time) {
         // 状態遷移（関数型）による更新
         current_state_ = current_state_->step(*last_input_, delta_time);
     }
+    if (current_state_ && current_state_->is_ready_to_transition()) {
+        // 例: manager_.change_scene(std::make_unique<NextScene>(game_config_, manager_));
+        // TODO: ロジックを試すにはNextSceneの実装を行う必要がある
+    }
 }
 
 void InitialScene::process_input(const Input& input) {
