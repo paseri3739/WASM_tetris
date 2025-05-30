@@ -1,0 +1,35 @@
+# 出力ディレクトリ
+OUTPUT_DIRECTORY       = docs
+
+# 入力ソース（include/ および src/ を指定）
+INPUT                  = include src
+
+# 解析対象ファイル
+FILE_PATTERNS          = *.hpp *.h *.cpp *.cc
+
+# 再帰的にサブディレクトリも探索
+RECURSIVE              = YES
+
+# ソースコード情報の抽出
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+EXTRACT_LOCAL_CLASSES  = YES
+
+# UML クラス図の生成
+HAVE_DOT               = YES
+CLASS_DIAGRAMS         = YES
+CALL_GRAPH             = YES
+CALLER_GRAPH           = YES
+
+# dot のパス（Homebrewで入れた場合）
+DOT_PATH               = /opt/homebrew/bin
+
+# PlantUML の使用（バージョン3.12.2 jarを想定）
+PLANTUML_JAR_PATH      = /opt/homebrew/opt/plantuml/libexec/plantuml.jar
+
+# PlantUML画像の出力形式
+PLANTUML_OUTPUT_FORMAT = png
+
+# 生成されるドキュメントで使用する文字コード
+OUTPUT_LANGUAGE        = Japanese
