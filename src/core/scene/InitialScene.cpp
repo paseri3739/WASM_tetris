@@ -8,30 +8,51 @@ void InitialScene::initialize() {
 }
 
 void InitialScene::update(const double delta_time) {
-    // 初期シーンの更新処理
+    constexpr double repeat_delay = 0.3;  // 最初のディレイ
+    constexpr double repeat_rate = 0.1;   // リピート間隔
+
+    for (auto key : {InputKey::LEFT, InputKey::RIGHT, InputKey::UP, InputKey::DOWN}) {
+        auto it = last_input_->key_states.find(key);
+        if (it != last_input_->key_states.end()) {
+            const auto& state = it->second;
+
+            if (state.is_held || state.is_pressed) {
+                // 時間を加算
+                hold_durations_[key] += delta_time;
+
+                // 最初の遅延と以降のリピート処理
+                double duration = hold_durations_[key];
+                if ((state.is_pressed && duration >= 0.0) ||  // 押された瞬間
+                    (duration >= repeat_delay &&
+                     fmod(duration - repeat_delay, repeat_rate) < delta_time)) {
+                    // 実行タイミング
+                    switch (key) {
+                        case InputKey::LEFT:
+                            position_.x -= 10;
+                            break;
+                        case InputKey::RIGHT:
+                            position_.x += 10;
+                            break;
+                        case InputKey::UP:
+                            position_.y -= 10;
+                            break;
+                        case InputKey::DOWN:
+                            position_.y += 10;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            } else {
+                // 押してないなら時間リセット
+                hold_durations_[key] = 0.0;
+            }
+        }
+    }
 }
 
 void InitialScene::process_input(const Input& input) {
-    // 右
-    auto right = input.key_states.find(InputKey::RIGHT);
-    if (right != input.key_states.end() && right->second.is_pressed) {
-        position_.x += 10;
-    }
-    // 左
-    auto left = input.key_states.find(InputKey::LEFT);
-    if (left != input.key_states.end() && left->second.is_pressed) {
-        position_.x -= 10;
-    }
-    // 上
-    auto up = input.key_states.find(InputKey::UP);
-    if (up != input.key_states.end() && up->second.is_pressed) {
-        position_.y -= 10;
-    }
-    // 下
-    auto down = input.key_states.find(InputKey::DOWN);
-    if (down != input.key_states.end() && down->second.is_pressed) {
-        position_.y += 10;
-    }
+    last_input_ = std::make_shared<Input>(input);  // ※ shallow copy で良い
 }
 
 void InitialScene::render(IRenderer& renderer) {
