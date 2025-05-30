@@ -19,11 +19,7 @@ void InitialScene::process_input(const Input& input) {
 
 void InitialScene::render(IRenderer& renderer) {
     // 描画処理も状態に委譲
-    if (auto state = std::dynamic_pointer_cast<const SampleSceneGameState>(current_state_)) {
-        Rect rect = {state->position, {100, 200}};
-        constexpr Color background_color{0, 0, 255, 255};
-        renderer.fill_rect(rect, background_color);
-    }
+    current_state_->render(renderer);
 }
 
 void InitialScene::cleanup() {
