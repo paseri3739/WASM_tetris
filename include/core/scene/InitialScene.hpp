@@ -19,10 +19,8 @@ class InitialScene final : public IScene {
     void cleanup() override;
 
    private:
-    GameConfig game_config_;  // ゲーム設定
-    Position position_;
-    std::unordered_map<InputKey, double> hold_durations_;  // 各キーの押下時間
-    std::shared_ptr<const Input> last_input_;              // 最後に受け取った入力
+    GameConfig game_config_;                   // ゲーム設定
+    std::shared_ptr<const Input> last_input_;  // 入力は保持（Immutable）
 };
 
 #endif /* D84B2884_6930_4338_8CE4_151D458C1D5E */
