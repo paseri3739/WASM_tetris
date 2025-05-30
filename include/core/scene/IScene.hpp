@@ -28,7 +28,7 @@ class IScene {
     // シーンの終了処理
     virtual void cleanup() = 0;
 
-   private:
+   protected:
     std::shared_ptr<IGameState> current_state_;  // ← ポインタで保持（継承先からアクセス可）
 };
 
