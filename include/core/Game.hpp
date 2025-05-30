@@ -7,6 +7,12 @@
 #include <core/scene/SceneManager.hpp>
 #include <memory>
 
+/**
+ * Game ― ゲームのメインクラス
+ * ゲーム全体の管理を行うクラスで、シーンの遷移や更新、描画を担当する。
+ * ゲームの設定や入力ポーリングもここで行う。
+ * ゲームの初期化、ループ処理、更新処理を提供する。
+ */
 class Game {
    public:
     Game(const GameConfig& config, std::unique_ptr<SceneManager> scene_manager,

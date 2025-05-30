@@ -1,5 +1,11 @@
 #ifndef A3705902_55D3_4E4F_B7C4_0899B5406266
 #define A3705902_55D3_4E4F_B7C4_0899B5406266
+
+/**
+ * GameConfig.hpp
+ * ゲームの設定を定義するヘッダーファイル
+ * テトリスのゲーム設定を格納する構造体を定義
+ */
 struct GameConfig {
     struct {
         double width;

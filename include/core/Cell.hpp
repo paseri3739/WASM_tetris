@@ -15,7 +15,8 @@ enum class CellStatus { EMPTY, MOVING, FILLED };
 
 /**
  * セル値オブジェクト
- *  - メンバは public immutable（直接代入せず生成関数経由で作成）
+ *  -
+ * メンバはimmerを使えるようにpublicにしているがイミュータブル更新を期待する（直接代入せず生成関数経由で作成）
  */
 struct Cell {
     CellStatus type;
