@@ -29,7 +29,7 @@ class IScene {
     virtual void cleanup() = 0;
 
    private:
-    IGameState current_state_;  // 現在のゲーム状態
+    std::shared_ptr<IGameState> current_state_;  // ← ポインタで保持（継承先からアクセス可）
 };
 
 #endif /* B2833B7C_0978_42EE_A754_673FBA7514B8 */
