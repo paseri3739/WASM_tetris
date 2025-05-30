@@ -4,6 +4,12 @@
 #include <core/GameConfig.hpp>
 #include <core/scene/IScene.hpp>
 
+/**
+ * InitialScene ― 初期シーン
+ * 矩形を描画するシンプルなシーンで、入力ポーリングと状態遷移を行う。
+ * このシーンはゲームの初期状態を表し、ゲーム開始時に表示される。
+ * 最低限のゲームループ機構を持つ。
+ */
 class InitialScene final : public IScene {
    public:
     InitialScene(const GameConfig& game_config) : game_config_(game_config) {};

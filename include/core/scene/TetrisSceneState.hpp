@@ -5,6 +5,11 @@
 #include <core/Tetrimino.hpp>
 #include <core/TetrisGrid.hpp>
 
+/**
+ * テトリスのゲーム状態を表すクラス
+ * TetrisSceneState は、テトリスのゲーム状態を表現します。
+ * このクラスは、テトリスのグリッド、現在のテトリミノ、およびゲームオーバー状態を保持します。
+ */
 class TetrisSceneState final : public IGameState {
    public:
     TetrisGrid grid;              // 不変データ構造
@@ -13,8 +18,6 @@ class TetrisSceneState final : public IGameState {
 
     TetrisSceneState(TetrisGrid g, Tetrimino t, bool over)
         : grid(std::move(g)), current_tetrimino(std::move(t)), is_game_over(over) {}
-
-    static IGameState step(const IGameState& state, const Input& input, double delta_time) noexcept;
 };
 
 #endif /* DB541074_2FC2_44B0_9DF3_58C8A424B4A1 */

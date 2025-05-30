@@ -6,6 +6,14 @@
 #include <core/Position.hpp>
 #include <unordered_map>
 
+/**
+ * SampleSceneGameState ― サンプルシーンのゲーム状態
+ * このクラスは、サンプルシーンのゲーム状態を表現します。
+ * プレイヤーの位置と入力キーのホールド時間を管理し、入力に応じて状態を更新します。
+ * 入力キーのホールド時間に基づいて、プレイヤーの位置を更新します。
+ * 入力キーのホールド時間は、リピート遅延とリピートレートを考慮して計算されます。
+ * このクラスは、ゲームの状態遷移を行うために使用されます。
+ */
 class SampleSceneGameState : public IGameState {
    public:
     Position position;

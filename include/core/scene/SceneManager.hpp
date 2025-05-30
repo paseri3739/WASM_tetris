@@ -7,6 +7,7 @@
 
 /**
  * SceneManager ― Stateパターンに基づきシーンを管理・遷移するクラス
+ * ISceneのライフサイクルを管理し、シーンの更新、描画、入力処理を行う。
  */
 
 class SceneManager {
