@@ -4,6 +4,12 @@
 #include <core/graphics_types.hpp>  // 先ほどのプリミティブ
 #include <string>
 
+/**
+ * IRenderer ― レンダリングのインターフェース
+ * 描画処理を抽象化するインターフェースで、具体的なレンダリングバックエンドに依存しない。
+ * このインターフェースを実装することで、異なるレンダリングバックエンド（SDL, OpenGL,
+ * Vulkanなど）に対応可能。 各種プリミティブ描画やテクスチャ描画のメソッドを提供する。
+ */
 class IRenderer {
    public:
     virtual ~IRenderer() = default;

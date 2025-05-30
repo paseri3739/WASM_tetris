@@ -12,8 +12,29 @@
 #include <core/Position.hpp>        // Position {int x, y;}
 #include <core/graphics_types.hpp>  // Color {uint8_t r,g,b,a;}
 
+/**
+ * TetriminoType
+ * テトリミノの種類を表す列挙型
+ */
 enum class TetriminoType : std::uint8_t { I, O, T, S, Z, J, L };
+
+/**
+ * Rotation
+ * テトリミノの回転状態を表す列挙型
+ * - R0: 0度回転
+ * - R90: 90度回転
+ * - R180: 180度回転
+ * - R270: 270度回転
+ */
 enum class Rotation : std::uint8_t { R0, R90, R180, R270 };
+
+/**
+ * TetriminoStateType
+ * テトリミノの状態を表す列挙型
+ * - ACTIVE: 現在操作中のテトリミノ
+ * - PENDING: 設置待ちのテトリミノ
+ * - LOCKED: 落下が完了し、固定されたテトリミノ
+ */
 enum class TetriminoStateType : std::uint8_t { ACTIVE, PENDING, LOCKED };
 
 // ────────────────── テーブル定義 ──────────────────

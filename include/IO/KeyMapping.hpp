@@ -4,6 +4,11 @@
 #include <core/Input.hpp>
 #include <optional>
 
+/**
+ * SDL キーコードと InputKey のマッピング
+ * SDL のキーコードを InputKey に変換するためのマッピングを定義します。
+ * これにより、SDL イベントからゲームの入力キーに変換できます。
+ */
 inline const std::pair<SDL_Keycode, InputKey> SDL_TO_INPUT_KEY_MAP[] = {
     // 移動
     {SDLK_LEFT, InputKey::LEFT},
@@ -34,6 +39,11 @@ inline const std::pair<SDL_Keycode, InputKey> SDL_TO_INPUT_KEY_MAP[] = {
 };
 
 namespace KeyMapping {
+/**
+ * SDL キーコードを InputKey に変換する関数
+ * @param code SDL_Keycode
+ * @return std::optional<InputKey> 変換結果（存在しない場合は std::nullopt）
+ */
 inline std::optional<InputKey> to_input_key(SDL_Keycode code) {
     for (const auto& [sdl, input] : SDL_TO_INPUT_KEY_MAP) {
         if (sdl == code) return input;

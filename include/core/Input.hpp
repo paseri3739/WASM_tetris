@@ -3,15 +3,29 @@
 #include <string>
 #include <unordered_map>
 
-// TODO: 抽象入力を実装。WebではSDLとバインディングする。
+/**
+ * 抽象キー入力を表現するenum
+ */
 enum class InputKey { UP, DOWN, LEFT, RIGHT, ROTATE_LEFT, ROTATE_RIGHT, DROP, PAUSE, QUIT };
 
+/**
+ * キー入力の状態を表現する構造体
+ * - is_pressed: キーが押された瞬間
+ * - is_released: キーが離された瞬間
+ * - is_held: キーが押され続けている状態
+ */
 struct InputState {
     bool is_pressed = false;   // キーが押されているか
     bool is_released = false;  // キーが離されたか
     bool is_held = false;      // キーが押され続けているか
 };
 
+/**
+ * 入力状態を表現する構造体
+ * - key_states: 各キーの状態を保持するマップ
+ * - clear_frame_state: フレーム状態をクリアした新インスタンスを返す
+ * - to_string: 入力状態を文字列に変換する
+ */
 struct Input {
     std::unordered_map<InputKey, InputState> key_states;
 

@@ -5,6 +5,9 @@
 #include <core/TetrisGrid.hpp>
 #include <vector>
 
+// このファイルには、テトリスのルールやテトリミノのキューを管理するクラスを定義します。
+// 複数のゲームオブジェクトからTetrisSceneStateを生成するための各種純粋関数を定義します。
+
 class TetriminoTypeQueue {
    private:
     std::vector<TetriminoType> queue_;
