@@ -50,11 +50,11 @@ int main() {
         return 1;
     }
     auto renderer = std::move(renderer_result.value());
+    auto game_config = std::make_shared<const GameConfig>(game_config::defaultGameConfig);
 
     // ── SceneManager ──
-    auto scene_manager = std::make_unique<SceneManager>(
-        std::make_unique<InitialScene>(game_config::defaultGameConfig),
-        std::make_shared<const GameConfig>(game_config::defaultGameConfig));
+    auto scene_manager =
+        std::make_unique<SceneManager>(std::make_unique<InitialScene>(*game_config), game_config);
 
     // ── InputPoller ──
     auto input_poller = std::make_unique<SDLInputPoller>();
