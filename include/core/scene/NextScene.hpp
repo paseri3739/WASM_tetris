@@ -46,9 +46,9 @@ class NextScene : public IScene {
     // シーンの終了処理
     void cleanup() override {};
 
-    std::unique_ptr<IScene> take_scene_transition() override {
+    std::optional<std::unique_ptr<IScene>> take_scene_transition() override {
         // シーン遷移の要求があればここで処理
-        return nullptr;  // 遷移しない
+        return std::nullopt;  // 遷移しない
     };
 
    private:

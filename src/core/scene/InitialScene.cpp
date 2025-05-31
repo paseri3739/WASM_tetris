@@ -1,3 +1,4 @@
+#include <core/scene/IScene.hpp>
 #include <core/scene/InitialScene.hpp>
 #include <core/scene/NextScene.hpp>
 #include <core/scene/SampleSceneGameState.hpp>
@@ -32,4 +33,11 @@ void InitialScene::cleanup() {
     // 特にリソース解放等があればここで実施
 }
 
-std::unique_ptr<IScene> InitialScene::take_scene_transition() { return std::move(pending_scene_); }
+std::optional<std::unique_ptr<IScene>> InitialScene::take_scene_transition() {
+    if (pending_scene_) {
+        // 遷移要求があればそれを返す
+        return std::move(pending_scene_);
+    }
+    // 遷移しない場合は空のオプションを返す
+    return std::nullopt;
+}

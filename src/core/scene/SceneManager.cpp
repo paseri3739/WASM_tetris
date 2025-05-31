@@ -6,9 +6,8 @@ void SceneManager::update(const double delta_time) {
     current_scene_->update(delta_time);
 
     // 遷移要求をpullする
-    auto next = current_scene_->take_scene_transition();
-    if (next) {  // nullptr でない場合のみ遷移要求がある
-        change_scene(std::move(next));
+    if (auto opt = current_scene_->take_scene_transition(); opt && *opt) {
+        change_scene(std::move(*opt));  // unique_ptr<IScene> へムーブ
     }
 
     // 遷移要求があれば適用。次のフレームは新シーンの描画になる。

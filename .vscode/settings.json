@@ -1,3 +1,7 @@
 {
-    "cmake.ctest.testExplorerIntegrationEnabled": false
+    "cmake.ctest.testExplorerIntegrationEnabled": false,
+    "files.associations": {
+        "*.asm": "asm6502",
+        "optional": "cpp"
+    }
 }

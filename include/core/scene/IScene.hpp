@@ -32,7 +32,7 @@ class IScene {
     // シーンの終了処理
     virtual void cleanup() = 0;
 
-    virtual std::unique_ptr<IScene> take_scene_transition() = 0;
+    virtual std::optional<std::unique_ptr<IScene>> take_scene_transition() = 0;
 
    protected:
     std::shared_ptr<const IGameState> current_state_;  // ← ポインタで保持（継承先からアクセス可）
