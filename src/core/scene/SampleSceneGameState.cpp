@@ -25,7 +25,8 @@ SampleSceneGameState::SampleSceneGameState(Position pos) : position_{pos} {
 // ─────────────────────────────────────────────
 // 状態遷移 (純粋関数)
 // ─────────────────────────────────────────────
-std::shared_ptr<const IGameState> SampleSceneGameState::step(const Input& input, double dt) const {
+std::shared_ptr<const IGameState> SampleSceneGameState::step(const Input& input,
+                                                             double delta_time) const {
     constexpr double repeat_delay = 0.30;  // 最初に動き出すまでの遅延
     constexpr double repeat_rate = 0.10;   // リピート間隔
     constexpr double step_px = 10.0;       // 1 ステップで動く距離 [px]
@@ -45,11 +46,11 @@ std::shared_ptr<const IGameState> SampleSceneGameState::step(const Input& input,
 
         const auto& st = it->second;
         double prev_duration = hold_durations_.find(key) ? *hold_durations_.find(key) : 0.0;
-        double new_duration = st.is_held || st.is_pressed ? prev_duration + dt : 0.0;
+        double new_duration = st.is_held || st.is_pressed ? prev_duration + delta_time : 0.0;
 
         bool should_move = (st.is_pressed && new_duration >= 0.0) ||
                            (new_duration >= repeat_delay &&
-                            std::fmod(new_duration - repeat_delay, repeat_rate) < dt);
+                            std::fmod(new_duration - repeat_delay, repeat_rate) < delta_time);
 
         if (should_move) {
             switch (key) {
