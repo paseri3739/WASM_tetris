@@ -35,7 +35,8 @@ int main() {
 #endif
     // TODO: サイズを再考する
     window = SDL_CreateWindow("Fallback Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                              640, 480, winFlags);
+                              game_config::defaultGameConfig.window.width,
+                              game_config::defaultGameConfig.window.height, winFlags);
     if (!window) {
         std::cerr << "SDL_CreateWindow Error: " << SDL_GetError() << '\n';
         return 1;
