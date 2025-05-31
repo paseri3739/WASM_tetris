@@ -29,3 +29,5 @@ void InitialScene::render(IRenderer& renderer) {
 void InitialScene::cleanup() {
     // 特にリソース解放等があればここで実施
 }
+
+std::unique_ptr<IScene> InitialScene::take_scene_transition() { return std::move(pending_scene_); }

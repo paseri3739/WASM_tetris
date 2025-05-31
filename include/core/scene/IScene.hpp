@@ -32,8 +32,11 @@ class IScene {
     // シーンの終了処理
     virtual void cleanup() = 0;
 
+    virtual std::unique_ptr<IScene> take_scene_transition() = 0;
+
    protected:
     std::shared_ptr<const IGameState> current_state_;  // ← ポインタで保持（継承先からアクセス可）
+    std::unique_ptr<IScene> pending_scene_;            // 次のシーンへの遷移要求を保持
 };
 
 #endif /* B2833B7C_0978_42EE_A754_673FBA7514B8 */

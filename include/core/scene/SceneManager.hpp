@@ -21,13 +21,13 @@ class SceneManager {
     void render(IRenderer& renderer);
     void process_input(const Input& input);
 
-    void change_scene(std::unique_ptr<IScene> next);  // ← const を外す
     IScene& get_current() const;
 
    private:
     std::unique_ptr<IScene> current_scene_;
     std::unique_ptr<IScene> next_scene_;
 
+    void change_scene(std::unique_ptr<IScene> next);  // ← const を外す
     void apply_scene_change();
 };
 

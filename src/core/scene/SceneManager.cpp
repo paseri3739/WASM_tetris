@@ -5,6 +5,12 @@ void SceneManager::update(const double delta_time) {
     assert(current_scene_);
     current_scene_->update(delta_time);
 
+    // 遷移要求をpullする
+    auto next = current_scene_->take_scene_transition();
+    if (next) {  // nullptr でない場合のみ遷移要求がある
+        change_scene(std::move(next));
+    }
+
     // 遷移要求があれば適用
     apply_scene_change();
 }

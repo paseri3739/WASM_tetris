@@ -24,6 +24,8 @@ class InitialScene final : public IScene {
 
     void cleanup() override;
 
+    std::unique_ptr<IScene> take_scene_transition() override;
+
    private:
     GameConfig game_config_;                   // ゲーム設定
     std::shared_ptr<const Input> last_input_;  // 入力は保持（Immutable）
