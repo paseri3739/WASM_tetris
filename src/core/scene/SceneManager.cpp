@@ -47,5 +47,5 @@ void SceneManager::apply_scene_change() {
     next_scene_.reset();
 
     // 新シーンの初期化
-    current_scene_->initialize();
+    current_scene_->initialize(*game_config_);
 }

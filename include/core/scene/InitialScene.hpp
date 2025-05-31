@@ -12,9 +12,7 @@
  */
 class InitialScene final : public IScene {
    public:
-    InitialScene(const GameConfig& game_config) : game_config_(game_config) {};
-
-    void initialize() override;
+    void initialize(const GameConfig& config) override;
 
     void update(const double delta_time) override;
 
@@ -27,7 +25,6 @@ class InitialScene final : public IScene {
     std::optional<std::unique_ptr<IScene>> take_scene_transition() override;
 
    private:
-    GameConfig game_config_;                   // ゲーム設定
     std::shared_ptr<const Input> last_input_;  // 入力は保持（Immutable）
 };
 

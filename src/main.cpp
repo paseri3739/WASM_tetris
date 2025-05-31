@@ -54,14 +54,14 @@ int main() {
 
     // ── SceneManager ──
     auto scene_manager =
-        std::make_unique<SceneManager>(std::make_unique<InitialScene>(*game_config), game_config);
+        std::make_unique<SceneManager>(std::make_unique<InitialScene>(), game_config);
 
     // ── InputPoller ──
     auto input_poller = std::make_unique<SDLInputPoller>();
 
     // ── Game を生成し g_game に保持 ──
-    g_game = std::make_unique<Game>(game_config::defaultGameConfig, std::move(scene_manager),
-                                    std::move(renderer), std::move(input_poller));
+    g_game = std::make_unique<Game>(game_config, std::move(scene_manager), std::move(renderer),
+                                    std::move(input_poller));
 
 #ifdef __EMSCRIPTEN__
     emscripten_set_main_loop_arg(frame_cb, g_game.get(),

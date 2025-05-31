@@ -3,7 +3,7 @@
 #include <core/scene/NextScene.hpp>
 #include <core/scene/SampleSceneGameState.hpp>
 
-void InitialScene::initialize() {
+void InitialScene::initialize(const GameConfig& config) {
     // 状態の初期化：100,100 を初期位置とする状態
     current_state_ = std::make_shared<SampleSceneGameState>(Position{100, 100});
 }

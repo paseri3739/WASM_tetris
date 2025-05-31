@@ -15,7 +15,7 @@
  */
 class Game {
    public:
-    Game(const GameConfig& config, std::unique_ptr<SceneManager> scene_manager,
+    Game(std::shared_ptr<const GameConfig> config, std::unique_ptr<SceneManager> scene_manager,
          std::unique_ptr<IRenderer> renderer, std::unique_ptr<InputPoller> input_poller)
         : config_(config),
           scene_manager_(std::move(scene_manager)),
@@ -23,8 +23,6 @@ class Game {
           current_input_(std::make_shared<Input>()),
           input_poller_(std::move(input_poller)) {}
 
-    // ゲームの設定を取得
-    const GameConfig& getConfig() const { return config_; }
     // ゲームの初期化処理
     bool initialize();
 #ifndef __EMSCRIPTEN__
@@ -34,7 +32,7 @@ class Game {
     void tick(double deltaTime);  // 1フレーム処理（全環境共通）
 
    private:
-    GameConfig config_;
+    std::shared_ptr<const GameConfig> config_;  // ゲーム設定の共有ポインタ
     std::unique_ptr<SceneManager> scene_manager_;
     std::unique_ptr<IRenderer> renderer_;  // レンダラーのユニークポインタ
     std::shared_ptr<const Input> current_input_;

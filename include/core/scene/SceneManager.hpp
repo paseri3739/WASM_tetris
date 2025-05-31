@@ -16,7 +16,7 @@ class SceneManager {
     SceneManager(std::unique_ptr<IScene> initial_scene,
                  std::shared_ptr<const GameConfig> game_config)
         : current_scene_{std::move(initial_scene)}, game_config_{std::move(game_config)} {
-        current_scene_->initialize();
+        current_scene_->initialize(*game_config);
     }
 
     void update(const double delta_time);
@@ -24,8 +24,6 @@ class SceneManager {
     void process_input(const Input& input);
 
     IScene& get_current() const;
-
-    inline std::shared_ptr<const GameConfig> get_game_config() const { return game_config_; }
 
    private:
     std::unique_ptr<IScene> current_scene_;
