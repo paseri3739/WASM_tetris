@@ -8,9 +8,13 @@
  */
 struct GameConfig {
     struct {
-        double width;
-        double height;
+        int width;
+        int height;
     } window;
+    struct {
+        int x;
+        int y;
+    } game_area_position;  // ゲームエリアの位置
     struct {
         double size;
     } cell;  // square
@@ -25,8 +29,11 @@ struct GameConfig {
 
 namespace game_config {
 // ゲームの設定を格納する構造体
-constexpr GameConfig defaultGameConfig = {
-    .window = {640, 480}, .cell = {30}, .grid = {20, 10}, .frame_rate = {60}};
+constexpr GameConfig defaultGameConfig = {.window = {300, 600},
+                                          .game_area_position = {0, 0},
+                                          .cell = {30},
+                                          .grid = {20, 10},
+                                          .frame_rate = {60}};
 }  // namespace game_config
 
 #endif /* A3705902_55D3_4E4F_B7C4_0899B5406266 */
