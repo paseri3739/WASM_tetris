@@ -11,7 +11,7 @@ void SceneManager::update(const double delta_time) {
         change_scene(std::move(next));
     }
 
-    // 遷移要求があれば適用
+    // 遷移要求があれば適用。次のフレームは新シーンの描画になる。
     apply_scene_change();
 }
 

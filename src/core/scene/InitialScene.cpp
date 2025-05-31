@@ -1,4 +1,5 @@
 #include <core/scene/InitialScene.hpp>
+#include <core/scene/NextScene.hpp>
 #include <core/scene/SampleSceneGameState.hpp>
 
 void InitialScene::initialize() {
@@ -14,6 +15,7 @@ void InitialScene::update(const double delta_time) {
     if (current_state_ && current_state_->is_ready_to_transition()) {
         // 例: manager_.change_scene(std::make_unique<NextScene>(game_config_, manager_));
         // TODO: ロジックを試すにはNextSceneの実装を行う必要がある
+        pending_scene_ = std::make_unique<NextScene>();
     }
 }
 
