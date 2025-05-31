@@ -15,8 +15,9 @@
  */
 class Game {
    public:
-    Game(std::shared_ptr<const GameConfig> config, std::unique_ptr<SceneManager> scene_manager,
-         std::unique_ptr<IRenderer> renderer, std::unique_ptr<InputPoller> input_poller)
+    Game(const std::shared_ptr<const GameConfig>& config,
+         std::unique_ptr<SceneManager> scene_manager, std::unique_ptr<IRenderer> renderer,
+         std::unique_ptr<InputPoller> input_poller)
         : config_(config),
           scene_manager_(std::move(scene_manager)),
           renderer_(std::move(renderer)),

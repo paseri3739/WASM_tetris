@@ -14,8 +14,8 @@
 class SceneManager {
    public:
     SceneManager(std::unique_ptr<IScene> initial_scene,
-                 std::shared_ptr<const GameConfig> game_config)
-        : current_scene_{std::move(initial_scene)}, game_config_{std::move(game_config)} {
+                 const std::shared_ptr<const GameConfig>& game_config)
+        : current_scene_{std::move(initial_scene)}, game_config_{game_config} {
         current_scene_->initialize(*game_config);
     }
 
