@@ -1,4 +1,3 @@
-// core/scene/SampleSceneGameState.cpp
 #include <cmath>
 #include <core/graphics_types.hpp>  // Color, Rect など
 #include <core/scene/SampleSceneGameState.hpp>
@@ -8,11 +7,19 @@
 // ─────────────────────────────────────────────
 // コンストラクタ
 // ─────────────────────────────────────────────
+
+// step内で呼び出す想定のコンストラクタ
+SampleSceneGameState::SampleSceneGameState(Position pos, immer::map<InputKey, double> durations,
+                                           bool transition_flag)
+    : position_{pos}, hold_durations_{std::move(durations)}, transition_flag_{transition_flag} {}
+
+// 初期位置のみを指定するコンストラクタ。シーン開始時に使用されている。
 SampleSceneGameState::SampleSceneGameState(Position pos) : position_{pos} {
-    // すべてのキーのホールド時間を 0 初期化
+    immer::map<InputKey, double> init_map;
     for (auto key : {InputKey::LEFT, InputKey::RIGHT, InputKey::UP, InputKey::DOWN}) {
-        hold_durations_[key] = 0.0;
+        init_map = init_map.set(key, 0.0);
     }
+    hold_durations_ = init_map;
 }
 
 // ─────────────────────────────────────────────
@@ -24,59 +31,56 @@ std::shared_ptr<const IGameState> SampleSceneGameState::step(const Input& input,
     constexpr double step_px = 10.0;       // 1 ステップで動く距離 [px]
 
     // コピーして新しい値オブジェクトを作る
-    SampleSceneGameState next = *this;
+    auto updated_hold_durations = hold_durations_;
+    Position new_position = position_;
+    bool new_transition_flag = transition_flag_;
 
     // ── 入力キーごとの処理 ─────────────────────
     for (auto key : {InputKey::LEFT, InputKey::RIGHT, InputKey::UP, InputKey::DOWN}) {
         const auto it = input.key_states.find(key);
-
-        if (it == input.key_states.end()) {  // キー情報がない
-            next.hold_durations_[key] = 0.0;
+        if (it == input.key_states.end()) {
+            updated_hold_durations = updated_hold_durations.set(key, 0.0);
             continue;
         }
 
         const auto& st = it->second;
+        double prev_duration = hold_durations_.find(key) ? *hold_durations_.find(key) : 0.0;
+        double new_duration = st.is_held || st.is_pressed ? prev_duration + dt : 0.0;
 
-        if (st.is_held || st.is_pressed) {
-            double new_duration = next.hold_durations_[key] + dt;
+        bool should_move = (st.is_pressed && new_duration >= 0.0) ||
+                           (new_duration >= repeat_delay &&
+                            std::fmod(new_duration - repeat_delay, repeat_rate) < dt);
 
-            bool should_move =
-                (st.is_pressed && new_duration >= 0.0) ||  // 押した瞬間
-                (new_duration >= repeat_delay &&
-                 std::fmod(new_duration - repeat_delay, repeat_rate) < dt);  // オートリピート
-
-            if (should_move) {
-                switch (key) {
-                    case InputKey::LEFT:
-                        next.position_.x -= step_px;
-                        break;
-                    case InputKey::RIGHT:
-                        next.position_.x += step_px;
-                        break;
-                    case InputKey::UP:
-                        next.position_.y -= step_px;
-                        break;
-                    case InputKey::DOWN:
-                        next.position_.y += step_px;
-                        break;
-                    default:
-                        break;
-                }
+        if (should_move) {
+            switch (key) {
+                case InputKey::LEFT:
+                    new_position.x -= step_px;
+                    break;
+                case InputKey::RIGHT:
+                    new_position.x += step_px;
+                    break;
+                case InputKey::UP:
+                    new_position.y -= step_px;
+                    break;
+                case InputKey::DOWN:
+                    new_position.y += step_px;
+                    break;
+                default:
+                    break;
             }
-            next.hold_durations_[key] = new_duration;
-
-        } else {
-            next.hold_durations_[key] = 0.0;
         }
+
+        updated_hold_durations = updated_hold_durations.set(key, new_duration);
     }
 
-    // ── シーン遷移判定の例 ───────────────────────
-    // 例：プレイヤーが x > 500 に達したら遷移フラグを立てる
-    if (next.position_.x > 500) {
-        next.transition_flag_ = true;
+    // シーン遷移判定
+    if (new_position.x > 500) {
+        new_transition_flag = true;
     }
 
-    return std::make_shared<SampleSceneGameState>(std::move(next));
+    // 更新用コンストラクタに変わる
+    return std::make_shared<SampleSceneGameState>(new_position, std::move(updated_hold_durations),
+                                                  new_transition_flag);
 }
 
 // ─────────────────────────────────────────────
