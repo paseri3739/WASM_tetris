@@ -2,6 +2,7 @@
 #define B9A2347A_606F_4127_89AC_A0403C3E1235
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <core/IRenderer.hpp>
 #include <memory>
 #include <string>
@@ -50,6 +51,29 @@ class SDLRenderer final : public IRenderer {
     void draw_texture(TextureId id, const Rect& src_region, const Rect& dst_region,
                       double angle = 0.0) override;
 
+    // ──────────── フォント関連 ------------------------------------------------
+    /**
+     * フォントをロードして登録
+     * @param path     フォントファイル（TTF/OTF など）
+     * @param pt_size  ポイントサイズ
+     * @return 成功: FontId, 失敗: エラーメッセージ
+     */
+    [[nodiscard]]
+    tl::expected<FontId, std::string> register_font(const std::string& path, int pt_size) override;
+
+    /**
+     * テキストを即描画
+     *   - キャッシュが必要なら呼び出し側で wrap してください
+     * @param font_id 登録済みフォント
+     * @param utf8    UTF-8 文字列
+     * @param pos     描画左上座標
+     * @param color   RGBA
+     * @return 成功: void, 失敗: エラーメッセージ
+     */
+    [[nodiscard]]
+    tl::expected<void, std::string> draw_text(FontId font_id, const std::string& utf8, Position pos,
+                                              Color color) override;
+
     // 追加ユーティリティ ----------------------------------------------------
     /** SDL_Texture* を登録し TextureId を取得 */
     [[nodiscard]]
@@ -71,6 +95,10 @@ class SDLRenderer final : public IRenderer {
 
     std::unordered_map<TextureId, SDL_Texture*> textures_;
     TextureId next_id_{1};
+
+    // テクスチャと同じ管理方式
+    std::unordered_map<FontId, TTF_Font*> fonts_;
+    FontId next_font_id_{0};
 
     // 内部ヘルパ ------------------------------------------------------------
     void set_draw_color(Color c) { SDL_SetRenderDrawColor(renderer_, c.r, c.g, c.b, c.a); }

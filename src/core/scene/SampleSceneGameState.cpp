@@ -2,6 +2,7 @@
 #include <cmath>
 #include <core/graphics_types.hpp>  // Color, Rect など
 #include <core/scene/SampleSceneGameState.hpp>
+#include <iostream>
 #include <utility>  // std::move
 
 // ─────────────────────────────────────────────
@@ -86,6 +87,17 @@ void SampleSceneGameState::render(IRenderer& renderer) const {
     Color blue{0, 0, 255, 255};
 
     renderer.fill_rect(rect, blue);
+
+    auto font_id = renderer.register_font("assets/Noto_Sans_JP/static/NotoSansJP-Regular.ttf", 24);
+
+    if (font_id) {
+        auto font_id_value = font_id.value();
+        auto result =
+            renderer.draw_text(font_id_value, "Sample Scene", {100, 100}, {255, 255, 255, 255});
+        if (!result) {
+            std::cerr << "Failed to draw text: " << result.error() << std::endl;
+        }
+    }
 }
 
 // ─────────────────────────────────────────────

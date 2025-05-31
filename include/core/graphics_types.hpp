@@ -32,7 +32,4 @@ struct Rect {
     Size size;
 };
 
-/** バックエンド依存のテクスチャ識別子 */
-using TextureId = std::uint32_t;
-
 #endif /* FDF1996A_28A1_4BB6_9350_B2E7149BB007 */

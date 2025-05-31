@@ -6,10 +6,13 @@ function(setup_wasm_target target_name)
 
     # --- 1. SDL2 port を先に構築 ----------------------------------------
     add_custom_target(fetch_sdl2
-        COMMAND embuilder build sdl2 sdl2_image sdl2_mixer
-        COMMENT "Emscripten ports: building SDL2 (+image/mixer) if needed"
+        # FIXME: SDL関係の追加オプションを増やしたらここを修正してください
+        # pyenvビルドのpythonだとうまくいかないかもしれないので、その場合はEMSDK_PYTHON環境変数を設定してください
+        COMMAND embuilder build sdl2 sdl2_image sdl2_mixer sdl2_ttf # ← 追加
+        COMMENT "Emscripten ports: building SDL2 (+image/mixer/ttf) if needed"
         VERBATIM
     )
+
     add_dependencies(${target_name} fetch_sdl2)
 
     # --- 2. SDL2 のインクルードを明示 ------------------------------------
@@ -26,9 +29,11 @@ function(setup_wasm_target target_name)
         "-sUSE_WEBGL2=1"
         "-sUSE_SDL_IMAGE=2"
         "-sUSE_SDL_MIXER=2"
+        "-sUSE_SDL_TTF=2"
         "-sALLOW_MEMORY_GROWTH=1"
         "-sFULL_ES3=1"
         "-sASYNCIFY"
         "-sEXPORTED_FUNCTIONS=['_main']"
+        "--preload-file" "${CMAKE_SOURCE_DIR}/assets@/assets" # ★ 2トークン
     )
 endfunction()
