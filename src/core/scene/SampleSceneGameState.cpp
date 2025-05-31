@@ -39,7 +39,7 @@ std::shared_ptr<const IGameState> SampleSceneGameState::step(const Input& input,
     for (auto key : {InputKey::LEFT, InputKey::RIGHT, InputKey::UP, InputKey::DOWN}) {
         const auto it = input.key_states.find(key);
         if (it == input.key_states.end()) {
-            updated_hold_durations = updated_hold_durations.set(key, 0.0);
+            updated_hold_durations = updated_hold_durations.set(key, 0.0);  // イミュータブル更新
             continue;
         }
 
