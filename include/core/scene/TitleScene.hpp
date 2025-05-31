@@ -5,7 +5,7 @@ class TitleScene final : public IScene {
     ~TitleScene() = default;
 
     // シーンの初期化が必要ならここで行う
-    void initialize() override;
+    void initialize(const GameConfig& config) override;
 
     // シーンの更新処理
     void update(const double delta_time) override;

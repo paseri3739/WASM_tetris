@@ -23,7 +23,7 @@ class TetrisGrid {
     const Position position;                         ///< グリッドの左上位置
     const Size size;                                 ///< 全体サイズ
     const GridColumnRow grid_size;                   ///< 行数・列数
-    const immer::vector<immer::vector<Cell>> cells;  // ← 変更点
+    const immer::vector<immer::vector<Cell>> cells;  /// < 重い部分はimmer::vectorで管理
     const CellFactory cell_factory;                  ///< セル生成用ファクトリ
 
     /**
