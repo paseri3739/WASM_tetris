@@ -53,7 +53,8 @@ int main() {
 
     // ── SceneManager ──
     auto scene_manager = std::make_unique<SceneManager>(
-        std::make_unique<InitialScene>(game_config::defaultGameConfig));
+        std::make_unique<InitialScene>(game_config::defaultGameConfig),
+        std::make_shared<const GameConfig>(game_config::defaultGameConfig));
 
     // ── InputPoller ──
     auto input_poller = std::make_unique<SDLInputPoller>();

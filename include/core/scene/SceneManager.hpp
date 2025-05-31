@@ -2,6 +2,7 @@
 
 #ifndef C79CAE94_BCD1_41D5_AD77_2A43EE576AB7
 #define C79CAE94_BCD1_41D5_AD77_2A43EE576AB7
+#include <core/GameConfig.hpp>
 #include <core/scene/IScene.hpp>
 #include <memory>
 
@@ -12,8 +13,9 @@
 
 class SceneManager {
    public:
-    explicit SceneManager(std::unique_ptr<IScene> initial_scene)
-        : current_scene_{std::move(initial_scene)} {
+    SceneManager(std::unique_ptr<IScene> initial_scene,
+                 std::shared_ptr<const GameConfig> game_config)
+        : current_scene_{std::move(initial_scene)}, game_config_{std::move(game_config)} {
         current_scene_->initialize();
     }
 
@@ -23,11 +25,14 @@ class SceneManager {
 
     IScene& get_current() const;
 
+    inline std::shared_ptr<const GameConfig> get_game_config() const { return game_config_; }
+
    private:
     std::unique_ptr<IScene> current_scene_;
     std::unique_ptr<IScene> next_scene_;
+    std::shared_ptr<const GameConfig> game_config_;
 
-    void change_scene(std::unique_ptr<IScene> next);  // ← const を外す
+    void change_scene(std::unique_ptr<IScene> next);
     void apply_scene_change();
 };
 
