@@ -23,7 +23,7 @@ class IRenderer {
     virtual void end_frame() = 0;
 
     // 画面クリア
-    virtual void clear(Color color = {0, 0, 0, 255}) = 0;
+    virtual void clear(Color color) = 0;
 
     // プリミティブ描画
     virtual void fill_rect(const Rect&, Color) = 0;
@@ -32,7 +32,7 @@ class IRenderer {
 
     // 他にも draw_texture, draw_text など必要に応じて追加
     virtual void draw_texture(TextureId id, const Rect& src_region, const Rect& dst_region,
-                              double angle = 0.0) = 0;
+                              double angle) = 0;
 
     // ──────────── フォント関連 ------------------------------------------------
     /**

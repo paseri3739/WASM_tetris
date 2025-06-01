@@ -19,10 +19,11 @@ class SceneManager {
         current_scene_->initialize(*game_config);
     }
 
-    void update(const double delta_time);
+    void update(double delta_time);
     void render(IRenderer& renderer);
     void process_input(const Input& input);
 
+    [[nodiscard]]
     IScene& get_current() const;
 
    private:

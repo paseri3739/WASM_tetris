@@ -14,7 +14,7 @@ class InitialScene final : public IScene {
    public:
     void initialize(const GameConfig& config) override;
 
-    void update(const double delta_time) override;
+    void update(double delta_time) override;
 
     void process_input(const Input& input) override;
 

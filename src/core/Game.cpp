@@ -5,7 +5,6 @@
 #ifndef __EMSCRIPTEN__
 #include <SDL2/SDL.h>
 #endif
-#include <iostream>
 
 void Game::update(double delta_time) { this->scene_manager_->update(delta_time); }
 void Game::processInput() {
@@ -15,6 +14,7 @@ void Game::processInput() {
     this->scene_manager_->process_input(*this->current_input_);
 }
 
+bool Game::initialize() { return true; }
 // ─────────────────────── 1フレーム処理 ───────────────────────
 void Game::tick(double deltaTime) {
     this->processInput();     // 入力収集

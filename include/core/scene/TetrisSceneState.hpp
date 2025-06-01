@@ -18,6 +18,10 @@ class TetrisSceneState final : public IGameState {
 
     TetrisSceneState(TetrisGrid g, Tetrimino t, bool over)
         : grid(std::move(g)), current_tetrimino(std::move(t)), is_game_over(over) {}
+
+    std::shared_ptr<const IGameState> step(const Input& input, double delta_time) const override;
+    void render(IRenderer& renderer) const override;
+    bool is_ready_to_transition() const noexcept override;
 };
 
 #endif /* DB541074_2FC2_44B0_9DF3_58C8A424B4A1 */

@@ -22,7 +22,7 @@ class IScene {
     virtual void initialize(const GameConfig& config) = 0;
 
     // シーンの更新処理
-    virtual void update(const double delta_time) = 0;
+    virtual void update(double delta_time) = 0;
 
     // シーンの入力処理
     virtual void process_input(const Input& input) = 0;
@@ -37,7 +37,7 @@ class IScene {
 
    protected:
     std::shared_ptr<const IGameState> current_state_;  // ← ポインタで保持（継承先からアクセス可）
-    std::unique_ptr<IScene> pending_scene_;  // 次のシーンへの遷移要求を保持
+    std::unique_ptr<IScene> pending_scene_;            // 次のシーンへの遷移要求を保持
 };
 
 #endif /* B2833B7C_0978_42EE_A754_673FBA7514B8 */

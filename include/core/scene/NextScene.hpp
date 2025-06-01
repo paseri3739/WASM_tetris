@@ -10,6 +10,7 @@ class NextSceneGameState : public IGameState {
     NextSceneGameState() = default;
 
     // 状態の更新処理
+    [[nodiscard]]
     std::shared_ptr<const IGameState> step(const Input& input,
                                            const double delta_time) const override {
         return std::make_shared<NextSceneGameState>(*this);
@@ -20,6 +21,7 @@ class NextSceneGameState : public IGameState {
         renderer.fill_rect({0, 0, 100, 200}, {255, 0, 0, 255});
     };
 
+    [[nodiscard]]
     bool is_ready_to_transition() const noexcept override {
         return false;  // 次シーンへは遷移しない
     }

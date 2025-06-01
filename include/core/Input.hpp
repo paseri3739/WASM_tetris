@@ -39,6 +39,7 @@ struct Input {
         return next;
     }
 
+    [[nodiscard]]
     std::string to_string() const {
         std::string result;
         for (const auto& [key, state] : key_states) {

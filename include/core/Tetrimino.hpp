@@ -48,14 +48,40 @@ constexpr Color color_of(TetriminoType t) noexcept { return kColors[static_cast<
 
 using Shape4 = std::array<std::array<bool, 4>, 4>;
 
-constexpr std::array<Shape4, 7> kBaseShapes{
-    {/* I */ {{{0, 0, 0, 0}, {1, 1, 1, 1}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-     /* O */ {{{1, 1, 0, 0}, {1, 1, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-     /* T */ {{{0, 1, 0, 0}, {1, 1, 1, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-     /* S */ {{{0, 1, 1, 0}, {1, 1, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-     /* Z */ {{{1, 1, 0, 0}, {0, 1, 1, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-     /* J */ {{{1, 0, 0, 0}, {1, 1, 1, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-     /* L */ {{{0, 0, 1, 0}, {1, 1, 1, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}}}};
+constexpr std::array<Shape4, 7> kBaseShapes{{/* I */ {{{false, false, false, false},
+                                                       {true, true, true, true},
+                                                       {false, false, false, false},
+                                                       {false, false, false, false}}},
+                                             /* O */
+                                             {{{true, true, false, false},
+                                               {true, true, false, false},
+                                               {false, false, false, false},
+                                               {false, false, false, false}}},
+                                             /* T */
+                                             {{{false, true, false, false},
+                                               {true, true, true, false},
+                                               {false, false, false, false},
+                                               {false, false, false, false}}},
+                                             /* S */
+                                             {{{false, true, true, false},
+                                               {true, true, false, false},
+                                               {false, false, false, false},
+                                               {false, false, false, false}}},
+                                             /* Z */
+                                             {{{true, true, false, false},
+                                               {false, true, true, false},
+                                               {false, false, false, false},
+                                               {false, false, false, false}}},
+                                             /* J */
+                                             {{{true, false, false, false},
+                                               {true, true, true, false},
+                                               {false, false, false, false},
+                                               {false, false, false, false}}},
+                                             /* L */
+                                             {{{false, false, true, false},
+                                               {true, true, true, false},
+                                               {false, false, false, false},
+                                               {false, false, false, false}}}}};
 
 constexpr Shape4 rotate_cw(const Shape4& s) noexcept {
     Shape4 out{};

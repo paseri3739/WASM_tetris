@@ -1,6 +1,8 @@
 #ifndef EAEC85BA_F694_47C7_AB0E_2FD093BD0A16
 #define EAEC85BA_F694_47C7_AB0E_2FD093BD0A16
 
+#define IMMER_VECTOR_USE_ALIASES 1
+
 #include <algorithm>
 #include <core/Cell.hpp>
 #include <core/IRenderer.hpp>
@@ -64,8 +66,10 @@ class TetrisGrid {
 
     bool is_within_bounds(const Position& position);
 
+    [[nodiscard]]
     bool is_filled_cell(const GridColumnRow& grid_position) const;
 
+    [[nodiscard]]
     bool is_colliding(const GridColumnRow& before, const GridColumnRow& after) const;
 
     // 変更点：更新系メソッドは新しいインスタンスを返す
