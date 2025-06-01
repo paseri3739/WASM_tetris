@@ -28,17 +28,20 @@ void TitleSceneState::render(IRenderer& renderer) const {
     renderer.fill_rect({0, 0, static_cast<double>(width_), static_cast<double>(height_)},
                        Color::from_string("#CC0000"));
 
-    auto font_id = renderer.register_font("assets/Noto_Sans_JP/static/NotoSansJP-Regular.ttf", 24);
+    const auto font_id =
+        renderer.register_font("assets/Noto_Sans_JP/static/NotoSansJP-Regular.ttf", 40);
 
     if (font_id) {
+        const auto font_position = renderer.measure_text(font_id.value(), title_text_);
+        const double text_x = (width_ - font_position.first) / 2;
         const auto font_id_value = font_id.value();
-        auto result = renderer.draw_text(font_id_value, title_text_, {50, 100},
-                                         Color::from_string("#FAD202"));
+        const auto result = renderer.draw_text(font_id_value, title_text_, {text_x, 100},
+                                               Color::from_string("#FAD202"));
         if (!result) {
             std::cerr << "Failed to draw text: " << result.error() << std::endl;
         }
 
-        auto result_symbol =
+        const auto result_symbol =
             renderer.draw_text(font_id_value, symbol_, {20, 50}, Color::from_string("#FAD202"));
         if (!result_symbol) {
             std::cerr << "Failed to draw symbol: " << result_symbol.error() << std::endl;
