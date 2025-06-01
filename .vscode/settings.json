@@ -3,5 +3,6 @@
     "files.associations": {
         "*.asm": "asm6502",
         "optional": "cpp"
-    }
+    },
+    "clangd.enable": false
 }

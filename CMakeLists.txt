@@ -80,7 +80,7 @@ if(EMSCRIPTEN)
 
   set(CMAKE_BUILD_TYPE Debug)
   string(APPEND CMAKE_CXX_FLAGS_DEBUG
-    " -gsource-map --source-map-base http://localhost:8080/")
+    " -gsource-map --source-map-base http://localhost:6931/")
 
   # ヘッダ専用ライブラリはリンクだけ渡す（シンボルは出ない）
   target_link_libraries(wasm_app PRIVATE immer tl::expected)

@@ -8,7 +8,6 @@
             "url": "http://localhost:6931/wasm_app.html",
             "webRoot": "${workspaceFolder}",
             "runtimeArgs": ["--remote-debugging-port=9222"],
-            "sourceMaps": true,
             "trace": false
         }
     ]
