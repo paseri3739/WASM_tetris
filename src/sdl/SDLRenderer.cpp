@@ -65,13 +65,13 @@ void SDLRenderer::clear(Color color) {
 // ──────────── プリミティブ描画 ────────────
 void SDLRenderer::fill_rect(const Rect& rect, Color color) {
     set_draw_color(color);
-    SDL_Rect srect = to_sdl_rect(rect);
+    const SDL_Rect srect = to_sdl_rect(rect);
     SDL_RenderFillRect(renderer_, &srect);
 }
 
 void SDLRenderer::stroke_rect(const Rect& rect, Color color) {
     set_draw_color(color);
-    SDL_Rect srect = to_sdl_rect(rect);
+    const SDL_Rect srect = to_sdl_rect(rect);
     SDL_RenderDrawRect(renderer_, &srect);
 }
 
@@ -83,12 +83,12 @@ void SDLRenderer::draw_line(Position start, Position end, Color color) {
 
 void SDLRenderer::draw_texture(TextureId id, const Rect& src_region, const Rect& dst_region,
                                double angle) {
-    auto it = textures_.find(id);
+    const auto it = textures_.find(id);
     if (it == textures_.end()) return;  // 未登録 ID は無視（必要ならエラーを返す API を追加）
 
     SDL_Texture* tex = it->second;
-    SDL_Rect src = to_sdl_rect(src_region);
-    SDL_Rect dst = to_sdl_rect(dst_region);
+    const SDL_Rect src = to_sdl_rect(src_region);
+    const SDL_Rect dst = to_sdl_rect(dst_region);
 
     SDL_RenderCopyEx(renderer_, tex, &src, &dst, angle, nullptr, SDL_FLIP_NONE);
 }
@@ -117,12 +117,12 @@ tl::expected<FontId, std::string> SDLRenderer::register_font(const std::string& 
 // ──────────── テキスト描画 ────────────
 tl::expected<void, std::string> SDLRenderer::draw_text(FontId font_id, const std::string& utf8,
                                                        Position pos, Color color) {
-    auto it = fonts_.find(font_id);
+    const auto it = fonts_.find(font_id);
     if (it == fonts_.end()) {
         return tl::unexpected<std::string>{"draw_text: invalid font_id"};
     }
 
-    SDL_Color fg{color.r, color.g, color.b, color.a};
+    const SDL_Color fg{color.r, color.g, color.b, color.a};
     SDL_Surface* surface = TTF_RenderUTF8_Blended(it->second, utf8.c_str(), fg);
     if (!surface) {
         return tl::unexpected<std::string>(std::string{"TTF_RenderUTF8_Blended failed: "} +
@@ -140,7 +140,7 @@ tl::expected<void, std::string> SDLRenderer::draw_text(FontId font_id, const std
     // 描画先矩形
     int w, h;
     SDL_QueryTexture(tex, nullptr, nullptr, &w, &h);
-    SDL_Rect dst{static_cast<int>(pos.x), static_cast<int>(pos.y), w, h};
+    const SDL_Rect dst{static_cast<int>(pos.x), static_cast<int>(pos.y), w, h};
 
     SDL_RenderCopy(renderer_, tex, nullptr, &dst);
     SDL_DestroyTexture(tex);  // キャッシュ不要なら即破棄

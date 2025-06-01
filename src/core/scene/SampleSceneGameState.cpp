@@ -16,7 +16,7 @@ SampleSceneGameState::SampleSceneGameState(Position pos, immer::map<InputKey, do
 // 初期位置のみを指定するコンストラクタ。シーン開始時に使用されている。
 SampleSceneGameState::SampleSceneGameState(Position pos) : position_{pos} {
     immer::map<InputKey, double> init_map;
-    for (auto key : {InputKey::LEFT, InputKey::RIGHT, InputKey::UP, InputKey::DOWN}) {
+    for (const auto key : {InputKey::LEFT, InputKey::RIGHT, InputKey::UP, InputKey::DOWN}) {
         init_map = init_map.set(key, 0.0);
     }
     hold_durations_ = init_map;
@@ -45,12 +45,12 @@ std::shared_ptr<const IGameState> SampleSceneGameState::step(const Input& input,
         }
 
         const auto& st = it->second;
-        double prev_duration = hold_durations_.find(key) ? *hold_durations_.find(key) : 0.0;
-        double new_duration = st.is_held || st.is_pressed ? prev_duration + delta_time : 0.0;
+        const double prev_duration = hold_durations_.find(key) ? *hold_durations_.find(key) : 0.0;
+        const double new_duration = st.is_held || st.is_pressed ? prev_duration + delta_time : 0.0;
 
-        bool should_move = (st.is_pressed && new_duration >= 0.0) ||
-                           (new_duration >= repeat_delay &&
-                            std::fmod(new_duration - repeat_delay, repeat_rate) < delta_time);
+        const bool should_move = (st.is_pressed && new_duration >= 0.0) ||
+                                 (new_duration >= repeat_delay &&
+                                  std::fmod(new_duration - repeat_delay, repeat_rate) < delta_time);
 
         if (should_move) {
             switch (key) {
@@ -88,12 +88,13 @@ std::shared_ptr<const IGameState> SampleSceneGameState::step(const Input& input,
 // 描画
 // ─────────────────────────────────────────────
 void SampleSceneGameState::render(IRenderer& renderer) const {
-    Rect rect{position_, {100, 200}};
-    Color blue{0, 0, 255, 255};
+    const Rect rect{position_, {100, 200}};
+    const Color blue{0, 0, 255, 255};
 
     renderer.fill_rect(rect, blue);
 
-    auto font_id = renderer.register_font("assets/Noto_Sans_JP/static/NotoSansJP-Regular.ttf", 24);
+    const auto font_id =
+        renderer.register_font("assets/Noto_Sans_JP/static/NotoSansJP-Regular.ttf", 24);
 
     if (font_id) {
         auto font_id_value = font_id.value();

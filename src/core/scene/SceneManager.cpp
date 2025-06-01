@@ -14,12 +14,12 @@ void SceneManager::update(const double delta_time) {
     apply_scene_change();
 }
 
-void SceneManager::render(IRenderer& renderer) {
+void SceneManager::render(IRenderer& renderer) const {
     assert(current_scene_);
     current_scene_->render(renderer);
 }
 
-void SceneManager::process_input(const Input& input) {
+void SceneManager::process_input(const Input& input) const {
     assert(current_scene_);
     current_scene_->process_input(input);
 }

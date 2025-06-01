@@ -20,8 +20,8 @@ class SceneManager {
     }
 
     void update(double delta_time);
-    void render(IRenderer& renderer);
-    void process_input(const Input& input);
+    void render(IRenderer& renderer) const;
+    void process_input(const Input& input) const;
 
     [[nodiscard]]
     IScene& get_current() const;

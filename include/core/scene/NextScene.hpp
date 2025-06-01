@@ -4,7 +4,7 @@
 #include <core/IGameState.hpp>
 #include <core/scene/IScene.hpp>
 
-class NextSceneGameState : public IGameState {
+class NextSceneGameState final : public IGameState {
    public:
     // 状態の初期化や更新処理をここで実装
     NextSceneGameState() = default;

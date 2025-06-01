@@ -1,7 +1,8 @@
 #include <core/TetrisGrid.hpp>
 
 // セルの座標を算出
-Position TetrisGrid::get_position_of_cell(const GridColumnRow& grid_position, double cell_size) {
+Position TetrisGrid::get_position_of_cell(const GridColumnRow& grid_position,
+                                          double cell_size) const {
     return Position{
         this->position.x + grid_position.column * cell_size,
         this->position.y + grid_position.row * cell_size,
@@ -10,19 +11,19 @@ Position TetrisGrid::get_position_of_cell(const GridColumnRow& grid_position, do
 
 // 座標からグリッド上の行・列を逆算（浮動小数をintに切り下げ）
 GridColumnRow TetrisGrid::get_grid_position_of_cell(const Position& cell_position,
-                                                    double cell_size) {
-    int col = static_cast<int>((cell_position.x - this->position.x) / cell_size);
-    int row = static_cast<int>((cell_position.y - this->position.y) / cell_size);
+                                                    double cell_size) const {
+    const int col = static_cast<int>((cell_position.x - this->position.x) / cell_size);
+    const int row = static_cast<int>((cell_position.y - this->position.y) / cell_size);
     return GridColumnRow{col, row};
 }
 
 // 範囲内チェック（整数インデックス）
-bool TetrisGrid::is_within_bounds(int column, int row) {
+bool TetrisGrid::is_within_bounds(int column, int row) const {
     return column >= 0 && column < this->grid_size.column && row >= 0 && row < this->grid_size.row;
 }
 
 // 範囲内チェック（座標位置）
-bool TetrisGrid::is_within_bounds(const Position& position) {
+bool TetrisGrid::is_within_bounds(const Position& position) const {
     return position.x >= this->position.x && position.y >= this->position.y &&
            position.x < this->position.x + this->size.width &&
            position.y < this->position.y + this->size.height;
@@ -40,10 +41,10 @@ bool TetrisGrid::is_filled_cell(const GridColumnRow& grid_position) const {
 
 bool TetrisGrid::is_colliding(const GridColumnRow& before, const GridColumnRow& after) const {
     // まず両方の位置がグリッド内に収まっているか確認
-    bool before_in_bounds = before.column >= 0 && before.column < grid_size.column &&
-                            before.row >= 0 && before.row < grid_size.row;
-    bool after_in_bounds = after.column >= 0 && after.column < grid_size.column && after.row >= 0 &&
-                           after.row < grid_size.row;
+    const bool before_in_bounds = before.column >= 0 && before.column < grid_size.column &&
+                                  before.row >= 0 && before.row < grid_size.row;
+    const bool after_in_bounds = after.column >= 0 && after.column < grid_size.column &&
+                                 after.row >= 0 && after.row < grid_size.row;
 
     if (!(before_in_bounds && after_in_bounds)) {
         return true;  // 領域外への移動は衝突とみなす

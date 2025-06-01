@@ -92,7 +92,7 @@ constexpr Shape4 rotate_cw(const Shape4& s) noexcept {
 
 /// 回転を都度計算（LUT 不使用）
 inline Shape4 shape_of(TetriminoType type, Rotation r) noexcept {
-    Shape4 s = kBaseShapes[static_cast<std::size_t>(type)];
+    const Shape4 s = kBaseShapes[static_cast<std::size_t>(type)];
     switch (r) {
         case Rotation::R0:
             return s;

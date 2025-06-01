@@ -11,7 +11,7 @@
 Color Color::from_string(std::string color_str) {
     // 先頭・末尾の空白を除去
     auto trim = [](std::string& s) {
-        auto ns = [](unsigned char c) { return !std::isspace(c); };
+        auto ns = [](const unsigned char c) { return !std::isspace(c); };
         s.erase(s.begin(), std::find_if(s.begin(), s.end(), ns));
         s.erase(std::find_if(s.rbegin(), s.rend(), ns).base(), s.end());
     };
@@ -19,7 +19,7 @@ Color Color::from_string(std::string color_str) {
 
     // 小文字化
     std::transform(color_str.begin(), color_str.end(), color_str.begin(),
-                   [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+                   [](const unsigned char c) { return static_cast<char>(std::tolower(c)); });
 
     // デフォルトは白
     Color color{255, 255, 255, 255};
@@ -49,7 +49,7 @@ Color Color::from_string(std::string color_str) {
     }
 
     // ────────── rgb(r,g,b) / rgba(r,g,b,a) ──────────
-    auto parse_rgb_like = [&](const std::string& s, bool with_alpha) -> bool {
+    auto parse_rgb_like = [&](const std::string& s, const bool with_alpha) -> bool {
         const auto l = s.find('('), r = s.rfind(')');
         if (l == std::string::npos || r == std::string::npos || l >= r) return false;
 

@@ -35,8 +35,8 @@ class TetrisGrid {
 
     inline void render(IRenderer& renderer) const {
         // セルを描画する
-        int columns = this->grid_size.column;
-        int rows = this->grid_size.row;
+        const int columns = this->grid_size.column;
+        const int rows = this->grid_size.row;
 
         for (int row = 0; row < rows; ++row) {
             for (int column = 0; column < columns; ++column) {
@@ -46,13 +46,13 @@ class TetrisGrid {
         }
     }
 
-    Position get_position_of_cell(const GridColumnRow& grid_position, double cell_size);
+    Position get_position_of_cell(const GridColumnRow& grid_position, double cell_size) const;
 
-    GridColumnRow get_grid_position_of_cell(const Position& cell_position, double cell_size);
+    GridColumnRow get_grid_position_of_cell(const Position& cell_position, double cell_size) const;
 
-    bool is_within_bounds(int column, int row);
+    bool is_within_bounds(int column, int row) const;
 
-    bool is_within_bounds(const Position& position);
+    bool is_within_bounds(const Position& position) const;
 
     [[nodiscard]]
     bool is_filled_cell(const GridColumnRow& grid_position) const;

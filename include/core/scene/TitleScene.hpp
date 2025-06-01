@@ -31,7 +31,7 @@ class TitleSceneState final : public IGameState {
             renderer.register_font("assets/Noto_Sans_JP/static/NotoSansJP-Regular.ttf", 24);
 
         if (font_id) {
-            auto font_id_value = font_id.value();
+            const auto font_id_value = font_id.value();
             auto result = renderer.draw_text(font_id_value, title_text_, {50, 100},
                                              Color::from_string("#FAD202"));
             if (!result) {

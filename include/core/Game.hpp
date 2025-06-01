@@ -25,7 +25,7 @@ class Game {
           input_poller_(std::move(input_poller)) {}
 
     // ゲームの初期化処理
-    bool initialize();
+    static bool initialize();
 #ifndef __EMSCRIPTEN__
     // デスクトップ環境でのゲームループ
     void runLoop();
@@ -40,7 +40,7 @@ class Game {
     std::unique_ptr<InputPoller> input_poller_;
     double last_update_time_ = 0.0;
     // ゲームの更新処理
-    void update(double delta_time);
+    void update(double delta_time) const;
     void processInput();
 };
 

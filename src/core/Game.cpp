@@ -6,7 +6,7 @@
 #include <SDL2/SDL.h>
 #endif
 
-void Game::update(double delta_time) { this->scene_manager_->update(delta_time); }
+void Game::update(const double delta_time) const { this->scene_manager_->update(delta_time); }
 void Game::processInput() {
     // SDLInputPoller で新しい Input を取得（不変）
     this->current_input_ = input_poller_->poll(this->current_input_);
@@ -16,7 +16,7 @@ void Game::processInput() {
 
 bool Game::initialize() { return true; }
 // ─────────────────────── 1フレーム処理 ───────────────────────
-void Game::tick(double deltaTime) {
+void Game::tick(const double deltaTime) {
     this->processInput();     // 入力収集
     this->update(deltaTime);  // ロジック更新
 

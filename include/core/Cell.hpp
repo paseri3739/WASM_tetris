@@ -26,7 +26,7 @@ struct Cell {
 
     inline void render(IRenderer& renderer) const {
         // 描画処理の実装
-        Rect rect{this->position.x, this->position.y, this->size.width, this->size.height};
+        const Rect rect{this->position.x, this->position.y, this->size.width, this->size.height};
         if (this->type == CellStatus::FILLED) {
             renderer.fill_rect(rect, this->color);
         } else {
@@ -36,7 +36,7 @@ struct Cell {
 
     // コンストラクタは private にして、CellFactory 経由でのみインスタンス化可能にする
    private:
-    Cell(CellStatus t, Position pos, Size sz, Color col)
+    Cell(const CellStatus t, const Position pos, const Size sz, const Color col)
         : type(t), position(pos), size(sz), color(col) {}
     friend class CellFactory;  // CellFactoryからのみインスタンス化可能
 };

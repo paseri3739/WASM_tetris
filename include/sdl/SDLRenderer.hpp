@@ -40,7 +40,7 @@ class SDLRenderer final : public IRenderer {
     void end_frame() override;
 
     // 画面クリア ------------------------------------------------------------
-    void clear(Color color = {0, 0, 0, 255}) override;
+    void clear(Color color) override;
 
     // プリミティブ描画 ------------------------------------------------------
     void fill_rect(const Rect& rect, Color color) override;    // 塗りつぶし
@@ -80,10 +80,13 @@ class SDLRenderer final : public IRenderer {
     tl::expected<TextureId, std::string> register_texture(SDL_Texture* tex);
 
     /** BlendMode を直接設定 */
-    void set_blend_mode(SDL_BlendMode mode) { SDL_SetRenderDrawBlendMode(renderer_, mode); }
+    void set_blend_mode(SDL_BlendMode mode) const { SDL_SetRenderDrawBlendMode(renderer_, mode); }
 
     /** 外部連携用に生ポインタを公開 */
-    SDL_Renderer* raw() noexcept { return renderer_; }
+    [[nodiscard]]
+    SDL_Renderer* raw() const noexcept {
+        return renderer_;
+    }
 
    private:
     // create() からのみ呼ばれるプライベートコンストラクタ
