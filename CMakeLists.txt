@@ -10,6 +10,8 @@ set(immer_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(immer_BUILD_EXTRAS OFF CACHE BOOL "" FORCE)
 set(EXPECTED_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # コンパイルコマンドを生成
+
 FetchContent_Declare(
   googletest
   GIT_REPOSITORY https://github.com/google/googletest.git
@@ -79,8 +81,10 @@ if(EMSCRIPTEN)
   setup_wasm_target(wasm_app)
 
   set(CMAKE_BUILD_TYPE Debug)
-  string(APPEND CMAKE_CXX_FLAGS_DEBUG
-    " -gsource-map --source-map-base http://localhost:6931/")
+
+  # FIX: これはいらない。set(CMAKE_BUILD_TYPE Debug) で-gが自動的に設定されるので、二重指定になるらしい。
+  #string(APPEND CMAKE_CXX_FLAGS_DEBUG
+  #  " -g")
 
   # ヘッダ専用ライブラリはリンクだけ渡す（シンボルは出ない）
   target_link_libraries(wasm_app PRIVATE immer tl::expected)

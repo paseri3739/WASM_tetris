@@ -4,5 +4,6 @@
         "*.asm": "asm6502",
         "optional": "cpp"
     },
-    "clangd.enable": false
+    "clangd.enable": true,
+    "C_Cpp.intelliSenseEngine": "disabled"
 }
