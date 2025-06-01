@@ -110,7 +110,21 @@ class SDLRenderer final : public IRenderer {
     tl::expected<void, std::string> set_render_target(TextureId tex_id) override;
 
     // ──────────── テキスト描画 ------------------------------------------------
+    /**
+     * フォントで指定した文字列 (UTF-8) の描画サイズを求める
+     * @return (幅, 高さ) をペアで返す
+     */
     std::pair<int, int> measure_text(FontId font_id, const std::string& utf8) override;
+    /**
+     * フォントキャッシュ用に、文字列をテクスチャ化して登録する
+     * @param font_id 登録済みフォントID
+     * @param utf8    UTF-8 文字列
+     * @param color   テキスト色 (RGBA)
+     * @return 成功: テクスチャID (TextureId)、失敗: エラーメッセージ
+     *
+     * ※登録したテクスチャは後ほど SDL_DestroyTexture されるまでメモリ上に残るため、
+     *   描画のたびに recreate せず、同じ文字列を何度も描きたい場合に高速化できる。
+     */
     tl::expected<TextureId, std::string> create_text_texture(FontId font_id,
                                                              const std::string& utf8,
                                                              Color color) override;

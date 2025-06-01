@@ -254,9 +254,51 @@ std::pair<int, int> SDLRenderer::measure_text(FontId font_id, const std::string&
     TTF_SizeUTF8(it->second, utf8.c_str(), &w, &h);
     return {w, h};
 }
+/**
+ * create_text_texture の実装
+ *  - TTF_RenderUTF8_Blended で SDL_Surface を作成
+ *  - SDL_CreateTextureFromSurface で SDL_Texture に変換
+ *  - SDL_SetTextureBlendMode でブレンドモードを有効化
+ *  - register_texture で内部キャッシュに登録し、得られた TextureId を返す
+ */
 tl::expected<TextureId, std::string> SDLRenderer::create_text_texture(FontId font_id,
                                                                       const std::string& utf8,
                                                                       Color color) {
-    // TODO: フォントキャッシュを利用する
-    std::terminate();
+    // 1) フォントID の妥当性チェック
+    const auto it_font = fonts_.find(font_id);
+    if (it_font == fonts_.end()) {
+        return tl::unexpected<std::string>("create_text_texture: invalid font_id");
+    }
+
+    // 2) TTF_RenderUTF8_Blended で文字列を Surface 化
+    const SDL_Color fg{color.r, color.g, color.b, color.a};
+    SDL_Surface* surface = TTF_RenderUTF8_Blended(it_font->second, utf8.c_str(), fg);
+    if (!surface) {
+        return tl::unexpected<std::string>(
+            std::string("create_text_texture: TTF_RenderUTF8_Blended failed: ") + TTF_GetError());
+    }
+
+    // 3) SDL_CreateTextureFromSurface でテクスチャ化
+    SDL_Texture* tex = SDL_CreateTextureFromSurface(renderer_, surface);
+    SDL_FreeSurface(surface);  // Surface はもう不要
+    if (!tex) {
+        return tl::unexpected<std::string>(
+            std::string("create_text_texture: SDL_CreateTextureFromSurface failed: ") +
+            SDL_GetError());
+    }
+
+    // 4) ブレンドモードを有効にしておく（半透明テキスト対応）
+    SDL_SetTextureBlendMode(tex, SDL_BLENDMODE_BLEND);
+
+    // 5) register_texture で内部キャッシュに登録 → TextureId を取得
+    auto register_result = register_texture(tex);
+    if (!register_result) {
+        // register_texture 内で SDL_DestroyTexture しているはずなので、ここでは後続不要
+        return tl::unexpected<std::string>(
+            std::string("create_text_texture: failed to register texture: ") +
+            register_result.error());
+    }
+
+    // 6) 正常終了時は登録された TextureId を返す
+    return register_result.value();
 }
