@@ -1,17 +1,13 @@
 #ifndef EAEC85BA_F694_47C7_AB0E_2FD093BD0A16
 #define EAEC85BA_F694_47C7_AB0E_2FD093BD0A16
 
-#define IMMER_VECTOR_USE_ALIASES 1
-
 #include <algorithm>
 #include <core/Cell.hpp>
 #include <core/IRenderer.hpp>
 #include <core/Position.hpp>
-#include <core/Tetrimino.hpp>
 #include <core/graphics_types.hpp>
 #include <immer/vector.hpp>
 #include <string>
-#include <tl/expected.hpp>
 
 /**
  * TetrisGrid ― テトリスの盤面を表す値オブジェクト
@@ -28,15 +24,7 @@ class TetrisGrid {
     const immer::vector<immer::vector<Cell>> cells;  /// < 重い部分はimmer::vectorで管理
     const CellFactory cell_factory;                  ///< セル生成用ファクトリ
 
-    /**
-     * コンストラクタ
-     * @param id グリッドの識別子
-     * @param position グリッドの左上位置
-     * @param size グリッドのサイズ
-     * @param grid_size 行数・列数
-     * @param cell_factory セル生成用ファクトリ
-     */
-    TetrisGrid(std::string id, Position position, Size size, GridColumnRow grid_size,
+    TetrisGrid(std::string id, const Position& position, const Size& size, GridColumnRow grid_size,
                CellFactory factory, immer::vector<immer::vector<Cell>> cells)
         : id(std::move(id)),
           position(position),
@@ -45,7 +33,7 @@ class TetrisGrid {
           cells(std::move(cells)),
           cell_factory(std::move(factory)) {}
 
-    inline void render(IRenderer& renderer) {
+    inline void render(IRenderer& renderer) const {
         // セルを描画する
         int columns = this->grid_size.column;
         int rows = this->grid_size.row;
@@ -77,9 +65,8 @@ class TetrisGrid {
                                          Color color) const;
 
    private:
-    inline immer::vector<immer::vector<Cell>> initialize_cells(const Position& origin,
-                                                               const GridColumnRow& grid_size,
-                                                               const CellFactory& factory) {
+    inline static immer::vector<immer::vector<Cell>> initialize_cells(
+        const Position& origin, const GridColumnRow& grid_size, const CellFactory& factory) {
         immer::vector<immer::vector<Cell>> rows;
         for (int row = 0; row < grid_size.row; ++row) {
             immer::vector<Cell> columns;
