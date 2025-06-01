@@ -76,7 +76,7 @@ TetrisGrid TetrisGrid::update_cell(const GridColumnRow& pos, CellStatus status, 
         color = Color::from_string("white");
     }
 
-    auto updated_cell_result = this->cell_factory.update_cell_state(old_cell, status, color);
+    auto updated_cell_result = CellFactory::update_cell_state(old_cell, status, color);
     if (!updated_cell_result.has_value()) {
         return *this;  // 失敗 → 元のまま
     }

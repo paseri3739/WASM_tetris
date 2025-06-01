@@ -77,7 +77,7 @@ class CellFactory {
     [[nodiscard]]
     inline Cell create(const Position& pos, CellStatus type, Color color) const {
         if (type == CellStatus::EMPTY) color = Color::from_string("white");
-        return Cell{type, pos, size, std::move(color)};
+        return Cell{type, pos, size, color};
     };
 
     /**
@@ -87,8 +87,10 @@ class CellFactory {
      * @param new_color 新しい色（EMPTYの場合は常に白）
      * @return 成功時は更新後のセル、失敗時はエラーメッセージ
      */
-    inline tl::expected<Cell, std::string> update_cell_state(const Cell& cell, CellStatus new_state,
-                                                             Color new_color) const {
+    [[nodiscard]]
+    inline static tl::expected<Cell, std::string> update_cell_state(const Cell& cell,
+                                                                    CellStatus new_state,
+                                                                    Color new_color) {
         if (!is_legal_transition(cell.type, new_state)) {
             return tl::unexpected{"illegal state transition"};
         }
@@ -98,7 +100,7 @@ class CellFactory {
             new_color = Color::from_string("white");
         }
 
-        return Cell{new_state, cell.position, cell.size, std::move(new_color)};
+        return Cell{new_state, cell.position, cell.size, new_color};
     };
 };
 
