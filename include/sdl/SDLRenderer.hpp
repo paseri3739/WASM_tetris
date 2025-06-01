@@ -16,6 +16,24 @@
  *   - テクスチャは register_texture() で管理（これも expected で結果返却）
  */
 class SDLRenderer final : public IRenderer {
+   private:
+    // create() からのみ呼ばれるプライベートコンストラクタ
+    SDLRenderer(SDL_Window* window, SDL_Renderer* renderer) noexcept
+        : window_{window}, renderer_{renderer} {}
+
+    SDL_Window* window_{nullptr};      // 借用：破棄はアプリ側
+    SDL_Renderer* renderer_{nullptr};  // 保有：デストラクタで破棄
+
+    std::unordered_map<TextureId, SDL_Texture*> textures_;
+    TextureId next_id_{1};
+
+    // テクスチャと同じ管理方式
+    std::unordered_map<FontId, TTF_Font*> fonts_;
+    FontId next_font_id_{0};
+
+    // 内部ヘルパ ------------------------------------------------------------
+    void set_draw_color(Color c) { SDL_SetRenderDrawColor(renderer_, c.r, c.g, c.b, c.a); }
+
    public:
     /**
      * ファクトリ関数
@@ -41,15 +59,21 @@ class SDLRenderer final : public IRenderer {
 
     // 画面クリア ------------------------------------------------------------
     void clear(Color color) override;
-
     // プリミティブ描画 ------------------------------------------------------
     void fill_rect(const Rect& rect, Color color) override;    // 塗りつぶし
     void stroke_rect(const Rect& rect, Color color) override;  // 枠線のみ
-
     void draw_line(Position start, Position end, Color color) override;
-
+    void draw_point(const Position& pos, Color color) override;
     void draw_texture(TextureId id, const Rect& src_region, const Rect& dst_region,
-                      double angle = 0.0) override;
+                      double angle) override;
+    void draw_points(const Position* points, int count, Color color) override;
+    void draw_lines(const Position* segments, int count, Color color) override;
+    void fill_rects(const Rect* rects, int count, Color color) override;
+
+    // 論理解像度・ビューポート・スケール設定 --------------------------------
+    void set_logical_size(int width, int height) override;
+    void set_viewport(const Rect& clip_rect) override;
+    void set_scale(double scale_x, double scale_y) override;
 
     // ──────────── フォント関連 ------------------------------------------------
     /**
@@ -74,37 +98,22 @@ class SDLRenderer final : public IRenderer {
     tl::expected<void, std::string> draw_text(FontId font_id, const std::string& utf8, Position pos,
                                               Color color) override;
 
-    // 追加ユーティリティ ----------------------------------------------------
     /** SDL_Texture* を登録し TextureId を取得 */
     [[nodiscard]]
     tl::expected<TextureId, std::string> register_texture(SDL_Texture* tex);
 
-    /** BlendMode を直接設定 */
-    void set_blend_mode(SDL_BlendMode mode) const { SDL_SetRenderDrawBlendMode(renderer_, mode); }
+    [[nodiscard]] tl::expected<TextureId, std::string> register_texture_from_file(
+        const std::string& path) override;
+    [[nodiscard]] tl::expected<TextureId, std::string> register_texture_from_memory(
+        int width, int height, const unsigned char* pixel_data) override;
 
-    /** 外部連携用に生ポインタを公開 */
-    [[nodiscard]]
-    SDL_Renderer* raw() const noexcept {
-        return renderer_;
-    }
+    tl::expected<void, std::string> set_render_target(TextureId tex_id) override;
 
-   private:
-    // create() からのみ呼ばれるプライベートコンストラクタ
-    SDLRenderer(SDL_Window* window, SDL_Renderer* renderer) noexcept
-        : window_{window}, renderer_{renderer} {}
-
-    SDL_Window* window_{nullptr};      // 借用：破棄はアプリ側
-    SDL_Renderer* renderer_{nullptr};  // 保有：デストラクタで破棄
-
-    std::unordered_map<TextureId, SDL_Texture*> textures_;
-    TextureId next_id_{1};
-
-    // テクスチャと同じ管理方式
-    std::unordered_map<FontId, TTF_Font*> fonts_;
-    FontId next_font_id_{0};
-
-    // 内部ヘルパ ------------------------------------------------------------
-    void set_draw_color(Color c) { SDL_SetRenderDrawColor(renderer_, c.r, c.g, c.b, c.a); }
+    // ──────────── テキスト描画 ------------------------------------------------
+    std::pair<int, int> measure_text(FontId font_id, const std::string& utf8) override;
+    tl::expected<TextureId, std::string> create_text_texture(FontId font_id,
+                                                             const std::string& utf8,
+                                                             Color color) override;
 };
 
 #endif /* D17E6D9B_A7F3_4DDC_97F4_93C7522C8A8C */

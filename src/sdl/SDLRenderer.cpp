@@ -1,3 +1,4 @@
+#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <sdl/SDLRenderer.hpp>
 
@@ -80,6 +81,10 @@ void SDLRenderer::draw_line(Position start, Position end, Color color) {
     SDL_RenderDrawLine(renderer_, static_cast<int>(start.x), static_cast<int>(start.y),
                        static_cast<int>(end.x), static_cast<int>(end.y));
 }
+void SDLRenderer::draw_point(const Position& pos, Color color) {
+    set_draw_color(color);
+    SDL_RenderDrawPoint(renderer_, static_cast<int>(pos.x), static_cast<int>(pos.y));
+}
 
 void SDLRenderer::draw_texture(TextureId id, const Rect& src_region, const Rect& dst_region,
                                double angle) {
@@ -91,6 +96,37 @@ void SDLRenderer::draw_texture(TextureId id, const Rect& src_region, const Rect&
     const SDL_Rect dst = to_sdl_rect(dst_region);
 
     SDL_RenderCopyEx(renderer_, tex, &src, &dst, angle, nullptr, SDL_FLIP_NONE);
+}
+void SDLRenderer::draw_points(const Position* points, int count, Color color) {
+    set_draw_color(color);
+    for (int i = 0; i < count; ++i) {
+        SDL_RenderDrawPoint(renderer_, static_cast<int>(points[i].x),
+                            static_cast<int>(points[i].y));
+    }
+}
+
+void SDLRenderer::draw_lines(const Position* segments, int count, Color color) {
+    // 描画色を設定
+    set_draw_color(color);
+
+    // segments 配列は { start0, end0, start1, end1, … } の長さ (count * 2) を想定
+    for (int i = 0; i < count; ++i) {
+        const Position& start = segments[i * 2];
+        const Position& end = segments[i * 2 + 1];
+
+        SDL_RenderDrawLine(renderer_, static_cast<int>(start.x), static_cast<int>(start.y),
+                           static_cast<int>(end.x), static_cast<int>(end.y));
+    }
+}
+
+void SDLRenderer::fill_rects(const Rect* rects, int count, Color color) {
+    set_draw_color(color);
+    std::vector<SDL_Rect> sdl_rects;
+    sdl_rects.reserve(count);
+    for (int i = 0; i < count; ++i) {
+        sdl_rects.push_back(to_sdl_rect(rects[i]));
+    }
+    SDL_RenderFillRects(renderer_, sdl_rects.data(), count);
 }
 
 // ──────────── テクスチャ管理 ────────────
@@ -146,4 +182,81 @@ tl::expected<void, std::string> SDLRenderer::draw_text(FontId font_id, const std
     SDL_DestroyTexture(tex);  // キャッシュ不要なら即破棄
 
     return {};
+}
+
+void SDLRenderer::set_logical_size(int width, int height) {
+    SDL_RenderSetLogicalSize(renderer_, width, height);
+}
+
+void SDLRenderer::set_viewport(const Rect& clip_rect) {
+    SDL_Rect srect = to_sdl_rect(clip_rect);
+    SDL_RenderSetViewport(renderer_, &srect);
+}
+
+void SDLRenderer::set_scale(double scale_x, double scale_y) {
+    SDL_RenderSetScale(renderer_, static_cast<float>(scale_x), static_cast<float>(scale_y));
+}
+
+tl::expected<TextureId, std::string> SDLRenderer::register_texture_from_file(
+    const std::string& path) {
+    SDL_Surface* surf = IMG_Load(path.c_str());
+    if (!surf) {
+        return tl::unexpected<std::string>(std::string{"IMG_Load failed: "} + IMG_GetError());
+    }
+    SDL_Texture* tex = SDL_CreateTextureFromSurface(renderer_, surf);
+    SDL_FreeSurface(surf);
+    if (!tex) {
+        return tl::unexpected<std::string>(std::string{"SDL_CreateTextureFromSurface failed: "} +
+                                           SDL_GetError());
+    }
+    return register_texture(tex);
+}
+
+tl::expected<TextureId, std::string> SDLRenderer::register_texture_from_memory(
+    int width, int height, const unsigned char* pixel_data) {
+    // RGBA8 の場合
+    SDL_Texture* tex = SDL_CreateTexture(renderer_, SDL_PIXELFORMAT_RGBA32,
+                                         SDL_TEXTUREACCESS_STATIC, width, height);
+    if (!tex) {
+        return tl::unexpected<std::string>(std::string{"SDL_CreateTexture failed: "} +
+                                           SDL_GetError());
+    }
+    if (SDL_UpdateTexture(tex, nullptr, pixel_data, width * 4) != 0) {
+        SDL_DestroyTexture(tex);
+        return tl::unexpected<std::string>(std::string{"SDL_UpdateTexture failed: "} +
+                                           SDL_GetError());
+    }
+    return register_texture(tex);
+}
+tl::expected<void, std::string> SDLRenderer::set_render_target(TextureId tex_id) {
+    if (tex_id == 0) {
+        // 0 を特別扱いしてウィンドウ（デフォルト）に戻す
+        if (SDL_SetRenderTarget(renderer_, nullptr) != 0) {
+            return tl::unexpected<std::string>(SDL_GetError());
+        }
+    } else {
+        auto it = textures_.find(tex_id);
+        if (it == textures_.end()) {
+            return tl::unexpected<std::string>{"set_render_target: invalid texture id"};
+        }
+        if (SDL_SetRenderTarget(renderer_, it->second) != 0) {
+            return tl::unexpected<std::string>(SDL_GetError());
+        }
+    }
+    return {};
+}
+std::pair<int, int> SDLRenderer::measure_text(FontId font_id, const std::string& utf8) {
+    auto it = fonts_.find(font_id);
+    if (it == fonts_.end()) {
+        return {0, 0};
+    }
+    int w, h;
+    TTF_SizeUTF8(it->second, utf8.c_str(), &w, &h);
+    return {w, h};
+}
+tl::expected<TextureId, std::string> SDLRenderer::create_text_texture(FontId font_id,
+                                                                      const std::string& utf8,
+                                                                      Color color) {
+    // TODO: フォントキャッシュを利用する
+    std::terminate();
 }
