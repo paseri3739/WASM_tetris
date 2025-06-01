@@ -1,9 +1,10 @@
-#include <chrono>
-#include <cmath>  // for std::max
+
 #include <core/Game.hpp>
 #include <thread>
 #ifndef __EMSCRIPTEN__
 #include <SDL2/SDL.h>
+#include <chrono>
+#include <cmath>  // for std::max
 #endif
 
 void Game::update(const double delta_time) const { this->scene_manager_->update(delta_time); }
@@ -14,7 +15,11 @@ void Game::processInput() {
     this->scene_manager_->process_input(*this->current_input_);
 }
 
-bool Game::initialize() { return true; }
+bool Game::initialize() const {
+    // ここでグローバルアセットのキャッシュなどを行うとよいはず
+    this->scene_manager_->initialize(*config_, *renderer_);
+    return true;
+}
 // ─────────────────────── 1フレーム処理 ───────────────────────
 void Game::tick(const double deltaTime) {
     this->processInput();     // 入力収集

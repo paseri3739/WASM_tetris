@@ -1,8 +1,8 @@
 #include <SDL2/SDL.h>
 #include <emscripten.h>
+#include <IO/SDLInputPoller.hpp>
 #include <core/Game.hpp>
 #include <core/GameConfig.hpp>
-#include <core/scene/InitialScene.hpp>
 #include <core/scene/SceneManager.hpp>
 #include <core/scene/TitleScene.hpp>
 #include <iostream>
@@ -44,7 +44,7 @@ int main() {
     }
 
     // ── Renderer ──
-    auto renderer_result =
+    tl::expected<std::shared_ptr<SDLRenderer>, std::string> renderer_result =
         SDLRenderer::create(window, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (!renderer_result) {
         std::cerr << renderer_result.error() << '\n';
@@ -55,7 +55,7 @@ int main() {
 
     // ── SceneManager ──
     auto scene_manager =
-        std::make_unique<SceneManager>(std::make_unique<TitleScene>(), game_config);
+        std::make_unique<SceneManager>(std::make_unique<TitleScene>(), game_config, renderer);
 
     // ── InputPoller ──
     auto input_poller = std::make_unique<SDLInputPoller>();

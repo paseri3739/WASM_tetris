@@ -11,7 +11,7 @@ inline SDL_Rect to_sdl_rect(const Rect& r) {
 }  // namespace
 
 // ──────────── create (ファクトリ) ────────────
-tl::expected<std::unique_ptr<SDLRenderer>, std::string> SDLRenderer::create(SDL_Window* window,
+tl::expected<std::shared_ptr<SDLRenderer>, std::string> SDLRenderer::create(SDL_Window* window,
                                                                             int flags) {
     if (!window) {
         return tl::unexpected<std::string>{"SDLRenderer: window must not be null"};
@@ -28,7 +28,7 @@ tl::expected<std::unique_ptr<SDLRenderer>, std::string> SDLRenderer::create(SDL_
                                            SDL_GetError());
     }
 
-    return std::unique_ptr<SDLRenderer>{new SDLRenderer{window, renderer}};
+    return std::shared_ptr<SDLRenderer>{new SDLRenderer{window, renderer}};
 }
 
 // ──────────── デストラクタ ────────────

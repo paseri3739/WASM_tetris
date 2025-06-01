@@ -55,7 +55,7 @@ void TitleSceneState::set_transition_flag(bool flag) { transition_flag_ = flag; 
 
 // --- TitleScene の実装 ----------------------------------------
 
-void TitleScene::initialize(const GameConfig& config) {
+void TitleScene::initialize(const GameConfig& config, const IRenderer& /*renderer*/) {
     // 初期状態をタイトル画面の状態に設定
     current_state_ = std::make_shared<TitleSceneState>(config.window.width, config.window.height);
 }

@@ -42,7 +42,7 @@ class SDLRenderer final : public IRenderer {
      * @return 成功時: std::unique_ptr<SDLRenderer>
      *         失敗時: エラーメッセージ
      */
-    static tl::expected<std::unique_ptr<SDLRenderer>, std::string> create(
+    static tl::expected<std::shared_ptr<SDLRenderer>, std::string> create(
         SDL_Window* window, int flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
     // コピー禁止・ムーブのみ許可

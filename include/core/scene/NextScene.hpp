@@ -31,7 +31,7 @@ class NextScene : public IScene {
    public:
     NextScene() = default;
     // シーンの初期化が必要ならここで行う
-    void initialize(const GameConfig& config) override {
+    void initialize(const GameConfig& config, const IRenderer& renderer) override {
         // 状態の初期化
         current_state_ = std::make_shared<NextSceneGameState>();
     };

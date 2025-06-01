@@ -23,6 +23,9 @@ void SceneManager::process_input(const Input& input) const {
     assert(current_scene_);
     current_scene_->process_input(input);
 }
+void SceneManager::initialize(const GameConfig& config, const IRenderer& renderer) const {
+    current_scene_->initialize(config, renderer);
+}
 
 void SceneManager::change_scene(std::unique_ptr<IScene> next) {
     // nullptr の遷移要求は無視
@@ -49,5 +52,6 @@ void SceneManager::apply_scene_change() {
     // 新シーンの初期化。関数呼び出しで渡しているのでコンストラクタで受け取らなくてOK。
     // コンストラクタの煩雑なオーバーロードを廃し、GameConfigに依存する初期化処理を閉じ込める目的がある。
     // 必要に応じてISceneはGameConfigをメンバ変数として保存できるが、非推奨。(しかし、型として明示されるため、依存関係が分かりやすくなっている)
-    current_scene_->initialize(*game_config_);
+    // TODO: IRendererを渡すように追加する。
+    current_scene_->initialize(*game_config_, *renderer_);
 }
