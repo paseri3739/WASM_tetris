@@ -1,59 +1,32 @@
+// TitleScene.hpp
 #ifndef A65EE3A1_1126_4263_9557_3A178058360A
 #define A65EE3A1_1126_4263_9557_3A178058360A
 
 #include <core/IGameState.hpp>
 #include <core/scene/IScene.hpp>
 #include <core/scene/NextScene.hpp>
-#include <iostream>
 #include <memory>
+#include <optional>
 #include <string>
 
 class TitleSceneState final : public IGameState {
    public:
-    TitleSceneState(int width, int height) : width_(width), height_(height) {}
-    TitleSceneState(int width, int height, bool transition_flag)
-        : width_(width), height_(height), transition_flag_(transition_flag) {}
-    ~TitleSceneState() override {}
+    TitleSceneState(int width, int height);
+    TitleSceneState(int width, int height, bool transition_flag);
+    ~TitleSceneState() override;
+
     /**
      * 入力と時間経過に基づいて次の状態を生成する
      */
-    std::shared_ptr<const IGameState> step(const Input& input, double delta_time) const override {
-        // タイトル画面では特に状態遷移は行わない
-        // ただし、ENTERキーが押された場合は遷移準備を行う
-        if (input.key_states.count(InputKey::PAUSE) &&
-            input.key_states.at(InputKey::PAUSE).is_pressed) {
-            return std::make_shared<TitleSceneState>(width_, height_, true);  // TO DO:遷移準備
-        }
-        return std::make_shared<TitleSceneState>(width_, height_);  // 現在の状態を維持
-    };
+    std::shared_ptr<const IGameState> step(const Input& input, double delta_time) const override;
 
     /// 現在の状態を描画
-    void render(IRenderer& renderer) const override {
-        renderer.fill_rect({0, 0, static_cast<double>(width_), static_cast<double>(height_)},
-                           Color::from_string("#CC0000"));
-
-        auto font_id =
-            renderer.register_font("assets/Noto_Sans_JP/static/NotoSansJP-Regular.ttf", 24);
-
-        if (font_id) {
-            const auto font_id_value = font_id.value();
-            auto result = renderer.draw_text(font_id_value, title_text_, {50, 100},
-                                             Color::from_string("#FAD202"));
-            if (!result) {
-                std::cerr << "Failed to draw text: " << result.error() << std::endl;
-            }
-
-            auto result_symbol =
-                renderer.draw_text(font_id_value, symbol_, {20, 50}, Color::from_string("#FAD202"));
-            if (!result_symbol) {
-                std::cerr << "Failed to draw symbol: " << result_symbol.error() << std::endl;
-            }
-        }
-    };
+    void render(IRenderer& renderer) const override;
 
     /// シーン遷移の準備が整ったかを判定
-    bool is_ready_to_transition() const noexcept override { return transition_flag_; };
-    void set_transition_flag(bool flag) { transition_flag_ = flag; }
+    bool is_ready_to_transition() const noexcept override;
+
+    void set_transition_flag(bool flag);
 
    private:
     // タイトル画面の状態に必要なデータをここに追加
@@ -70,49 +43,26 @@ class TitleScene final : public IScene {
     ~TitleScene() = default;
 
     // シーンの初期化が必要ならここで行う
-    void initialize(const GameConfig& config) override {
-        // 初期状態をタイトル画面の状態に設定
-        current_state_ =
-            std::make_shared<TitleSceneState>(config.window.width, config.window.height);
-    };
+    void initialize(const GameConfig& config) override;
 
     // シーンの更新処理
-    void update(const double delta_time) override {
-        if (current_state_) {
-            current_state_ = current_state_->step(*input_, delta_time);
-        }
-        if (current_state_ && current_state_->is_ready_to_transition()) {
-            // 遷移準備が整った場合、次のシーンを設定
-            pending_scene_ = std::make_unique<NextScene>();
-        }
-    };
+    void update(const double delta_time) override;
 
     // シーンの入力処理
-    void process_input(const Input& input) override {
-        input_ = std::make_shared<Input>(input);  // immutable input 記録
-    };
+    void process_input(const Input& input) override;
 
     // シーンの描画処理
-    void render(IRenderer& renderer) override {
-        if (current_state_) {
-            current_state_->render(renderer);
-        }
-    }
+    void render(IRenderer& renderer) override;
 
     // シーンの終了処理
-    void cleanup() override {};
+    void cleanup() override;
 
-    std::optional<std::unique_ptr<IScene>> take_scene_transition() override {
-        if (pending_scene_) {
-            // 遷移要求があればそれを返す
-            return std::move(pending_scene_);
-        }
-        // 遷移しない場合は空のオプションを返す
-        return std::nullopt;
-    };
+    std::optional<std::unique_ptr<IScene>> take_scene_transition() override;
 
    private:
     std::shared_ptr<const Input> input_;
+    std::shared_ptr<const IGameState> current_state_;
+    std::unique_ptr<IScene> pending_scene_;
 };
 
 #endif /* A65EE3A1_1126_4263_9557_3A178058360A */
