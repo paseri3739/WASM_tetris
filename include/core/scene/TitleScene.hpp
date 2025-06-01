@@ -1,6 +1,9 @@
-// FIXME: ビルドが通らないので後で直してください
+#ifndef A65EE3A1_1126_4263_9557_3A178058360A
+#define A65EE3A1_1126_4263_9557_3A178058360A
+
 #include <core/IGameState.hpp>
 #include <core/scene/IScene.hpp>
+#include <core/scene/NextScene.hpp>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -8,7 +11,9 @@
 class TitleSceneState final : public IGameState {
    public:
     TitleSceneState(int width, int height) : width_(width), height_(height) {}
-    ~TitleSceneState() {}
+    TitleSceneState(int width, int height, bool transition_flag)
+        : width_(width), height_(height), transition_flag_(transition_flag) {}
+    ~TitleSceneState() override {}
     /**
      * 入力と時間経過に基づいて次の状態を生成する
      */
@@ -17,7 +22,7 @@ class TitleSceneState final : public IGameState {
         // ただし、ENTERキーが押された場合は遷移準備を行う
         if (input.key_states.count(InputKey::PAUSE) &&
             input.key_states.at(InputKey::PAUSE).is_pressed) {
-            return std::make_shared<TitleSceneState>(width_, height_);  // TODO:遷移準備
+            return std::make_shared<TitleSceneState>(width_, height_, true);  // TO DO:遷移準備
         }
         return std::make_shared<TitleSceneState>(width_, height_);  // 現在の状態を維持
     };
@@ -76,19 +81,15 @@ class TitleScene final : public IScene {
         if (current_state_) {
             current_state_ = current_state_->step(*input_, delta_time);
         }
+        if (current_state_ && current_state_->is_ready_to_transition()) {
+            // 遷移準備が整った場合、次のシーンを設定
+            pending_scene_ = std::make_unique<NextScene>();
+        }
     };
 
     // シーンの入力処理
     void process_input(const Input& input) override {
-        input_ = std::make_shared<const Input>(input);  // 入力を保持
-        if (current_state_) {
-            // 入力に基づいて状態を更新
-            auto state = std::dynamic_pointer_cast<TitleSceneState>(current_state_);
-            if (state && input.key_states.count(InputKey::PAUSE) &&
-                input.key_states.at(InputKey::PAUSE).is_pressed) {
-                state->set_transition_flag(true);  // 遷移準備を整える
-            }
-        }
+        input_ = std::make_shared<Input>(input);  // immutable input 記録
     };
 
     // シーンの描画処理
@@ -101,6 +102,17 @@ class TitleScene final : public IScene {
     // シーンの終了処理
     void cleanup() override {};
 
-    std::optional<std::unique_ptr<IScene>> take_scene_transition() override;
+    std::optional<std::unique_ptr<IScene>> take_scene_transition() override {
+        if (pending_scene_) {
+            // 遷移要求があればそれを返す
+            return std::move(pending_scene_);
+        }
+        // 遷移しない場合は空のオプションを返す
+        return std::nullopt;
+    };
+
+   private:
     std::shared_ptr<const Input> input_;
 };
+
+#endif /* A65EE3A1_1126_4263_9557_3A178058360A */

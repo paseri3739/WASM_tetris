@@ -4,6 +4,7 @@
 #include <core/GameConfig.hpp>
 #include <core/scene/InitialScene.hpp>
 #include <core/scene/SceneManager.hpp>
+#include <core/scene/TitleScene.hpp>
 #include <iostream>
 #include <memory>
 #include <sdl/SDLRenderer.hpp>
@@ -54,7 +55,7 @@ int main() {
 
     // ── SceneManager ──
     auto scene_manager =
-        std::make_unique<SceneManager>(std::make_unique<InitialScene>(), game_config);
+        std::make_unique<SceneManager>(std::make_unique<TitleScene>(), game_config);
 
     // ── InputPoller ──
     auto input_poller = std::make_unique<SDLInputPoller>();
