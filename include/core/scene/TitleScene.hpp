@@ -11,8 +11,8 @@
 
 class TitleSceneState final : public IGameState {
    public:
-    TitleSceneState(int width, int height);
-    TitleSceneState(int width, int height, bool transition_flag);
+    TitleSceneState(int width, int height, Font& font);
+    TitleSceneState(int width, int height, bool transition_flag, Font& font);
     ~TitleSceneState() override;
 
     /**
@@ -32,6 +32,7 @@ class TitleSceneState final : public IGameState {
 
    private:
     // タイトル画面の状態に必要なデータをここに追加
+    Font& font_;
     int width_;
     int height_;
     std::string title_text_ = "ТЕТРИС";
@@ -67,6 +68,7 @@ class TitleScene final : public IScene {
     std::unique_ptr<IScene> pending_scene_;
     std::unique_ptr<FontId> font_id_;  // フォントIDを保持
     std::shared_ptr<IRenderer> renderer_;
+    std::unique_ptr<Font> font_;
 };
 
 #endif /* A65EE3A1_1126_4263_9557_3A178058360A */

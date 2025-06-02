@@ -2,5 +2,11 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/build/_deps/googletest-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/build/_deps/immer-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/build/_deps/immer-src/extra/python/lib/pybind11" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/build/_deps/immer-src/extra/python/lib/pybind11/tools/clang" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/build/_deps/immer-src/tools/sinusoidal-sphinx-theme" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/build/_deps/tl_expected-src" vcs="Git" />
   </component>
 </project>

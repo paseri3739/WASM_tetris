@@ -5,11 +5,11 @@
 
 // --- TitleSceneState の実装 ----------------------------------------
 
-TitleSceneState::TitleSceneState(int width, int height)
-    : width_(width), height_(height), transition_flag_(false) {}
+TitleSceneState::TitleSceneState(int width, int height, Font& font)
+    : width_(width), height_(height), font_(font), transition_flag_(false) {}
 
-TitleSceneState::TitleSceneState(int width, int height, bool transition_flag)
-    : width_(width), height_(height), transition_flag_(transition_flag) {}
+TitleSceneState::TitleSceneState(int width, int height, bool transition_flag, Font& font)
+    : width_(width), height_(height), transition_flag_(transition_flag), font_(font) {}
 
 TitleSceneState::~TitleSceneState() = default;
 
@@ -19,22 +19,20 @@ std::shared_ptr<const IGameState> TitleSceneState::step(const Input& input,
     // ただし、ENTERキーが押された場合は遷移準備を行う
     if (input.key_states.count(InputKey::PAUSE) &&
         input.key_states.at(InputKey::PAUSE).is_pressed) {
-        return std::make_shared<TitleSceneState>(width_, height_, true);  // TO DO:遷移準備
+        return std::make_shared<TitleSceneState>(width_, height_, true, font_);  // TO DO:遷移準備
     }
-    return std::make_shared<TitleSceneState>(width_, height_);  // 現在の状態を維持
+    return std::make_shared<TitleSceneState>(width_, height_, font_);  // 現在の状態を維持
 }
 
 void TitleSceneState::render(IRenderer& renderer) const {
     renderer.fill_rect({0, 0, static_cast<double>(width_), static_cast<double>(height_)},
                        Color::from_string("#CC0000"));
 
-    const auto font_id =
-        renderer.register_font("assets/Noto_Sans_JP/static/NotoSansJP-Regular.ttf", 40);
-
+    const auto font_id = font_.font_id;
     if (font_id) {
-        const auto font_position = renderer.measure_text(font_id.value(), title_text_);
+        const auto font_position = renderer.measure_text(font_id, title_text_);
         const double text_x = (width_ - font_position.first) / 2.0;
-        const auto font_id_value = font_id.value();
+        const auto font_id_value = font_id;
         const auto result = renderer.draw_text(font_id_value, title_text_, {text_x, 100},
                                                Color::from_string("#FAD202"));
         if (!result) {
@@ -46,12 +44,6 @@ void TitleSceneState::render(IRenderer& renderer) const {
         if (!result_symbol) {
             std::cerr << "Failed to draw symbol: " << result_symbol.error() << std::endl;
         }
-
-        const auto clear_result = renderer.clear_font(font_id_value);
-
-        if (!clear_result) {
-            std::cerr << "Failed to clear font: " << clear_result.error() << std::endl;
-        }
     }
 }
 
@@ -62,7 +54,19 @@ void TitleSceneState::set_transition_flag(bool flag) { transition_flag_ = flag; 
 // --- TitleScene の実装 ----------------------------------------
 
 void TitleScene::initialize(const GameConfig& config, IRenderer& renderer) {
-    current_state_ = std::make_shared<TitleSceneState>(config.window.width, config.window.height);
+    const std::string font_path = "assets/Noto_Sans_JP/static/NotoSansJP-Regular.ttf";
+    const int font_size = 40;
+    const auto font_id = renderer.register_font(font_path, font_size);
+
+    if (font_id) {
+        font_ = std::make_unique<Font>(font_path, font_size, renderer);
+        // 状態の初期化：画面サイズとフォントを渡してタイトル状態を生成
+        current_state_ =
+            std::make_shared<TitleSceneState>(config.window.width, config.window.height, *font_);
+    } else {
+        std::cerr << "Failed to load font: " << font_path << std::endl;
+    }
+    // フォールバックはしない。
 }
 
 void TitleScene::update(const double delta_time) {

@@ -515,6 +515,7 @@ class IRenderer {
 struct Font {
     const std::string& path;
     int pt_size;
+    FontId font_id;
     Font(const std::string& path, int pt_size, IRenderer& renderer)
         : path(path), pt_size(pt_size), renderer_((renderer)) {
         const auto result = renderer_.register_font(path, pt_size);
@@ -540,7 +541,6 @@ struct Font {
 
    private:
     IRenderer& renderer_;
-    FontId font_id;
 };
 
 #endif /* B8AC84C6_6A5A_4990_8095_F03C1115A0EC */
