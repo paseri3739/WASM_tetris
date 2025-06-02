@@ -28,22 +28,17 @@ void TitleSceneState::render(IRenderer& renderer) const {
     renderer.fill_rect({0, 0, static_cast<double>(width_), static_cast<double>(height_)},
                        Color::from_string("#CC0000"));
 
-    const auto font_id = font_.font_id;
-    if (font_id) {
-        const auto font_position = renderer.measure_text(font_id, title_text_);
-        const double text_x = (width_ - font_position.first) / 2.0;
-        const auto font_id_value = font_id;
-        const auto result = renderer.draw_text(font_id_value, title_text_, {text_x, 100},
-                                               Color::from_string("#FAD202"));
-        if (!result) {
-            std::cerr << "Failed to draw text: " << result.error() << std::endl;
-        }
+    const auto font_position = font_.measure_text(title_text_);
+    const double text_x = (width_ - font_position.first) / 2.0;
+    const auto result = font_.render(title_text_, {text_x, 100}, Color::from_string("#FAD202"));
 
-        const auto result_symbol =
-            renderer.draw_text(font_id_value, symbol_, {20, 50}, Color::from_string("#FAD202"));
-        if (!result_symbol) {
-            std::cerr << "Failed to draw symbol: " << result_symbol.error() << std::endl;
-        }
+    if (!result) {
+        std::cerr << "Failed to draw text: " << result.error() << std::endl;
+    }
+
+    const auto result_symbol = font_.render(symbol_, {20, 50}, Color::from_string("#FAD202"));
+    if (!result_symbol) {
+        std::cerr << "Failed to draw symbol: " << result_symbol.error() << std::endl;
     }
 }
 

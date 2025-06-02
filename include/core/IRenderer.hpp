@@ -512,6 +512,8 @@ class IRenderer {
 //
 //==============================================================================
 
+#include <emscripten/emscripten.h>
+
 struct Font {
     const std::string& path;
     int pt_size;
@@ -530,14 +532,20 @@ struct Font {
         if (!result) {
             std::cerr << "Font clearing failed: " << result.error() << std::endl;
         }
+        emscripten_log(EM_LOG_CONSOLE, "Font destructor called: %u", font_id);
     }
 
-    void render(const std::string& utf8, Position pos, Color color) {
+    tl::expected<void, std::string> render(const std::string& utf8, Position pos, Color color) {
         const auto result = renderer_.draw_text(font_id, utf8, pos, color);
         if (!result) {
             std::cerr << "Text rendering failed: " << result.error() << std::endl;
         }
+        return result;
     }
+
+    std::pair<int, int> measure_text(const std::string& utf8) {
+        return renderer_.measure_text(font_id, utf8);
+    };
 
    private:
     IRenderer& renderer_;
