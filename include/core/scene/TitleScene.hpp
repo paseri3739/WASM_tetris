@@ -48,7 +48,7 @@ class TitleScene final : public IScene {
     void initialize(const GameConfig& config, IRenderer& renderer) override;
 
     // シーンの更新処理
-    void update(const double delta_time) override;
+    void update(double delta_time) override;
 
     // シーンの入力処理
     void process_input(const Input& input) override;
