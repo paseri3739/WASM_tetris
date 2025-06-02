@@ -12,7 +12,7 @@
  */
 class InitialScene final : public IScene {
    public:
-    void initialize(const GameConfig& config, const IRenderer& renderer) override;
+    void initialize(const GameConfig& config, IRenderer& renderer) override;
 
     void update(double delta_time) override;
 

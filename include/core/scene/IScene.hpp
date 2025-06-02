@@ -19,7 +19,7 @@ class IScene {
     virtual ~IScene() = default;
 
     // シーンの初期化が必要ならここで行う
-    virtual void initialize(const GameConfig& config, const IRenderer& renderer) = 0;
+    virtual void initialize(const GameConfig& config, IRenderer& renderer) = 0;
 
     // シーンの更新処理
     virtual void update(double delta_time) = 0;

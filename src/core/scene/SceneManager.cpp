@@ -23,7 +23,7 @@ void SceneManager::process_input(const Input& input) const {
     assert(current_scene_);
     current_scene_->process_input(input);
 }
-void SceneManager::initialize(const GameConfig& config, const IRenderer& renderer) const {
+void SceneManager::initialize(const GameConfig& config, IRenderer& renderer) const {
     current_scene_->initialize(config, renderer);
 }
 

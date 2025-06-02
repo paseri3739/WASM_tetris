@@ -23,7 +23,7 @@ class SceneManager {
     void update(double delta_time);
     void render(IRenderer& renderer) const;
     void process_input(const Input& input) const;
-    void initialize(const GameConfig& config, const IRenderer& renderer) const;
+    void initialize(const GameConfig& config, IRenderer& renderer) const;
 
     [[nodiscard]]
     IScene& get_current() const;

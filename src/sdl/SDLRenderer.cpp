@@ -150,6 +150,24 @@ tl::expected<FontId, std::string> SDLRenderer::register_font(const std::string& 
     return id;
 }
 
+tl::expected<FontId, std::string> SDLRenderer::clear_font(FontId id) {
+    // ① 存在チェックとポインタ取得
+    auto it = fonts_.find(id);
+    if (it == fonts_.end()) {
+        return tl::unexpected<std::string>{"clear_font: invalid font_id"};
+    }
+    TTF_Font* font_ptr = it->second;
+
+    // ② フォントを閉じる
+    TTF_CloseFont(font_ptr);
+
+    // ③ マップから消す
+    fonts_.erase(it);
+
+    // 正常終了時は『元のID』を返却
+    return id;
+}
+
 // ──────────── テキスト描画 ────────────
 tl::expected<void, std::string> SDLRenderer::draw_text(FontId font_id, const std::string& utf8,
                                                        Position pos, Color color) {

@@ -128,6 +128,13 @@ class SDLRenderer final : public IRenderer {
     tl::expected<TextureId, std::string> create_text_texture(FontId font_id,
                                                              const std::string& utf8,
                                                              Color color) override;
+
+    /**
+     * フォントをクリア。デストラクタなどで利用してください。
+     * @param path パス
+     * @return result
+     */
+    [[nodiscard]] tl::expected<FontId, std::string> clear_font(FontId id) override;
 };
 
 #endif /* D17E6D9B_A7F3_4DDC_97F4_93C7522C8A8C */

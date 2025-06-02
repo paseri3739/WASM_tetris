@@ -33,7 +33,7 @@ void TitleSceneState::render(IRenderer& renderer) const {
 
     if (font_id) {
         const auto font_position = renderer.measure_text(font_id.value(), title_text_);
-        const double text_x = (width_ - font_position.first) / 2;
+        const double text_x = (width_ - font_position.first) / 2.0;
         const auto font_id_value = font_id.value();
         const auto result = renderer.draw_text(font_id_value, title_text_, {text_x, 100},
                                                Color::from_string("#FAD202"));
@@ -46,6 +46,12 @@ void TitleSceneState::render(IRenderer& renderer) const {
         if (!result_symbol) {
             std::cerr << "Failed to draw symbol: " << result_symbol.error() << std::endl;
         }
+
+        const auto clear_result = renderer.clear_font(font_id_value);
+
+        if (!clear_result) {
+            std::cerr << "Failed to clear font: " << clear_result.error() << std::endl;
+        }
     }
 }
 
@@ -55,8 +61,7 @@ void TitleSceneState::set_transition_flag(bool flag) { transition_flag_ = flag; 
 
 // --- TitleScene の実装 ----------------------------------------
 
-void TitleScene::initialize(const GameConfig& config, const IRenderer& /*renderer*/) {
-    // 初期状態をタイトル画面の状態に設定
+void TitleScene::initialize(const GameConfig& config, IRenderer& renderer) {
     current_state_ = std::make_shared<TitleSceneState>(config.window.width, config.window.height);
 }
 
@@ -80,9 +85,7 @@ void TitleScene::render(IRenderer& renderer) {
     }
 }
 
-void TitleScene::cleanup() {
-    // 特に終了時の処理は不要
-}
+void TitleScene::cleanup() {}
 
 std::optional<std::unique_ptr<IScene>> TitleScene::take_scene_transition() {
     if (pending_scene_) {

@@ -18,12 +18,14 @@ class TitleSceneState final : public IGameState {
     /**
      * 入力と時間経過に基づいて次の状態を生成する
      */
+    [[nodiscard]]
     std::shared_ptr<const IGameState> step(const Input& input, double delta_time) const override;
 
     /// 現在の状態を描画
     void render(IRenderer& renderer) const override;
 
     /// シーン遷移の準備が整ったかを判定
+    [[nodiscard]]
     bool is_ready_to_transition() const noexcept override;
 
     void set_transition_flag(bool flag);
@@ -43,7 +45,7 @@ class TitleScene final : public IScene {
     ~TitleScene() = default;
 
     // シーンの初期化が必要ならここで行う
-    void initialize(const GameConfig& config, const IRenderer& renderer) override;
+    void initialize(const GameConfig& config, IRenderer& renderer) override;
 
     // シーンの更新処理
     void update(const double delta_time) override;
@@ -63,6 +65,8 @@ class TitleScene final : public IScene {
     std::shared_ptr<const Input> input_;
     std::shared_ptr<const IGameState> current_state_;
     std::unique_ptr<IScene> pending_scene_;
+    std::unique_ptr<FontId> font_id_;  // フォントIDを保持
+    std::shared_ptr<IRenderer> renderer_;
 };
 
 #endif /* A65EE3A1_1126_4263_9557_3A178058360A */

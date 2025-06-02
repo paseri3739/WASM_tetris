@@ -234,6 +234,9 @@ class IRenderer {
     virtual tl::expected<FontId, std::string> register_font(const std::string& path,
                                                             int pt_size) = 0;
 
+    [[nodiscard]]
+    virtual tl::expected<FontId, std::string> clear_font(FontId id) = 0;
+
     /**
      * @brief 文字列を即時描画する（キャッシュなし）
      * @param font_id 登録済みの FontId
