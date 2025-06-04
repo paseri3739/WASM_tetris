@@ -142,7 +142,7 @@ tl::expected<TextureId, std::string> SDLRenderer::register_texture(SDL_Texture* 
 // ──────────── フォント管理 ────────────
 tl::expected<FontId, std::string> SDLRenderer::register_font(const std::string& path, int pt_size) {
     TTF_Font* font = TTF_OpenFont(path.c_str(), pt_size);
-    if (!font) {
+    if (font == nullptr) {
         return tl::unexpected<std::string>(std::string{"TTF_OpenFont failed: "} + TTF_GetError());
     }
     const FontId id = next_font_id_++;

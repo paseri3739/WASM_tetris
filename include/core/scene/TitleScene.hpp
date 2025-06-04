@@ -2,6 +2,7 @@
 #ifndef A65EE3A1_1126_4263_9557_3A178058360A
 #define A65EE3A1_1126_4263_9557_3A178058360A
 
+#include <core/Font.hpp>
 #include <core/IGameState.hpp>
 #include <core/scene/IScene.hpp>
 #include <core/scene/NextScene.hpp>

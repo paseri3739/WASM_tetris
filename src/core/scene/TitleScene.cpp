@@ -1,4 +1,5 @@
 // TitleScene.cpp
+#include <core/Font.hpp>
 #include <core/graphics_types.hpp>  // Color など
 #include <core/scene/TitleScene.hpp>
 #include <iostream>
@@ -51,17 +52,15 @@ void TitleSceneState::set_transition_flag(bool flag) { transition_flag_ = flag; 
 void TitleScene::initialize(const GameConfig& config, IRenderer& renderer) {
     const std::string font_path = "assets/Noto_Sans_JP/static/NotoSansJP-Regular.ttf";
     const int font_size = 40;
-    const auto font_id = renderer.register_font(font_path, font_size);
-
-    if (font_id) {
-        font_ = std::make_unique<Font>(font_path, font_size, renderer);
-        // 状態の初期化：画面サイズとフォントを渡してタイトル状態を生成
-        current_state_ =
-            std::make_shared<TitleSceneState>(config.window.width, config.window.height, *font_);
-    } else {
-        std::cerr << "Failed to load font: " << font_path << std::endl;
+    auto result = Font::create(font_path, font_size, renderer);
+    if (!result) {
+        std::cerr << "Failed to create font: " << result.error() << std::endl;
+        return;  // フォントのロードに失敗した場合は初期化を中止
     }
-    // フォールバックはしない。
+    font_ = std::move(result.value());
+    // 状態の初期化：画面サイズとフォントを渡してタイトル状態を生成
+    current_state_ =
+        std::make_shared<TitleSceneState>(config.window.width, config.window.height, *font_);
 }
 
 void TitleScene::update(const double delta_time) {

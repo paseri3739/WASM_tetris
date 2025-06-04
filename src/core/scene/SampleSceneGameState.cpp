@@ -93,17 +93,18 @@ void SampleSceneGameState::render(IRenderer& renderer) const {
 
     renderer.fill_rect(rect, blue);
 
-    const auto font_id =
-        renderer.register_font("assets/Noto_Sans_JP/static/NotoSansJP-Regular.ttf", 24);
-
-    if (font_id) {
-        auto font_id_value = font_id.value();
-        auto result =
-            renderer.draw_text(font_id_value, "Sample Scene", {100, 100}, {255, 255, 255, 255});
-        if (!result) {
-            std::cerr << "Failed to draw text: " << result.error() << std::endl;
-        }
-    }
+    // private化に伴いこのインターフェースはFontに隠蔽された
+    // const auto font_id =
+    //     renderer.register_font("assets/Noto_Sans_JP/static/NotoSansJP-Regular.ttf", 24);
+    //
+    // if (font_id) {
+    //     auto font_id_value = font_id.value();
+    //     auto result =
+    //         renderer.draw_text(font_id_value, "Sample Scene", {100, 100}, {255, 255, 255, 255});
+    //     if (!result) {
+    //         std::cerr << "Failed to draw text: " << result.error() << std::endl;
+    //     }
+    // }
 }
 
 // ─────────────────────────────────────────────

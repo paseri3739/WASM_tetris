@@ -57,6 +57,7 @@ using FontId = std::uint32_t;     ///< フォント識別子
 class IRenderer {
    public:
     virtual ~IRenderer() = default;
+    friend class Font;  // Font からのアクセスを許可。APIをシンプル化し、RAIIも守れるように。
 
     //=========================================================================
     // 1. フレーム制御
@@ -231,6 +232,7 @@ class IRenderer {
      *   }
      *   FontId font = res.value();
      */
+   private:
     [[nodiscard]]
     virtual tl::expected<FontId, std::string> register_font(const std::string& path,
                                                             int pt_size) = 0;
@@ -276,6 +278,7 @@ class IRenderer {
      */
     virtual std::pair<int, int> measure_text(FontId font_id, const std::string& utf8) = 0;
 
+   public:
     /**
      * @brief 文字列をテクスチャ化してキャッシュ登録する
      * @param font_id 登録済みの FontId
@@ -511,44 +514,5 @@ class IRenderer {
 // //    ウィンドウ破棄、SDL_DestroyRenderer、TTF_Quit、SDL_Quit など
 //
 //==============================================================================
-
-#include <emscripten/emscripten.h>
-
-struct Font {
-    const std::string& path;
-    int pt_size;
-    FontId font_id;
-    Font(const std::string& path, int pt_size, IRenderer& renderer)
-        : path(path), pt_size(pt_size), renderer_((renderer)) {
-        const auto result = renderer_.register_font(path, pt_size);
-        if (!result) {
-            std::cerr << "Font registration failed: " << result.error() << std::endl;
-        }
-        font_id = result.value();
-    }
-
-    ~Font() {
-        const auto result = renderer_.clear_font(font_id);
-        if (!result) {
-            std::cerr << "Font clearing failed: " << result.error() << std::endl;
-        }
-        emscripten_log(EM_LOG_CONSOLE, "Font destructor called: %u", font_id);
-    }
-
-    tl::expected<void, std::string> render(const std::string& utf8, Position pos, Color color) {
-        const auto result = renderer_.draw_text(font_id, utf8, pos, color);
-        if (!result) {
-            std::cerr << "Text rendering failed: " << result.error() << std::endl;
-        }
-        return result;
-    }
-
-    std::pair<int, int> measure_text(const std::string& utf8) {
-        return renderer_.measure_text(font_id, utf8);
-    };
-
-   private:
-    IRenderer& renderer_;
-};
 
 #endif /* B8AC84C6_6A5A_4990_8095_F03C1115A0EC */
