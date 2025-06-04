@@ -9,7 +9,8 @@ tl::expected<std::unique_ptr<Font>, std::string> Font::create(const std::string&
     if (!result) {
         return tl::unexpected(result.error());
     }
-    // std::make_unique ではなく、直接 new を使う
+    // std::make_uniqueの暗黙newではなく、明示的にnew
+    // unique_ptrのコンストラクタ呼び出しはFont外部からの呼び出しとして展開されるため、privateコンストラクタを呼び出せない。
     return std::unique_ptr<Font>(new Font(path, pt_size, result.value(), renderer));
 }
 
