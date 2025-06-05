@@ -1,6 +1,7 @@
 // TitleScene.cpp
 #include <core/Font.hpp>
 #include <core/graphics_types.hpp>  // Color など
+#include <core/scene/NextScene.hpp>
 #include <core/scene/TitleScene.hpp>
 #include <iostream>
 
@@ -14,15 +15,15 @@ TitleSceneState::TitleSceneState(int width, int height, bool transition_flag, Fo
 
 TitleSceneState::~TitleSceneState() = default;
 
-std::shared_ptr<const IGameState> TitleSceneState::step(const Input& input,
+std::unique_ptr<const IGameState> TitleSceneState::step(const Input& input,
                                                         double /*delta_time*/) const {
     // タイトル画面では特に状態遷移は行わない
     // ただし、ENTERキーが押された場合は遷移準備を行う
     if (input.key_states.count(InputKey::PAUSE) &&
         input.key_states.at(InputKey::PAUSE).is_pressed) {
-        return std::make_shared<TitleSceneState>(width_, height_, true, font_);  // TO DO:遷移準備
+        return std::make_unique<TitleSceneState>(width_, height_, true, font_);  // TO DO:遷移準備
     }
-    return std::make_shared<TitleSceneState>(width_, height_, font_);  // 現在の状態を維持
+    return std::make_unique<TitleSceneState>(width_, height_, font_);  // 現在の状態を維持
 }
 
 void TitleSceneState::render(IRenderer& renderer) const {
@@ -60,7 +61,7 @@ void TitleScene::initialize(const GameConfig& config, IRenderer& renderer) {
     font_ = std::move(result.value());
     // 状態の初期化：画面サイズとフォントを渡してタイトル状態を生成
     current_state_ =
-        std::make_shared<TitleSceneState>(config.window.width, config.window.height, *font_);
+        std::make_unique<TitleSceneState>(config.window.width, config.window.height, *font_);
 }
 
 void TitleScene::update(const double delta_time) {

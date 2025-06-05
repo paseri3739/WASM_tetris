@@ -17,7 +17,7 @@ class IGameState {
      * 入力と時間経過に基づいて次の状態を生成する
      */
     [[nodiscard]]
-    virtual std::shared_ptr<const IGameState> step(const Input& input, double delta_time) const = 0;
+    virtual std::unique_ptr<const IGameState> step(const Input& input, double delta_time) const = 0;
 
     /// 現在の状態を描画
     virtual void render(IRenderer& renderer) const = 0;

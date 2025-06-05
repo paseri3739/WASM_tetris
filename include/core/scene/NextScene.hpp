@@ -11,9 +11,9 @@ class NextSceneGameState final : public IGameState {
 
     // 状態の更新処理
     [[nodiscard]]
-    std::shared_ptr<const IGameState> step(const Input& input,
+    std::unique_ptr<const IGameState> step(const Input& input,
                                            const double delta_time) const override {
-        return std::make_shared<NextSceneGameState>(*this);
+        return std::make_unique<NextSceneGameState>(*this);
     };
 
     // 描画処理

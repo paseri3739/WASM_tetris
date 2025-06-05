@@ -27,7 +27,7 @@ class SampleSceneGameState final : public IGameState {
                          bool transition_flag);
 
     [[nodiscard]]
-    std::shared_ptr<const IGameState> step(const Input& input, double delta_time) const override;
+    std::unique_ptr<const IGameState> step(const Input& input, double delta_time) const override;
     void render(IRenderer& renderer) const override;
     [[nodiscard]]
     bool is_ready_to_transition() const noexcept override;

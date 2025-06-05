@@ -25,7 +25,7 @@ SampleSceneGameState::SampleSceneGameState(Position pos) : position_{pos} {
 // ─────────────────────────────────────────────
 // 状態遷移 (純粋関数)
 // ─────────────────────────────────────────────
-std::shared_ptr<const IGameState> SampleSceneGameState::step(const Input& input,
+std::unique_ptr<const IGameState> SampleSceneGameState::step(const Input& input,
                                                              double delta_time) const {
     constexpr double repeat_delay = 0.30;  // 最初に動き出すまでの遅延
     constexpr double repeat_rate = 0.10;   // リピート間隔
@@ -80,7 +80,7 @@ std::shared_ptr<const IGameState> SampleSceneGameState::step(const Input& input,
     }
 
     // 更新用コンストラクタに変わる
-    return std::make_shared<SampleSceneGameState>(new_position, std::move(updated_hold_durations),
+    return std::make_unique<SampleSceneGameState>(new_position, std::move(updated_hold_durations),
                                                   new_transition_flag);
 }
 
